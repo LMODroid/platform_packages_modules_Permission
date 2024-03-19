@@ -56,6 +56,7 @@ import com.android.permissioncontroller.PermissionControllerApplication;
 import com.android.permissioncontroller.R;
 import com.android.permissioncontroller.permission.service.LocationAccessCheck;
 import com.android.permissioncontroller.permission.utils.ArrayUtils;
+import com.android.permissioncontroller.permission.utils.ContextCompat;
 import com.android.permissioncontroller.permission.utils.KotlinUtils;
 import com.android.permissioncontroller.permission.utils.LocationUtils;
 import com.android.permissioncontroller.permission.utils.PermissionMapping;
@@ -336,8 +337,14 @@ public final class AppPermissionGroup implements Comparable<AppPermissionGroup> 
                 continue;
             }
 
-            final boolean granted = (packageInfo.requestedPermissionsFlags[i]
-                    & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0;
+            boolean granted;
+            if (ContextCompat.getDeviceId(context) == ContextCompat.DEVICE_ID_DEFAULT) {
+                granted = (packageInfo.requestedPermissionsFlags[i]
+                        & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0;
+            } else {
+                int result = packageManager.checkPermission(requestedPermission, packageName);
+                granted = result == PackageManager.PERMISSION_GRANTED;
+            }
 
             final String appOp = PLATFORM_PACKAGE_NAME.equals(requestedPermissionInfo.packageName)
                     || (isHealthPermissionUiEnabled() && HEALTH_PERMISSION_GROUP.equals(
@@ -936,8 +943,12 @@ public final class AppPermissionGroup implements Comparable<AppPermissionGroup> 
             }
 
             boolean wasGranted = permission.isGrantedIncludingAppOp();
+            boolean isPermissionSplitFromNonRuntime = KotlinUtils.isPermissionSplitFromNonRuntime(
+                    mContext,
+                    permission.getName(),
+                    mPackageInfo.applicationInfo.targetSdkVersion);
 
-            if (mAppSupportsRuntimePermissions) {
+            if (mAppSupportsRuntimePermissions && !isPermissionSplitFromNonRuntime) {
                 // Do not touch permissions fixed by the system.
                 if (permission.isSystemFixed()) {
                     wasAllGranted = false;
@@ -1127,7 +1138,14 @@ public final class AppPermissionGroup implements Comparable<AppPermissionGroup> 
 
             boolean wasGranted = permission.isGrantedIncludingAppOp();
 
-            if (mAppSupportsRuntimePermissions) {
+            boolean isPermissionSplitFromNonRuntime =
+                    KotlinUtils.isPermissionSplitFromNonRuntime(
+                            mContext,
+                            permission.getName(),
+                            mPackageInfo.applicationInfo.targetSdkVersion);
+
+            if (mAppSupportsRuntimePermissions && !isPermissionSplitFromNonRuntime) {
+
                 // Revoke the permission if needed.
                 if (permission.isGranted()) {
                     permission.setGranted(false);
@@ -1172,6 +1190,8 @@ public final class AppPermissionGroup implements Comparable<AppPermissionGroup> 
                     if (!permission.isRevokedCompat()) {
                         permission.setRevokedCompat(true);
                     }
+
+                    permission.setRevokeWhenRequested(false);
                 }
             }
 

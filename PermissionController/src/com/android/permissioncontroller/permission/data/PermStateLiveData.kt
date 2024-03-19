@@ -23,30 +23,39 @@ import android.os.UserHandle
 import com.android.permissioncontroller.PermissionControllerApplication
 import com.android.permissioncontroller.permission.model.livedatatypes.LightPackageInfo
 import com.android.permissioncontroller.permission.model.livedatatypes.PermState
+import com.android.permissioncontroller.permission.utils.ContextCompat
+import com.android.permissioncontroller.permission.utils.KotlinUtils
 import com.android.permissioncontroller.permission.utils.Utils
 import kotlinx.coroutines.Job
 
 /**
  * A LiveData which tracks the permission state for one permission group for one package. It
- * includes both the granted state of every permission in the group, and the flags stored
- * in the PermissionController service.
+ * includes both the granted state of every permission in the group, and the flags stored in the
+ * PermissionController service.
  *
  * @param app The current application
  * @param packageName The name of the package this LiveData will watch for mode changes for
- * @param permGroupName The name of the permission group whose app ops this LiveData
- * will watch
+ * @param permGroupName The name of the permission group whose app ops this LiveData will watch
  * @param user The user of the package
  */
-class PermStateLiveData private constructor(
+class PermStateLiveData
+private constructor(
     private val app: Application,
     private val packageName: String,
     private val permGroupName: String,
-    private val user: UserHandle
-) : SmartAsyncMediatorLiveData<Map<String, PermState>>(),
+    private val user: UserHandle,
+    private val deviceId: Int
+) :
+    SmartAsyncMediatorLiveData<Map<String, PermState>>(),
     PermissionListenerMultiplexer.PermissionChangeCallback {
 
-    private val context = Utils.getUserContext(app, user)
-    private val packageInfoLiveData = LightPackageInfoLiveData[packageName, user]
+    private val context =
+        Utils.getUserContext(app, user).let {
+            if (deviceId == ContextCompat.DEVICE_ID_DEFAULT) {
+                it
+            } else ContextCompat.createDeviceContext(it, deviceId)
+        }
+    private val packageInfoLiveData = LightPackageInfoLiveData[packageName, user, deviceId]
     private val groupLiveData = PermGroupLiveData[permGroupName]
 
     private var uid: Int? = null
@@ -58,9 +67,7 @@ class PermStateLiveData private constructor(
             updateAsync()
         }
 
-        addSource(groupLiveData) {
-            updateAsync()
-        }
+        addSource(groupLiveData) { updateAsync() }
     }
 
     /**
@@ -75,19 +82,19 @@ class PermStateLiveData private constructor(
         val packageInfo = packageInfoLiveData.value
         val permissionGroup = groupLiveData.value
         if (packageInfo == null || permissionGroup == null) {
-            invalidateSingle(Triple(packageName, permGroupName, user))
+            invalidateSingle(KotlinUtils.Quadruple(packageName, permGroupName, user, deviceId))
             postValue(null)
             return
         }
         val permissionStates = mutableMapOf<String, PermState>()
         for ((index, permissionName) in packageInfo.requestedPermissions.withIndex()) {
-
             permissionGroup.permissionInfos[permissionName]?.let { permInfo ->
                 val packageFlags = packageInfo.requestedPermissionsFlags[index]
-                val permFlags = context.packageManager.getPermissionFlags(permInfo.name,
-                    packageName, user)
-                val granted = packageFlags and PackageInfo.REQUESTED_PERMISSION_GRANTED != 0 &&
-                    permFlags and PackageManager.FLAG_PERMISSION_REVOKED_COMPAT == 0
+                val permFlags =
+                    context.packageManager.getPermissionFlags(permInfo.name, packageName, user)
+                val granted =
+                    packageFlags and PackageInfo.REQUESTED_PERMISSION_GRANTED != 0 &&
+                        permFlags and PackageManager.FLAG_PERMISSION_REVOKED_COMPAT == 0
 
                 if (job.isCancelled) {
                     return
@@ -105,15 +112,12 @@ class PermStateLiveData private constructor(
 
     private fun checkForUidUpdate(packageInfo: LightPackageInfo?) {
         if (packageInfo == null) {
-            registeredUid?.let {
-                PermissionListenerMultiplexer.removeCallback(it, this)
-            }
+            registeredUid?.let { PermissionListenerMultiplexer.removeCallback(it, this) }
             return
         }
         uid = packageInfo.uid
         if (uid != registeredUid && hasActiveObservers()) {
-            PermissionListenerMultiplexer.addOrReplaceCallback(
-                registeredUid, packageInfo.uid, this)
+            PermissionListenerMultiplexer.addOrReplaceCallback(registeredUid, packageInfo.uid, this)
             registeredUid = uid
         }
     }
@@ -136,14 +140,25 @@ class PermStateLiveData private constructor(
 
     /**
      * Repository for PermStateLiveDatas.
-     * <p> Key value is a triple of string package name, string permission group name, and UserHandle,
-     * value is its corresponding LiveData.
+     *
+     * <p> Key value is a triple of string package name, string permission group name, and
+     * UserHandle, value is its corresponding LiveData.
      */
-    companion object : DataRepositoryForPackage<Triple<String, String, UserHandle>,
-        PermStateLiveData>() {
-        override fun newValue(key: Triple<String, String, UserHandle>): PermStateLiveData {
-            return PermStateLiveData(PermissionControllerApplication.get(),
-                key.first, key.second, key.third)
+    companion object :
+        DataRepositoryForDevice<
+            KotlinUtils.Quadruple<String, String, UserHandle, Int>, PermStateLiveData
+        >() {
+        override fun newValue(
+            key: KotlinUtils.Quadruple<String, String, UserHandle, Int>,
+            deviceId: Int
+        ): PermStateLiveData {
+            return PermStateLiveData(
+                PermissionControllerApplication.get(),
+                key.first,
+                key.second,
+                key.third,
+                deviceId
+            )
         }
     }
 }

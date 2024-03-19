@@ -28,6 +28,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.os.UserHandle
@@ -37,12 +38,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import com.android.modules.utils.build.SdkLevel
-import com.android.permissioncontroller.PermissionControllerApplication
 import com.android.permissioncontroller.R
 import com.android.permissioncontroller.permission.compat.IntentCompat
 import com.android.permissioncontroller.permission.data.AppPermGroupUiInfoLiveData
 import com.android.permissioncontroller.permission.data.LightPackageInfoLiveData
 import com.android.permissioncontroller.permission.data.SmartUpdateMediatorLiveData
+import com.android.permissioncontroller.permission.data.get
 import com.android.permissioncontroller.permission.data.v31.AllLightHistoricalPackageOpsLiveData
 import com.android.permissioncontroller.permission.model.livedatatypes.LightPackageInfo
 import com.android.permissioncontroller.permission.model.livedatatypes.v31.AppPermissionId
@@ -54,7 +55,6 @@ import com.android.permissioncontroller.permission.model.livedatatypes.v31.Light
 import com.android.permissioncontroller.permission.ui.handheld.v31.getDurationUsedStr
 import com.android.permissioncontroller.permission.ui.handheld.v31.shouldShowSubattributionInPermissionsDashboard
 import com.android.permissioncontroller.permission.utils.KotlinUtils
-import com.android.permissioncontroller.permission.utils.KotlinUtils.getPackageLabel
 import com.android.permissioncontroller.permission.utils.PermissionMapping
 import com.android.permissioncontroller.permission.utils.Utils
 import com.android.permissioncontroller.permission.utils.v31.SubattributionUtils
@@ -79,6 +79,9 @@ class PermissionUsageDetailsViewModel(
         mutableMapOf<Pair<String, UserHandle>, LightPackageInfoLiveData>()
     val showSystemLiveData = state.getLiveData(SHOULD_SHOW_SYSTEM_KEY, false)
     val show7DaysLiveData = state.getLiveData(SHOULD_SHOW_7_DAYS_KEY, false)
+
+    private val packageIconCache: MutableMap<Pair<String, UserHandle>, Drawable> = mutableMapOf()
+    private val packageLabelCache: MutableMap<String, String> = mutableMapOf()
 
     private val roleManager =
         Utils.getSystemServiceSafe(application.applicationContext, RoleManager::class.java)
@@ -109,14 +112,19 @@ class PermissionUsageDetailsViewModel(
             }
         val startTime =
             (System.currentTimeMillis() - showPermissionUsagesDuration).coerceAtLeast(
-                Instant.EPOCH.toEpochMilli())
+                Instant.EPOCH.toEpochMilli()
+            )
 
         return PermissionUsageDetailsUiInfo(
             show7Days,
             showSystem,
             buildAppPermissionAccessUiInfoList(
-                allLightHistoricalPackageOpsLiveData, startTime, showSystem),
-            containsSystemAppUsages(allLightHistoricalPackageOpsLiveData, startTime))
+                allLightHistoricalPackageOpsLiveData,
+                startTime,
+                showSystem
+            ),
+            containsSystemAppUsages(allLightHistoricalPackageOpsLiveData, startTime)
+        )
     }
 
     /**
@@ -162,9 +170,11 @@ class PermissionUsageDetailsViewModel(
         // The Telecom doesn't request microphone or camera permissions. However, telecom app may
         // use these permissions and they are considered system app permissions, so we return true
         // even if the AppPermGroupUiInfo is unavailable.
-        if (appPermissionId.packageName == TELECOM_PACKAGE &&
-            (appPermissionId.permissionGroup == Manifest.permission_group.CAMERA ||
-                appPermissionId.permissionGroup == Manifest.permission_group.MICROPHONE)) {
+        if (
+            appPermissionId.packageName == TELECOM_PACKAGE &&
+                (appPermissionId.permissionGroup == Manifest.permission_group.CAMERA ||
+                    appPermissionId.permissionGroup == Manifest.permission_group.MICROPHONE)
+        ) {
             return true
         }
         return false
@@ -244,7 +254,8 @@ class PermissionUsageDetailsViewModel(
                     it.appPermissionId,
                     it.attributionLabel,
                     it.attributionTags,
-                    updatedDiscreteAccesses)
+                    updatedDiscreteAccesses
+                )
         }
 
     /** Filters out data for apps and permissions that don't need to be displayed in the UI. */
@@ -268,7 +279,8 @@ class PermissionUsageDetailsViewModel(
             this.appPermissionId,
             Resources.ID_NULL,
             attributionTags = emptyList(),
-            this.discreteAccesses)
+            this.discreteAccesses
+        )
 
     /** Groups tag-attributed accesses for the provided app and permission by attribution label. */
     private fun AttributedAppPermissionDiscreteAccesses.groupAccessesByLabel(
@@ -307,7 +319,9 @@ class PermissionUsageDetailsViewModel(
                     appPermissionId,
                     label,
                     tags,
-                    discreteAccesses.sortedBy { -1 * it.accessTimeMs }))
+                    discreteAccesses.sortedBy { -1 * it.accessTimeMs }
+                )
+            )
         }
 
         return appPermissionDiscreteAccessWithLabels
@@ -334,7 +348,9 @@ class PermissionUsageDetailsViewModel(
                         appPermAccesses.appPermissionId,
                         appPermAccesses.attributionLabel,
                         appPermAccesses.attributionTags,
-                        currentDiscreteAccesses.toMutableList()))
+                        currentDiscreteAccesses.toMutableList()
+                    )
+                )
                 currentDiscreteAccesses.clear()
                 currentDiscreteAccesses.add(discreteAccess)
             } else {
@@ -348,7 +364,9 @@ class PermissionUsageDetailsViewModel(
                     appPermAccesses.appPermissionId,
                     appPermAccesses.attributionLabel,
                     appPermAccesses.attributionTags,
-                    currentDiscreteAccesses.toMutableList()))
+                    currentDiscreteAccesses.toMutableList()
+                )
+            )
         }
         return clusters
     }
@@ -384,12 +402,15 @@ class PermissionUsageDetailsViewModel(
         return AppPermissionAccessUiInfo(
             this.appPermissionId.userHandle,
             this.appPermissionId.packageName,
+            getPackageLabel(this.appPermissionId.packageName, this.appPermissionId.userHandle),
             permissionGroup,
             this.discreteAccesses.last().accessTimeMs,
             this.discreteAccesses.first().accessTimeMs,
             summary,
             showingSubAttribution,
-            ArrayList(this.attributionTags))
+            ArrayList(this.attributionTags),
+            getBadgedPackageIcon(this.appPermissionId.packageName, this.appPermissionId.userHandle)
+        )
     }
 
     /** Builds a summary of the permission access. */
@@ -410,10 +431,14 @@ class PermissionUsageDetailsViewModel(
                     R.string.history_preference_subtext_3,
                     subTextStrings[0],
                     subTextStrings[1],
-                    subTextStrings[2])
+                    subTextStrings[2]
+                )
             2 ->
                 context.getString(
-                    R.string.history_preference_subtext_2, subTextStrings[0], subTextStrings[1])
+                    R.string.history_preference_subtext_2,
+                    subTextStrings[0],
+                    subTextStrings[1]
+                )
             1 -> subTextStrings[0]
             else -> null
         }
@@ -462,7 +487,6 @@ class PermissionUsageDetailsViewModel(
             .firstOrNull { it.proxy?.packageName != null }
             ?.let {
                 getPackageLabel(
-                    PermissionControllerApplication.get(),
                     it.proxy!!.packageName!!,
                     UserHandle.getUserHandleForUid(it.proxy.uid))
             }
@@ -492,13 +516,15 @@ class PermissionUsageDetailsViewModel(
     /** Data used to create a preference for an app's permission usage. */
     data class AppPermissionAccessUiInfo(
         val userHandle: UserHandle,
-        val pkgName: String,
+        val packageName: String,
+        val packageLabel: String,
         val permissionGroup: String,
         val accessStartTime: Long,
         val accessEndTime: Long,
         val summaryText: CharSequence?,
         val showingAttribution: Boolean,
         val attributionTags: ArrayList<String>,
+        val badgedPackageIcon: Drawable?,
     )
 
     /**
@@ -593,13 +619,17 @@ class PermissionUsageDetailsViewModel(
                 setSourcesToDifference(
                     appPermissionIds,
                     appPermGroupUiInfoLiveDataList,
-                    getAppPermGroupUiInfoLiveData) {
-                        update()
-                    }
+                    getAppPermGroupUiInfoLiveData
+                ) {
+                    update()
+                }
                 setSourcesToDifference(
-                    allPackages, lightPackageInfoLiveDataMap, getLightPackageInfoLiveData) {
-                        update()
-                    }
+                    allPackages,
+                    lightPackageInfoLiveDataMap,
+                    getLightPackageInfoLiveData
+                ) {
+                    update()
+                }
 
                 if (appPermGroupUiInfoLiveDataList.any { it.value.isStale }) {
                     return
@@ -612,6 +642,36 @@ class PermissionUsageDetailsViewModel(
                 value = buildPermissionUsageDetailsUiInfo()
             }
         }
+
+    /**
+     * Returns the icon for the provided package name and user, by first searching the cache
+     * otherwise retrieving it from the app's [android.content.pm.ApplicationInfo].
+     */
+    private fun getBadgedPackageIcon(packageName: String, userHandle: UserHandle): Drawable? {
+        val packageNameWithUser: Pair<String, UserHandle> = Pair(packageName, userHandle)
+        if (packageIconCache.containsKey(packageNameWithUser)) {
+            return requireNotNull(packageIconCache[packageNameWithUser])
+        }
+        val packageIcon = KotlinUtils.getBadgedPackageIcon(application, packageName, userHandle)
+        if (packageIcon != null) packageIconCache[packageNameWithUser] = packageIcon
+
+        return packageIcon
+    }
+
+    /**
+     * Returns the label for the provided package name, by first searching the cache otherwise
+     * retrieving it from the app's [android.content.pm.ApplicationInfo].
+     */
+    private fun getPackageLabel(packageName: String, user: UserHandle): String {
+        if (packageLabelCache.containsKey(packageName)) {
+            return requireNotNull(packageLabelCache[packageName])
+        }
+
+        val packageLabel = KotlinUtils.getPackageLabel(application, packageName, user)
+        packageLabelCache[packageName] = packageLabel
+
+        return packageLabel
+    }
 
     /** Companion object for [PermissionUsageDetailsViewModel]. */
     companion object {
@@ -629,7 +689,8 @@ class PermissionUsageDetailsViewModel(
             listOf(
                     Manifest.permission_group.CAMERA,
                     Manifest.permission_group.LOCATION,
-                    Manifest.permission_group.MICROPHONE)
+                    Manifest.permission_group.MICROPHONE
+                )
                 .flatMap { group -> PermissionMapping.getPlatformPermissionNamesOfGroup(group) }
                 .mapNotNull { permName -> AppOpsManager.permissionToOp(permName) }
                 .toMutableSet()
@@ -659,7 +720,8 @@ class PermissionUsageDetailsViewModel(
                 accessStartTime,
                 accessEndTime,
                 showingAttribution,
-                attributionTags)
+                attributionTags
+            )
                 ?: getDefaultManageAppPermissionsIntent(packageName, userHandle)
         }
 
@@ -692,11 +754,16 @@ class PermissionUsageDetailsViewModel(
                 }
             val resolveInfo =
                 context.packageManager.resolveActivity(
-                    intent, PackageManager.ResolveInfoFlags.of(0))
-            if (resolveInfo?.activityInfo == null ||
-                !Objects.equals(
-                    resolveInfo.activityInfo.permission,
-                    Manifest.permission.START_VIEW_PERMISSION_USAGE)) {
+                    intent,
+                    PackageManager.ResolveInfoFlags.of(0)
+                )
+            if (
+                resolveInfo?.activityInfo == null ||
+                    !Objects.equals(
+                        resolveInfo.activityInfo.permission,
+                        Manifest.permission.START_VIEW_PERMISSION_USAGE
+                    )
+            ) {
                 return null
             }
             intent.component = ComponentName(packageName, resolveInfo.activityInfo.name)

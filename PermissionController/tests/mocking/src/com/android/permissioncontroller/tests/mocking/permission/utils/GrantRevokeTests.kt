@@ -24,6 +24,7 @@ import android.app.AppOpsManager.MODE_FOREGROUND
 import android.app.AppOpsManager.MODE_IGNORED
 import android.app.AppOpsManager.permissionToOp
 import android.app.Application
+import android.content.Context
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.FLAG_PERMISSION_AUTO_REVOKED
 import android.content.pm.PackageManager.FLAG_PERMISSION_ONE_TIME
@@ -41,11 +42,13 @@ import android.os.Build
 import android.os.UserHandle
 import android.permission.PermissionManager
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.android.modules.utils.build.SdkLevel
 import com.android.permissioncontroller.permission.model.livedatatypes.LightAppPermGroup
 import com.android.permissioncontroller.permission.model.livedatatypes.LightPackageInfo
 import com.android.permissioncontroller.permission.model.livedatatypes.LightPermGroupInfo
 import com.android.permissioncontroller.permission.model.livedatatypes.LightPermInfo
 import com.android.permissioncontroller.permission.model.livedatatypes.LightPermission
+import com.android.permissioncontroller.permission.utils.ContextCompat
 import com.android.permissioncontroller.permission.utils.KotlinUtils
 import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth.assertWithMessage
@@ -64,7 +67,8 @@ import org.mockito.Mockito.never
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 
-private const val PERMISSION_CONTROLLER_CHANGED_FLAG_MASK = FLAG_PERMISSION_USER_SET or
+private const val PERMISSION_CONTROLLER_CHANGED_FLAG_MASK =
+    FLAG_PERMISSION_USER_SET or
         FLAG_PERMISSION_USER_FIXED or
         FLAG_PERMISSION_ONE_TIME or
         FLAG_PERMISSION_REVOKED_COMPAT or
@@ -101,8 +105,9 @@ class GrantRevokeTests {
         }
     }
 
-    @Mock
-    val app: Application = mock(Application::class.java)
+    @Mock val app: Application = mock(Application::class.java)
+
+    @Mock val context: Context = mock(Context::class.java)
 
     /**
      * Create a mock Application object, with a mock packageManager, AppOpsManager, and
@@ -114,16 +119,24 @@ class GrantRevokeTests {
         `when`(app.packageManager).thenReturn(mock(PackageManager::class.java))
 
         val aom: AppOpsManager = mock(AppOpsManager::class.java)
+
+        if (SdkLevel.isAtLeastU()) {
+            `when`(context.deviceId).thenReturn(ContextCompat.DEVICE_ID_DEFAULT)
+        }
+        `when`(context.packageManager).thenReturn(mock(PackageManager::class.java))
+        `when`(context.getSystemService(PermissionManager::class.java))
+            .thenReturn(mock(PermissionManager::class.java))
         // Return an invalid app op state, so setOpMode will always attempt to change the op state
         `when`(aom.unsafeCheckOpRaw(anyString(), anyInt(), nullable(String::class.java)))
             .thenReturn(-1)
         `when`(app.getSystemService(AppOpsManager::class.java)).thenReturn(aom)
 
-        `when`(app.getSystemService(ActivityManager::class.java)).thenReturn(
-            mock(ActivityManager::class.java))
+        `when`(app.getSystemService(ActivityManager::class.java))
+            .thenReturn(mock(ActivityManager::class.java))
 
-        `when`(app.getSystemService(PermissionManager::class.java)).thenReturn(
-            mock(PermissionManager::class.java))
+        `when`(app.getSystemService(PermissionManager::class.java))
+            .thenReturn(mock(PermissionManager::class.java))
+        `when`(app.applicationContext).thenReturn(context)
     }
 
     /**
@@ -142,19 +155,35 @@ class GrantRevokeTests {
         val permFlags = mutableListOf<Int>()
         for ((permName, isGranted) in perms) {
             permNames.add(permName)
-            permFlags.add(if (isGranted) {
-                PERMISSION_GRANTED
-            } else {
-                PERMISSION_DENIED
-            })
+            permFlags.add(
+                if (isGranted) {
+                    PERMISSION_GRANTED
+                } else {
+                    PERMISSION_DENIED
+                }
+            )
         }
 
-        return LightPackageInfo(TEST_PACKAGE_NAME, listOf(), permNames, permFlags, TEST_UID,
-                if (isPreMApp) {
-                    Build.VERSION_CODES.LOLLIPOP
-                } else {
-                    Build.VERSION_CODES.R
-                }, isInstantApp, isInstantApp, 0, 0L, 0L, false, emptyMap())
+        return LightPackageInfo(
+            TEST_PACKAGE_NAME,
+            listOf(),
+            permNames,
+            permFlags,
+            TEST_UID,
+            if (isPreMApp) {
+                Build.VERSION_CODES.LOLLIPOP
+            } else {
+                Build.VERSION_CODES.R
+            },
+            isInstantApp,
+            isInstantApp,
+            0,
+            0L,
+            0L,
+            false,
+            emptyMap(),
+            ContextCompat.DEVICE_ID_DEFAULT
+        )
     }
 
     /**
@@ -163,13 +192,13 @@ class GrantRevokeTests {
      * @param pkg Package requesting the permission
      * @param permName The name of the permission
      * @param granted Whether the permission is granted (should be false if the permission is compat
-     * revoked)
+     *   revoked)
      * @param backgroundPerm The name of this permission's background permission, if there is one
      * @param foregroundPerms The names of this permission's foreground permissions, if there are
-     * any
+     *   any
      * @param flags The system permission flags of this permission
      * @param permInfoProtectionFlags The flags that the PermissionInfo object has (accessed by
-     * PermissionInfo.getProtectionFlags)
+     *   PermissionInfo.getProtectionFlags)
      */
     private fun createMockPerm(
         pkgInfo: LightPackageInfo,
@@ -179,11 +208,24 @@ class GrantRevokeTests {
         flags: Int = NO_FLAGS,
         permInfoProtectionFlags: Int = 0
     ): LightPermission {
-        val permInfo = LightPermInfo(permName, TEST_PACKAGE_NAME, PERM_GROUP_NAME, backgroundPerm,
-            PermissionInfo.PROTECTION_DANGEROUS, permInfoProtectionFlags, 0)
-        return LightPermission(pkgInfo, permInfo,
-                pkgInfo.requestedPermissionsFlags[pkgInfo.requestedPermissions.indexOf(permName)]
-                        == PERMISSION_GRANTED, flags, foregroundPerms)
+        val permInfo =
+            LightPermInfo(
+                permName,
+                TEST_PACKAGE_NAME,
+                PERM_GROUP_NAME,
+                backgroundPerm,
+                PermissionInfo.PROTECTION_DANGEROUS,
+                permInfoProtectionFlags,
+                0
+            )
+        return LightPermission(
+            pkgInfo,
+            permInfo,
+            pkgInfo.requestedPermissionsFlags[pkgInfo.requestedPermissions.indexOf(permName)] ==
+                PERMISSION_GRANTED,
+            flags,
+            foregroundPerms
+        )
     }
 
     /**
@@ -201,12 +243,11 @@ class GrantRevokeTests {
     }
 
     /**
-     * Create a list of strings which usefully states which flags are set in a group of flags.
-     * Only checks for flags relevant to granting and revoking (so, for instance, policy fixed is
-     * not checked).
+     * Create a list of strings which usefully states which flags are set in a group of flags. Only
+     * checks for flags relevant to granting and revoking (so, for instance, policy fixed is not
+     * checked).
      *
      * @param flags The flags to check
-     *
      * @return a list of strings, representing which flags have been set
      */
     private fun flagsToString(flags: Int): List<String> {
@@ -251,28 +292,32 @@ class GrantRevokeTests {
             val flags = state.second
 
             assertWithMessage("permission $permName grant state incorrect")
-                .that(perms[permName]?.isGrantedIncludingAppOp).isEqualTo(granted)
+                .that(perms[permName]?.isGrantedIncludingAppOp)
+                .isEqualTo(granted)
 
             val actualFlags = perms[permName]!!.flags
-            assertWithMessage("permission $permName flags incorrect, expected" +
-                "${flagsToString(flags)}; got ${flagsToString(actualFlags)}")
-                .that(perms[permName]?.flags).isEqualTo(flags)
+            assertWithMessage(
+                    "permission $permName flags incorrect, expected" +
+                        "${flagsToString(flags)}; got ${flagsToString(actualFlags)}"
+                )
+                .that(perms[permName]?.flags)
+                .isEqualTo(flags)
         }
     }
 
     /**
-     * Verify that permission state was propagated to the system. Verify that grant or revoke
-     * were called, if applicable, or verify they weren't. Verify that we have set flags
-     * correctly, if applicable, or verify flags were not set.
+     * Verify that permission state was propagated to the system. Verify that grant or revoke were
+     * called, if applicable, or verify they weren't. Verify that we have set flags correctly, if
+     * applicable, or verify flags were not set.
      *
      * @param permName The name of the permission to verify
      * @param expectPermChange Whether or not a permission grant or revoke was expected. If false,
-     * verify neither grant nor revoke were called
-     * @param expectPermGranted If a permission change was expected, verify that the permission
-     * was set to granted (if true) or revoked (if false)
+     *   verify neither grant nor revoke were called
+     * @param expectPermGranted If a permission change was expected, verify that the permission was
+     *   set to granted (if true) or revoked (if false)
      * @param expectedFlags The flags that the system should have set the permission to have
-     * @param originalFlags The flags the permission originally had. Used to ensure the correct
-     * flag mask was used
+     * @param originalFlags The flags the permission originally had. Used to ensure the correct flag
+     *   mask was used
      */
     private fun verifyPermissionState(
         permName: String,
@@ -281,7 +326,7 @@ class GrantRevokeTests {
         expectedFlags: Int = NO_FLAGS,
         originalFlags: Int = NO_FLAGS
     ) {
-        val pm = app.packageManager
+        val pm = context.packageManager
         if (expectPermChange) {
             if (expectPermGranted) {
                 verify(pm).grantRuntimePermission(TEST_PACKAGE_NAME, permName, TEST_USER)
@@ -294,11 +339,23 @@ class GrantRevokeTests {
         }
 
         if (expectedFlags != originalFlags) {
-            verify(pm).updatePermissionFlags(permName, TEST_PACKAGE_NAME,
-                    PERMISSION_CONTROLLER_CHANGED_FLAG_MASK, expectedFlags, TEST_USER)
+            verify(pm)
+                .updatePermissionFlags(
+                    permName,
+                    TEST_PACKAGE_NAME,
+                    PERMISSION_CONTROLLER_CHANGED_FLAG_MASK,
+                    expectedFlags,
+                    TEST_USER
+                )
         } else {
-            verify(pm, never()).updatePermissionFlags(eq(permName), eq(TEST_PACKAGE_NAME), anyInt(),
-                anyInt(), eq(TEST_USER))
+            verify(pm, never())
+                .updatePermissionFlags(
+                    eq(permName),
+                    eq(TEST_PACKAGE_NAME),
+                    anyInt(),
+                    anyInt(),
+                    eq(TEST_USER)
+                )
         }
     }
 
@@ -308,7 +365,7 @@ class GrantRevokeTests {
      *
      * @param appOpName The name of the app op to check
      * @param expectAppOpSet Whether an app op change was expected. If false, verify setUidMode was
-     * not called
+     *   not called
      * @param expectedMode If a change was expected, the mode the app op should be set to
      */
     private fun verifyAppOpState(
@@ -353,8 +410,12 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.grantForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = true, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = true,
+            expectedFlags = newFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_ALLOWED)
         verifyAppKillState(shouldBeKilled = false)
 
@@ -379,17 +440,28 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.grantForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = true, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = true,
+            expectedFlags = newFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_ALLOWED)
-        verifyPermissionState(permName = FG_PERM_2_NAME, expectPermChange = true,
-            expectPermGranted = true, expectedFlags = newFlags)
-        verifyAppOpState(appOpName = OP_2_NAME, expectAppOpSet = true,
-            expectedMode = MODE_FOREGROUND)
+        verifyPermissionState(
+            permName = FG_PERM_2_NAME,
+            expectPermChange = true,
+            expectPermGranted = true,
+            expectedFlags = newFlags
+        )
+        verifyAppOpState(
+            appOpName = OP_2_NAME,
+            expectAppOpSet = true,
+            expectedMode = MODE_FOREGROUND
+        )
         verifyAppKillState(shouldBeKilled = false)
 
-        val expectedState = mutableMapOf(FG_PERM_NAME to (true to newFlags),
-            FG_PERM_2_NAME to (true to newFlags))
+        val expectedState =
+            mutableMapOf(FG_PERM_NAME to (true to newFlags), FG_PERM_2_NAME to (true to newFlags))
         assertGroupPermState(newGroup, expectedState)
     }
 
@@ -408,8 +480,12 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.grantForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME_NO_APP_OP, expectPermChange = true,
-            expectPermGranted = true, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME_NO_APP_OP,
+            expectPermChange = true,
+            expectPermGranted = true,
+            expectedFlags = newFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = false)
         verifyAppOpState(appOpName = OP_2_NAME, expectAppOpSet = false)
         verifyAppKillState(shouldBeKilled = false)
@@ -434,14 +510,18 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.grantBackgroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = BG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = true, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = BG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = true,
+            expectedFlags = newFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_ALLOWED)
         verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = false)
         verifyAppKillState(shouldBeKilled = false)
 
-        val expectedState = mutableMapOf(FG_PERM_NAME to (true to NO_FLAGS),
-            BG_PERM_NAME to (true to newFlags))
+        val expectedState =
+            mutableMapOf(FG_PERM_NAME to (true to NO_FLAGS), BG_PERM_NAME to (true to newFlags))
         assertGroupPermState(newGroup, expectedState)
     }
 
@@ -462,26 +542,34 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.grantForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = true, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = true,
+            expectedFlags = newFlags
+        )
         verifyPermissionState(permName = BG_PERM_NAME, expectPermChange = false)
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_FOREGROUND)
         verifyAppKillState(shouldBeKilled = false)
 
-        val expectedState = mutableMapOf(FG_PERM_NAME to (true to newFlags),
-            BG_PERM_NAME to (false to NO_FLAGS))
+        val expectedState =
+            mutableMapOf(FG_PERM_NAME to (true to newFlags), BG_PERM_NAME to (false to NO_FLAGS))
         assertGroupPermState(newGroup, expectedState)
 
         resetMockAppState()
         val newGroup2 = KotlinUtils.grantBackgroundRuntimePermissions(app, newGroup)
 
-        verifyPermissionState(permName = BG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = true, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = BG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = true,
+            expectedFlags = newFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_ALLOWED)
         verifyAppKillState(shouldBeKilled = false)
 
-        val expectedState2 = mutableMapOf(FG_PERM_NAME to (true to newFlags),
-            BG_PERM_NAME to (true to newFlags))
+        val expectedState2 =
+            mutableMapOf(FG_PERM_NAME to (true to newFlags), BG_PERM_NAME to (true to newFlags))
         assertGroupPermState(newGroup2, expectedState2)
     }
 
@@ -495,20 +583,28 @@ class GrantRevokeTests {
         val pkg = createMockPackage(mapOf(FG_PERM_NAME to false, BG_PERM_NAME to false))
         val perms = mutableMapOf<String, LightPermission>()
         val origBgFlags = FLAG_PERMISSION_AUTO_REVOKED
-        perms[FG_PERM_NAME] = createMockPerm(
-            pkg, FG_PERM_NAME, BG_PERM_NAME, null, FLAG_PERMISSION_AUTO_REVOKED)
-        perms[BG_PERM_NAME] = createMockPerm(
-            pkg, BG_PERM_NAME, null, listOf(FG_PERM_NAME), origBgFlags)
+        perms[FG_PERM_NAME] =
+            createMockPerm(pkg, FG_PERM_NAME, BG_PERM_NAME, null, FLAG_PERMISSION_AUTO_REVOKED)
+        perms[BG_PERM_NAME] =
+            createMockPerm(pkg, BG_PERM_NAME, null, listOf(FG_PERM_NAME), origBgFlags)
         val group = createMockGroup(pkg, perms)
         resetMockAppState()
 
         KotlinUtils.grantForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = true, expectedFlags = newFlags)
-        verifyPermissionState(permName = BG_PERM_NAME, expectPermChange = false,
-            expectedFlags = NO_FLAGS, originalFlags = origBgFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = true,
+            expectedFlags = newFlags
+        )
+        verifyPermissionState(
+            permName = BG_PERM_NAME,
+            expectPermChange = false,
+            expectedFlags = NO_FLAGS,
+            originalFlags = origBgFlags
+        )
     }
 
     /**
@@ -528,16 +624,24 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.grantForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = true, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = true,
+            expectedFlags = newFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_ALLOWED)
-        verifyPermissionState(permName = FG_PERM_2_NAME, expectPermChange = false,
-            expectedFlags = permFlags, originalFlags = permFlags)
+        verifyPermissionState(
+            permName = FG_PERM_2_NAME,
+            expectPermChange = false,
+            expectedFlags = permFlags,
+            originalFlags = permFlags
+        )
         verifyAppOpState(appOpName = OP_2_NAME, expectAppOpSet = false)
         verifyAppKillState(shouldBeKilled = false)
 
-        val expectedState = mutableMapOf(FG_PERM_NAME to (true to newFlags),
-            FG_PERM_2_NAME to (false to permFlags))
+        val expectedState =
+            mutableMapOf(FG_PERM_NAME to (true to newFlags), FG_PERM_2_NAME to (false to permFlags))
         assertGroupPermState(newGroup, expectedState)
     }
 
@@ -558,25 +662,33 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.grantForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = true, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = true,
+            expectedFlags = newFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_FOREGROUND)
         verifyAppKillState(shouldBeKilled = false)
 
-        var expectedState = mutableMapOf(FG_PERM_NAME to (true to newFlags),
-            BG_PERM_NAME to (false to permFlags))
+        var expectedState =
+            mutableMapOf(FG_PERM_NAME to (true to newFlags), BG_PERM_NAME to (false to permFlags))
         assertGroupPermState(newGroup, expectedState)
 
         resetMockAppState()
         val newGroup2 = KotlinUtils.grantBackgroundRuntimePermissions(app, newGroup)
 
-        verifyPermissionState(permName = BG_PERM_NAME, expectPermChange = false,
-            expectedFlags = permFlags, originalFlags = permFlags)
+        verifyPermissionState(
+            permName = BG_PERM_NAME,
+            expectPermChange = false,
+            expectedFlags = permFlags,
+            originalFlags = permFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = false)
         verifyAppKillState(shouldBeKilled = false)
 
-        expectedState = mutableMapOf(FG_PERM_NAME to (true to newFlags),
-            BG_PERM_NAME to (false to permFlags))
+        expectedState =
+            mutableMapOf(FG_PERM_NAME to (true to newFlags), BG_PERM_NAME to (false to permFlags))
         assertGroupPermState(newGroup2, expectedState)
     }
 
@@ -596,8 +708,12 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.grantForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = false,
-            expectedFlags = newFlags, originalFlags = oldFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = false,
+            expectedFlags = newFlags,
+            originalFlags = oldFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = false)
         verifyAppKillState(shouldBeKilled = false)
 
@@ -620,8 +736,12 @@ class GrantRevokeTests {
 
         val newGroup = KotlinUtils.grantForegroundRuntimePermissions(app, group)
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = false,
-            expectedFlags = newFlags, originalFlags = oldFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = false,
+            expectedFlags = newFlags,
+            originalFlags = oldFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_ALLOWED)
         verifyAppKillState(shouldBeKilled = true)
 
@@ -643,8 +763,12 @@ class GrantRevokeTests {
         resetMockAppState()
         val newGroup = KotlinUtils.grantForegroundRuntimePermissions(app, group)
 
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = false,
-            expectedFlags = flags, originalFlags = flags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = false,
+            expectedFlags = flags,
+            originalFlags = flags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = false)
         verifyAppKillState(shouldBeKilled = false)
 
@@ -652,9 +776,7 @@ class GrantRevokeTests {
         assertGroupPermState(newGroup, expectedState)
     }
 
-    /**
-     * Test that an instant app cannot have regular (non-instant) permission granted.
-     */
+    /** Test that an instant app cannot have regular (non-instant) permission granted. */
     @Test
     fun cantGrantInstantAppStandardPermTest() {
         val pkg = createMockPackage(mapOf(FG_PERM_NAME to false), isInstantApp = true)
@@ -680,8 +802,12 @@ class GrantRevokeTests {
     fun cantGrantPreRuntimeAppWithRuntimeOnlyPermTest() {
         val pkg = createMockPackage(mapOf(FG_PERM_NAME to false), isPreMApp = true)
         val perms = mutableMapOf<String, LightPermission>()
-        perms[FG_PERM_NAME] = createMockPerm(pkg, FG_PERM_NAME,
-            permInfoProtectionFlags = PROTECTION_FLAG_RUNTIME_ONLY)
+        perms[FG_PERM_NAME] =
+            createMockPerm(
+                pkg,
+                FG_PERM_NAME,
+                permInfoProtectionFlags = PROTECTION_FLAG_RUNTIME_ONLY
+            )
         val group = createMockGroup(pkg, perms)
         resetMockAppState()
 
@@ -695,23 +821,25 @@ class GrantRevokeTests {
         assertGroupPermState(newGroup, expectedState)
     }
 
-    /**
-     * Test that an instant package can have an instant permission granted.
-     */
+    /** Test that an instant package can have an instant permission granted. */
     @Test
     fun grantInstantAppInstantPermTest() {
         val pkg = createMockPackage(mapOf(FG_PERM_NAME to false), isInstantApp = true)
         val perms = mutableMapOf<String, LightPermission>()
-        perms[FG_PERM_NAME] = createMockPerm(pkg, FG_PERM_NAME,
-            permInfoProtectionFlags = PROTECTION_FLAG_INSTANT)
+        perms[FG_PERM_NAME] =
+            createMockPerm(pkg, FG_PERM_NAME, permInfoProtectionFlags = PROTECTION_FLAG_INSTANT)
         val group = createMockGroup(pkg, perms)
         resetMockAppState()
 
         val newGroup = KotlinUtils.grantForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = true, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = true,
+            expectedFlags = newFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_ALLOWED)
         verifyAppKillState(shouldBeKilled = false)
 
@@ -719,9 +847,7 @@ class GrantRevokeTests {
         assertGroupPermState(newGroup, expectedState)
     }
 
-    /**
-     * Test that granting a permission clears the user fixed and review required flags.
-     */
+    /** Test that granting a permission clears the user fixed and review required flags. */
     @Test
     fun grantClearsUserFixedAndReviewRequired() {
         val pkg = createMockPackage(mapOf(FG_PERM_NAME to true))
@@ -733,8 +859,12 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.grantForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = false,
-            expectedFlags = newFlags, originalFlags = oldFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = false,
+            expectedFlags = newFlags,
+            originalFlags = oldFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = false)
         verifyAppKillState(shouldBeKilled = false)
 
@@ -742,9 +872,7 @@ class GrantRevokeTests {
         assertGroupPermState(newGroup, expectedState)
     }
 
-    /**
-     * Test revoking one foreground permission. The permission and app op should be revoked.
-     */
+    /** Test revoking one foreground permission. The permission and app op should be revoked. */
     @Test
     fun revokeOnePermTest() {
         val pkg = createMockPackage(mapOf(FG_PERM_NAME to true))
@@ -756,8 +884,12 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.revokeForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = false, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = false,
+            expectedFlags = newFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_IGNORED)
         verifyAppKillState(shouldBeKilled = false)
 
@@ -765,9 +897,7 @@ class GrantRevokeTests {
         assertGroupPermState(newGroup, expectedState)
     }
 
-    /**
-     * Test revoking two foreground permissions. Both permissions and app ops should be revoked.
-     */
+    /** Test revoking two foreground permissions. Both permissions and app ops should be revoked. */
     @Test
     fun revokeTwoPermTest() {
         val pkg = createMockPackage(mapOf(FG_PERM_NAME to true, FG_PERM_2_NAME to true))
@@ -780,16 +910,24 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.revokeForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = false, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = false,
+            expectedFlags = newFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_IGNORED)
-        verifyPermissionState(permName = FG_PERM_2_NAME, expectPermChange = true,
-            expectPermGranted = false, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = FG_PERM_2_NAME,
+            expectPermChange = true,
+            expectPermGranted = false,
+            expectedFlags = newFlags
+        )
         verifyAppOpState(appOpName = OP_2_NAME, expectAppOpSet = true, expectedMode = MODE_IGNORED)
         verifyAppKillState(shouldBeKilled = false)
 
-        val expectedState = mutableMapOf(FG_PERM_NAME to (false to newFlags),
-            FG_PERM_2_NAME to (false to newFlags))
+        val expectedState =
+            mutableMapOf(FG_PERM_NAME to (false to newFlags), FG_PERM_2_NAME to (false to newFlags))
         assertGroupPermState(newGroup, expectedState)
     }
 
@@ -807,8 +945,12 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.revokeForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME_NO_APP_OP, expectPermChange = true,
-            expectPermGranted = false, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME_NO_APP_OP,
+            expectPermChange = true,
+            expectPermGranted = false,
+            expectedFlags = newFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = false)
         verifyAppOpState(appOpName = OP_2_NAME, expectAppOpSet = false)
         verifyAppKillState(shouldBeKilled = false)
@@ -834,13 +976,17 @@ class GrantRevokeTests {
 
         val newFlags = FLAG_PERMISSION_USER_SET
         verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = false)
-        verifyPermissionState(permName = BG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = false, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = BG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = false,
+            expectedFlags = newFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_FOREGROUND)
         verifyAppKillState(shouldBeKilled = false)
 
-        val expectedState = mutableMapOf(FG_PERM_NAME to (true to NO_FLAGS),
-            BG_PERM_NAME to (false to newFlags))
+        val expectedState =
+            mutableMapOf(FG_PERM_NAME to (true to NO_FLAGS), BG_PERM_NAME to (false to newFlags))
         assertGroupPermState(newGroup, expectedState)
     }
 
@@ -861,24 +1007,32 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.revokeBackgroundRuntimePermissions(app, group, true)
 
         val newFlags = FLAG_PERMISSION_USER_SET or FLAG_PERMISSION_USER_FIXED
-        verifyPermissionState(permName = BG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = false, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = BG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = false,
+            expectedFlags = newFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_FOREGROUND)
         verifyAppKillState(shouldBeKilled = false)
-        val expectedState = mutableMapOf(FG_PERM_NAME to (true to NO_FLAGS),
-            BG_PERM_NAME to (false to newFlags))
+        val expectedState =
+            mutableMapOf(FG_PERM_NAME to (true to NO_FLAGS), BG_PERM_NAME to (false to newFlags))
         assertGroupPermState(newGroup, expectedState)
 
         resetMockAppState()
         val newGroup2 = KotlinUtils.revokeForegroundRuntimePermissions(app, newGroup, true)
 
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = false, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = false,
+            expectedFlags = newFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_IGNORED)
         verifyAppKillState(shouldBeKilled = false)
 
-        val expectedState2 = mutableMapOf(FG_PERM_NAME to (false to newFlags),
-            BG_PERM_NAME to (false to newFlags))
+        val expectedState2 =
+            mutableMapOf(FG_PERM_NAME to (false to newFlags), BG_PERM_NAME to (false to newFlags))
         assertGroupPermState(newGroup2, expectedState2)
     }
 
@@ -899,15 +1053,19 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.revokeForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = false, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = false,
+            expectedFlags = newFlags
+        )
         verifyPermissionState(permName = FG_PERM_2_NAME, expectPermChange = false)
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_IGNORED)
         verifyAppOpState(appOpName = OP_2_NAME, expectAppOpSet = false)
         verifyAppKillState(shouldBeKilled = false)
 
-        val expectedState = mutableMapOf(FG_PERM_NAME to (false to newFlags),
-            FG_PERM_2_NAME to (true to permFlags))
+        val expectedState =
+            mutableMapOf(FG_PERM_NAME to (false to newFlags), FG_PERM_2_NAME to (true to permFlags))
         assertGroupPermState(newGroup, expectedState)
     }
 
@@ -928,13 +1086,17 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.revokeForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = false, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = false,
+            expectedFlags = newFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_IGNORED)
         verifyAppKillState(shouldBeKilled = false)
 
-        var expectedState = mutableMapOf(FG_PERM_NAME to (false to newFlags),
-            BG_PERM_NAME to (true to permFlags))
+        var expectedState =
+            mutableMapOf(FG_PERM_NAME to (false to newFlags), BG_PERM_NAME to (true to permFlags))
         assertGroupPermState(newGroup, expectedState)
 
         resetMockAppState()
@@ -944,14 +1106,14 @@ class GrantRevokeTests {
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = false)
         verifyAppKillState(shouldBeKilled = false)
 
-        expectedState = mutableMapOf(FG_PERM_NAME to (false to newFlags),
-            BG_PERM_NAME to (true to permFlags))
+        expectedState =
+            mutableMapOf(FG_PERM_NAME to (false to newFlags), BG_PERM_NAME to (true to permFlags))
         assertGroupPermState(newGroup2, expectedState)
     }
 
     /**
-     * Test revoking a one time granted permission. The permission should be revoked, but no
-     * longer be one time.
+     * Test revoking a one time granted permission. The permission should be revoked, but no longer
+     * be one time.
      */
     @Test
     fun revokeOneTimeTest() {
@@ -965,8 +1127,13 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.revokeForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = false, expectedFlags = newFlags, originalFlags = oldFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = false,
+            expectedFlags = newFlags,
+            originalFlags = oldFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_IGNORED)
         verifyAppKillState(shouldBeKilled = false)
 
@@ -975,8 +1142,8 @@ class GrantRevokeTests {
     }
 
     /**
-     * Test compat revoking (permission granted, app op denied) permission. The app op
-     * should be revoked, while the permission remains granted. The app should also be killed.
+     * Test compat revoking (permission granted, app op denied) permission. The app op should be
+     * revoked, while the permission remains granted. The app should also be killed.
      */
     @Test
     fun revokePreMAppTest() {
@@ -989,8 +1156,11 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.revokeForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET or FLAG_PERMISSION_REVOKED_COMPAT
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = false,
-            expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = false,
+            expectedFlags = newFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_IGNORED)
         verifyAppKillState(shouldBeKilled = true)
 
@@ -1036,8 +1206,12 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.revokeForegroundRuntimePermissions(app, group, true)
 
         val newFlags = FLAG_PERMISSION_USER_SET or FLAG_PERMISSION_USER_FIXED
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = false, expectedFlags = newFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = false,
+            expectedFlags = newFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_IGNORED)
         verifyAppKillState(shouldBeKilled = false)
 
@@ -1062,8 +1236,13 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.revokeForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = false, expectedFlags = newFlags, originalFlags = oldFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = false,
+            expectedFlags = newFlags,
+            originalFlags = oldFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_IGNORED)
         verifyAppKillState(shouldBeKilled = false)
 
@@ -1087,8 +1266,13 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.revokeForegroundRuntimePermissions(app, group, true)
 
         val newFlags = oldFlags or FLAG_PERMISSION_USER_FIXED
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = true,
-            expectPermGranted = false, expectedFlags = newFlags, originalFlags = oldFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = true,
+            expectPermGranted = false,
+            expectedFlags = newFlags,
+            originalFlags = oldFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = true, expectedMode = MODE_IGNORED)
         verifyAppKillState(shouldBeKilled = false)
 
@@ -1097,8 +1281,8 @@ class GrantRevokeTests {
     }
 
     /**
-     * Test revoking an already revoked permission, while changing its user fixed state from true
-     * to false. The user fixed should update, but the state should stay the same otherwise.
+     * Test revoking an already revoked permission, while changing its user fixed state from true to
+     * false. The user fixed should update, but the state should stay the same otherwise.
      */
     @Test
     fun changeUserFixedTest() {
@@ -1112,8 +1296,12 @@ class GrantRevokeTests {
         val newGroup = KotlinUtils.revokeForegroundRuntimePermissions(app, group)
 
         val newFlags = FLAG_PERMISSION_USER_SET
-        verifyPermissionState(permName = FG_PERM_NAME, expectPermChange = false,
-            expectedFlags = newFlags, originalFlags = oldFlags)
+        verifyPermissionState(
+            permName = FG_PERM_NAME,
+            expectPermChange = false,
+            expectedFlags = newFlags,
+            originalFlags = oldFlags
+        )
         verifyAppOpState(appOpName = OP_NAME, expectAppOpSet = false)
         verifyAppKillState(shouldBeKilled = false)
 

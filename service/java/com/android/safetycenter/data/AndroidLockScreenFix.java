@@ -16,9 +16,6 @@
 
 package com.android.safetycenter.data;
 
-import static android.os.Build.VERSION_CODES.TIRAMISU;
-
-import android.annotation.Nullable;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
@@ -30,8 +27,6 @@ import android.safetycenter.SafetySourceIssue;
 import android.safetycenter.SafetySourceStatus;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
-
 import com.android.modules.utils.build.SdkLevel;
 import com.android.safetycenter.PendingIntentFactory;
 import com.android.safetycenter.SafetyCenterFlags;
@@ -42,7 +37,6 @@ import java.util.List;
  * A class to work around an issue with the {@code AndroidLockScreen} safety source, by potentially
  * overriding its {@link SafetySourceData}.
  */
-@RequiresApi(TIRAMISU)
 final class AndroidLockScreenFix {
 
     private static final String TAG = "AndroidLockScreenFix";
@@ -57,9 +51,22 @@ final class AndroidLockScreenFix {
 
     private AndroidLockScreenFix() {}
 
+    static boolean shouldApplyFix(String sourceId) {
+        if (SdkLevel.isAtLeastU()) {
+            // No need to override on U+ as the issue has been fixed in a T QPR release.
+            // As such, U+ fields for the SafetySourceData are not taken into account in the methods
+            // below.
+            return false;
+        }
+        if (!ANDROID_LOCK_SCREEN_SOURCE_ID.equals(sourceId)) {
+            return false;
+        }
+        return SafetyCenterFlags.getReplaceLockScreenIconAction();
+    }
+
     /**
-     * Potentially overrides the {@link SafetySourceData} of the {@code AndroidLockScreen} source by
-     * replacing its {@link PendingIntent}s.
+     * Overrides the {@link SafetySourceData} of the {@code AndroidLockScreen} source by replacing
+     * its {@link PendingIntent}s.
      *
      * <p>This is done because of a bug in the Settings app where the {@link PendingIntent}s created
      * end up referencing either the {@link SafetyCenterEntry#getPendingIntent()} or the {@link
@@ -72,109 +79,76 @@ final class AndroidLockScreenFix {
      * different request codes for the different {@link PendingIntent}s to ensure new instances are
      * created (the key does take into account the request code).
      */
-    @Nullable
-    static SafetySourceData maybeOverrideSafetySourceData(
-            Context context, String sourceId, @Nullable SafetySourceData safetySourceData) {
-        if (safetySourceData == null) {
-            return null;
-        }
-        if (SdkLevel.isAtLeastU()) {
-            // No need to override on U+ as the issue has been fixed in a T QPR release.
-            // As such, U+ fields for the SafetySourceData are not taken into account in the methods
-            // below.
-            return safetySourceData;
-        }
-        if (!ANDROID_LOCK_SCREEN_SOURCE_ID.equals(sourceId)) {
-            return safetySourceData;
-        }
-        if (!SafetyCenterFlags.getReplaceLockScreenIconAction()) {
-            return safetySourceData;
-        }
-        return overrideTiramisuSafetySourceData(context, safetySourceData);
-    }
+    static SafetySourceData applyFix(Context context, SafetySourceData data) {
+        SafetySourceData.Builder overriddenData =
+                SafetySourceDataOverrides.copyDataToBuilderWithoutIssues(data);
 
-    private static SafetySourceData overrideTiramisuSafetySourceData(
-            Context context, SafetySourceData safetySourceData) {
-        SafetySourceData.Builder overriddenSafetySourceData = new SafetySourceData.Builder();
-        SafetySourceStatus safetySourceStatus = safetySourceData.getStatus();
-        if (safetySourceStatus != null) {
-            overriddenSafetySourceData.setStatus(
-                    overrideTiramisuSafetySourceStatus(context, safetySourceStatus));
+        SafetySourceStatus originalStatus = data.getStatus();
+        if (originalStatus != null) {
+            overriddenData.setStatus(overrideTiramisuSafetySourceStatus(context, originalStatus));
         }
-        List<SafetySourceIssue> safetySourceIssues = safetySourceData.getIssues();
-        for (int i = 0; i < safetySourceIssues.size(); i++) {
-            SafetySourceIssue safetySourceIssue = safetySourceIssues.get(i);
-            overriddenSafetySourceData.addIssue(
-                    overrideTiramisuSafetySourceIssue(context, safetySourceIssue));
+
+        List<SafetySourceIssue> issues = data.getIssues();
+        for (int i = 0; i < issues.size(); i++) {
+            overriddenData.addIssue(overrideTiramisuIssue(context, issues.get(i)));
         }
-        return overriddenSafetySourceData.build();
+
+        return overriddenData.build();
     }
 
     private static SafetySourceStatus overrideTiramisuSafetySourceStatus(
-            Context context, SafetySourceStatus safetySourceStatus) {
-        SafetySourceStatus.Builder overriddenSafetySourceStatus =
-                new SafetySourceStatus.Builder(
-                                safetySourceStatus.getTitle(),
-                                safetySourceStatus.getSummary(),
-                                safetySourceStatus.getSeverityLevel())
-                        .setPendingIntent(
-                                overridePendingIntent(
-                                        context, safetySourceStatus.getPendingIntent(), false))
-                        .setEnabled(safetySourceStatus.isEnabled());
-        SafetySourceStatus.IconAction iconAction = safetySourceStatus.getIconAction();
-        if (iconAction != null) {
-            overriddenSafetySourceStatus.setIconAction(
-                    overrideTiramisuSafetySourceStatusIconAction(
-                            context, safetySourceStatus.getIconAction()));
+            Context context, SafetySourceStatus status) {
+        SafetySourceStatus.Builder overriddenStatus =
+                SafetySourceDataOverrides.copyStatusToBuilder(status);
+
+        PendingIntent originalPendingIntent = status.getPendingIntent();
+        if (originalPendingIntent != null) {
+            overriddenStatus.setPendingIntent(
+                    overridePendingIntent(
+                            context, originalPendingIntent, /* isIconAction= */ false));
         }
-        return overriddenSafetySourceStatus.build();
+
+        SafetySourceStatus.IconAction iconAction = status.getIconAction();
+        if (iconAction != null) {
+            overriddenStatus.setIconAction(
+                    overrideTiramisuIconAction(context, status.getIconAction()));
+        }
+
+        return overriddenStatus.build();
     }
 
-    private static SafetySourceStatus.IconAction overrideTiramisuSafetySourceStatusIconAction(
+    private static SafetySourceStatus.IconAction overrideTiramisuIconAction(
             Context context, SafetySourceStatus.IconAction iconAction) {
         return new SafetySourceStatus.IconAction(
                 iconAction.getIconType(),
-                overridePendingIntent(context, iconAction.getPendingIntent(), true));
+                overridePendingIntent(
+                        context, iconAction.getPendingIntent(), /* isIconAction= */ true));
     }
 
-    private static SafetySourceIssue overrideTiramisuSafetySourceIssue(
-            Context context, SafetySourceIssue safetySourceIssue) {
-        SafetySourceIssue.Builder overriddenSafetySourceIssue =
-                new SafetySourceIssue.Builder(
-                                safetySourceIssue.getId(),
-                                safetySourceIssue.getTitle(),
-                                safetySourceIssue.getSummary(),
-                                safetySourceIssue.getSeverityLevel(),
-                                safetySourceIssue.getIssueTypeId())
-                        .setSubtitle(safetySourceIssue.getSubtitle())
-                        .setIssueCategory(safetySourceIssue.getIssueCategory())
-                        .setOnDismissPendingIntent(safetySourceIssue.getOnDismissPendingIntent());
-        List<SafetySourceIssue.Action> actions = safetySourceIssue.getActions();
+    private static SafetySourceIssue overrideTiramisuIssue(
+            Context context, SafetySourceIssue issue) {
+        SafetySourceIssue.Builder overriddenIssue =
+                SafetySourceDataOverrides.copyIssueToBuilderWithoutActions(issue);
+
+        List<SafetySourceIssue.Action> actions = issue.getActions();
         for (int i = 0; i < actions.size(); i++) {
             SafetySourceIssue.Action action = actions.get(i);
-            overriddenSafetySourceIssue.addAction(
-                    overrideTiramisuSafetySourceIssueAction(context, action));
+            overriddenIssue.addAction(overrideTiramisuIssueAction(context, action));
         }
-        return overriddenSafetySourceIssue.build();
+
+        return overriddenIssue.build();
     }
 
-    private static SafetySourceIssue.Action overrideTiramisuSafetySourceIssueAction(
+    private static SafetySourceIssue.Action overrideTiramisuIssueAction(
             Context context, SafetySourceIssue.Action action) {
-        return new SafetySourceIssue.Action.Builder(
-                        action.getId(),
-                        action.getLabel(),
-                        overridePendingIntent(context, action.getPendingIntent(), false))
-                .setWillResolve(action.willResolve())
-                .setSuccessMessage(action.getSuccessMessage())
-                .build();
+        PendingIntent pendingIntent =
+                overridePendingIntent(
+                        context, action.getPendingIntent(), /* isIconAction= */ false);
+        return SafetySourceDataOverrides.overrideActionPendingIntent(action, pendingIntent);
     }
 
-    @Nullable
     private static PendingIntent overridePendingIntent(
-            Context context, @Nullable PendingIntent pendingIntent, boolean isIconAction) {
-        if (pendingIntent == null) {
-            return null;
-        }
+            Context context, PendingIntent pendingIntent, boolean isIconAction) {
         String settingsPackageName = pendingIntent.getCreatorPackage();
         int userId = pendingIntent.getCreatorUserHandle().getIdentifier();
         Context settingsPackageContext =
@@ -206,7 +180,7 @@ final class AndroidLockScreenFix {
         // This is important because there are scenarios where the Settings app provides different
         // pending intents (e.g. in the work profile), and in this case we shouldn't override them.
         if (isIconAction) {
-            Log.w(
+            Log.i(
                     TAG,
                     "Replacing " + ANDROID_LOCK_SCREEN_SOURCE_ID + " icon action pending intent");
             return PendingIntentFactory.getActivityPendingIntent(
@@ -215,7 +189,7 @@ final class AndroidLockScreenFix {
                     newLockScreenIconActionIntent(settingsPackageName),
                     PendingIntent.FLAG_IMMUTABLE);
         }
-        Log.w(TAG, "Replacing " + ANDROID_LOCK_SCREEN_SOURCE_ID + " entry or issue pending intent");
+        Log.i(TAG, "Replacing " + ANDROID_LOCK_SCREEN_SOURCE_ID + " entry or issue pending intent");
         return PendingIntentFactory.getActivityPendingIntent(
                 settingsPackageContext,
                 ANDROID_LOCK_SCREEN_ENTRY_REQ_CODE,

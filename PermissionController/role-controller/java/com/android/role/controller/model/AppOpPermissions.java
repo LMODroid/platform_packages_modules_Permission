@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.UserHandle;
 
 import androidx.annotation.NonNull;
 
@@ -42,14 +43,15 @@ public class AppOpPermissions {
      * @param appOpPermission the name of the app op permission
      * @param overrideNonDefaultMode whether to override the app opp mode if it isn't in the default
      *        mode
+     * @param user the user of the application
      * @param context the {@code Context} to retrieve system services
      *
      * @return whether any app op mode has changed
      */
-    public static boolean grant(@NonNull String packageName, @NonNull String appOpPermission,
-            boolean overrideNonDefaultMode, @NonNull Context context) {
-        PackageInfo packageInfo = PackageUtils.getPackageInfo(packageName,
-                PackageManager.GET_PERMISSIONS, context);
+    public static boolean grantAsUser(@NonNull String packageName, @NonNull String appOpPermission,
+            boolean overrideNonDefaultMode, @NonNull UserHandle user, @NonNull Context context) {
+        PackageInfo packageInfo = PackageUtils.getPackageInfoAsUser(packageName,
+                PackageManager.GET_PERMISSIONS, user, context);
         if (packageInfo == null) {
             return false;
         }
@@ -58,14 +60,16 @@ public class AppOpPermissions {
         }
         String appOp = AppOpsManagerCompat.permissionToOp(appOpPermission);
         if (!overrideNonDefaultMode) {
-            Integer currentMode = Permissions.getAppOpMode(packageName, appOp, context);
+            Integer currentMode = Permissions.getAppOpModeAsUser(packageName, appOp, user, context);
             if (currentMode != null && currentMode != Permissions.getDefaultAppOpMode(appOp)) {
                 return false;
             }
         }
-        boolean changed = setAppOpMode(packageName, appOp, AppOpsManager.MODE_ALLOWED, context);
+        boolean changed = setAppOpModeAsUser(packageName, appOp, AppOpsManager.MODE_ALLOWED, user,
+                context);
         if (changed) {
-            Permissions.setPermissionGrantedByRole(packageName, appOpPermission, true, context);
+            Permissions.setPermissionGrantedByRoleAsUser(packageName, appOpPermission, true,
+                    user, context);
         }
         return changed;
     }
@@ -75,24 +79,27 @@ public class AppOpPermissions {
      *
      * @param packageName the package name of the application
      * @param appOpPermission the name of the app op permission
+     * @param user the user of the application
      * @param context the {@code Context} to retrieve system services
      *
      * @return whether any app op mode has changed
      */
-    public static boolean revoke(@NonNull String packageName, @NonNull String appOpPermission,
-            @NonNull Context context) {
-        if (!Permissions.isPermissionGrantedByRole(packageName, appOpPermission, context)) {
+    public static boolean revokeAsUser(@NonNull String packageName, @NonNull String appOpPermission,
+            @NonNull UserHandle user, @NonNull Context context) {
+        if (!Permissions.isPermissionGrantedByRoleAsUser(packageName, appOpPermission, user,
+                context)) {
             return false;
         }
         String appOp = AppOpsManager.permissionToOp(appOpPermission);
         int defaultMode = Permissions.getDefaultAppOpMode(appOp);
-        boolean changed = setAppOpMode(packageName, appOp, defaultMode, context);
-        Permissions.setPermissionGrantedByRole(packageName, appOpPermission, false, context);
+        boolean changed = setAppOpModeAsUser(packageName, appOp, defaultMode, user, context);
+        Permissions.setPermissionGrantedByRoleAsUser(packageName, appOpPermission, false,
+                user, context);
         return changed;
     }
 
-    private static boolean setAppOpMode(@NonNull String packageName, @NonNull String appOp,
-            int mode, @NonNull Context context) {
+    private static boolean setAppOpModeAsUser(@NonNull String packageName, @NonNull String appOp,
+            int mode, @NonNull UserHandle user, @NonNull Context context) {
         switch (appOp) {
             case AppOpsManager.OPSTR_ACCESS_NOTIFICATIONS:
             case AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW:
@@ -105,22 +112,25 @@ public class AppOpPermissions {
             case AppOpsManager.OPSTR_MANAGE_IPSEC_TUNNELS:
             case AppOpsManager.OPSTR_INSTANT_APP_START_FOREGROUND:
             case AppOpsManager.OPSTR_LOADER_USAGE_STATS:
-                return Permissions.setAppOpPackageMode(packageName, appOp, mode, context);
+                return Permissions.setAppOpPackageModeAsUser(packageName, appOp, mode, user,
+                        context);
             case AppOpsManager.OPSTR_INTERACT_ACROSS_PROFILES:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     // We fixed OP_INTERACT_ACROSS_PROFILES to use UID mode on S and backported it
                     // to R, but still, we might have an out-of-date platform or an upgraded
                     // platform with old state.
                     boolean changed = false;
-                    changed |= Permissions.setAppOpUidMode(packageName, appOp, mode, context);
-                    changed |= Permissions.setAppOpPackageMode(packageName, appOp,
-                            Permissions.getDefaultAppOpMode(appOp), context);
+                    changed |= Permissions.setAppOpUidModeAsUser(packageName, appOp, mode, user,
+                            context);
+                    changed |= Permissions.setAppOpPackageModeAsUser(packageName, appOp,
+                            Permissions.getDefaultAppOpMode(appOp), user, context);
                     return changed;
                 } else {
-                    return Permissions.setAppOpPackageMode(packageName, appOp, mode, context);
+                    return Permissions.setAppOpPackageModeAsUser(packageName, appOp, mode, user,
+                            context);
                 }
             default:
-                return Permissions.setAppOpUidMode(packageName, appOp, mode, context);
+                return Permissions.setAppOpUidModeAsUser(packageName, appOp, mode, user, context);
         }
     }
 }

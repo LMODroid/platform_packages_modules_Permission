@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 @NonNullByDefault
+@RequiresApi(TIRAMISU)
 package com.android.safetycenter.logging;
+
+import static android.os.Build.VERSION_CODES.TIRAMISU;
+
+import android.annotation.RequiresApi;
 
 import com.android.safetycenter.annotations.NonNullByDefault;

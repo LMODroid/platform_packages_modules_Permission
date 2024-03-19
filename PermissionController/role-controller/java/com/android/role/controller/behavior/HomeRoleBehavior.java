@@ -22,15 +22,20 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PermissionInfo;
 import android.content.pm.ResolveInfo;
+import android.os.Build;
 import android.os.UserHandle;
 import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
+import com.android.modules.utils.build.SdkLevel;
+import com.android.role.controller.model.AppOpPermissions;
 import com.android.role.controller.model.Permissions;
 import com.android.role.controller.model.Role;
 import com.android.role.controller.model.RoleBehavior;
+import com.android.role.controller.model.VisibilityMixin;
 import com.android.role.controller.util.UserUtils;
 
 import java.util.Arrays;
@@ -51,6 +56,18 @@ public class HomeRoleBehavior implements RoleBehavior {
             android.Manifest.permission.WRITE_CALL_LOG,
             android.Manifest.permission.READ_CONTACTS);
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private static final List<String> WEAR_PERMISSIONS_T = Arrays.asList(
+            android.Manifest.permission.POST_NOTIFICATIONS,
+            android.Manifest.permission.SYSTEM_APPLICATION_OVERLAY);
+
+    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
+    private static final List<String> WEAR_PERMISSIONS_V = Arrays.asList(
+            android.Manifest.permission.ALWAYS_UPDATE_WALLPAPER);
+
+    private static final List<String> WEAR_APP_OP_PERMISSIONS = Arrays.asList(
+            android.Manifest.permission.SYSTEM_ALERT_WINDOW);
+
     @Override
     public boolean isAvailableAsUser(@NonNull Role role, @NonNull UserHandle user,
             @NonNull Context context) {
@@ -62,10 +79,12 @@ public class HomeRoleBehavior implements RoleBehavior {
      */
     @Nullable
     @Override
-    public String getFallbackHolder(@NonNull Role role, @NonNull Context context) {
-        PackageManager packageManager = context.getPackageManager();
+    public String getFallbackHolderAsUser(@NonNull Role role, @NonNull UserHandle user,
+            @NonNull Context context) {
+        Context userContext = UserUtils.getUserContext(context, user);
+        PackageManager userPackageManager = userContext.getPackageManager();
         Intent intent = role.getRequiredComponents().get(0).getIntentFilterData().createIntent();
-        List<ResolveInfo> resolveInfos = packageManager.queryIntentActivities(intent,
+        List<ResolveInfo> resolveInfos = userPackageManager.queryIntentActivities(intent,
                 PackageManager.MATCH_DEFAULT_ONLY | PackageManager.MATCH_DIRECT_BOOT_AWARE
                 | PackageManager.MATCH_DIRECT_BOOT_UNAWARE);
 
@@ -78,7 +97,8 @@ public class HomeRoleBehavior implements RoleBehavior {
             // Leave the fallback to PackageManagerService if there is only the fallback home in
             // Settings, because if we fallback to it here, we cannot fallback to a normal home
             // later, and user cannot see the fallback home in the UI anyway.
-            if (isSettingsApplication(resolveInfo.activityInfo.applicationInfo, context)) {
+            if (isSettingsApplicationAsUser(resolveInfo.activityInfo.applicationInfo, user,
+                    context)) {
                 continue;
             }
             if (resolveInfo.priority > priority) {
@@ -94,14 +114,16 @@ public class HomeRoleBehavior implements RoleBehavior {
     /**
      * Check if the application is a settings application
      */
-    public static boolean isSettingsApplication(@NonNull ApplicationInfo applicationInfo,
-            @NonNull Context context) {
-        PackageManager packageManager = context.getPackageManager();
-        ResolveInfo resolveInfo = packageManager.resolveActivity(new Intent(
-                Settings.ACTION_SETTINGS), PackageManager.MATCH_DEFAULT_ONLY
+    private static boolean isSettingsApplicationAsUser(@NonNull ApplicationInfo applicationInfo,
+            @NonNull UserHandle user, @NonNull Context context) {
+        Context userContext = UserUtils.getUserContext(context, user);
+        PackageManager userPackageManager = userContext.getPackageManager();
+        ResolveInfo resolveInfo = userPackageManager.resolveActivity(
+                new Intent(Settings.ACTION_SETTINGS), PackageManager.MATCH_DEFAULT_ONLY
                 | PackageManager.MATCH_DIRECT_BOOT_AWARE
                 | PackageManager.MATCH_DIRECT_BOOT_UNAWARE);
-        if (resolveInfo == null || resolveInfo.activityInfo == null) {
+        if (resolveInfo == null || resolveInfo.activityInfo == null
+                || !resolveInfo.activityInfo.exported) {
             return false;
         }
         return Objects.equals(applicationInfo.packageName, resolveInfo.activityInfo.packageName);
@@ -119,31 +141,62 @@ public class HomeRoleBehavior implements RoleBehavior {
     }
 
     @Override
-    public void grant(@NonNull Role role, @NonNull String packageName, @NonNull Context context) {
+    public void grantAsUser(@NonNull Role role, @NonNull String packageName,
+            @NonNull UserHandle user, @NonNull Context context) {
         if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_AUTOMOTIVE)) {
-            Permissions.grant(packageName, AUTOMOTIVE_PERMISSIONS,
-                    true, false, true, false, false, context);
+            Permissions.grantAsUser(packageName, AUTOMOTIVE_PERMISSIONS,
+                    true, false, true, false, false, user, context);
         }
 
         // Before T, ALLOW_SLIPPERY_TOUCHES may either not exist, or may not be a role permission
         if (isRolePermission(android.Manifest.permission.ALLOW_SLIPPERY_TOUCHES, context)) {
-            Permissions.grant(packageName,
+            Permissions.grantAsUser(packageName,
                     Arrays.asList(android.Manifest.permission.ALLOW_SLIPPERY_TOUCHES),
-                    true, false, true, false, false, context);
+                    true, false, true, false, false, user, context);
+        }
+
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH)) {
+            if (SdkLevel.isAtLeastT()) {
+                Permissions.grantAsUser(packageName, WEAR_PERMISSIONS_T,
+                        true, false, true, false, false, user, context);
+                for (String permission : WEAR_APP_OP_PERMISSIONS) {
+                    AppOpPermissions.grantAsUser(packageName, permission, true, user, context);
+                }
+            }
+            if (SdkLevel.isAtLeastV()) {
+                Permissions.grantAsUser(packageName, WEAR_PERMISSIONS_V,
+                        true, false, true, false, false, user, context);
+            }
         }
     }
 
     @Override
-    public void revoke(@NonNull Role role, @NonNull String packageName, @NonNull Context context) {
+    public void revokeAsUser(@NonNull Role role, @NonNull String packageName,
+            @NonNull UserHandle user, @NonNull Context context) {
         if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_AUTOMOTIVE)) {
-            Permissions.revoke(packageName, AUTOMOTIVE_PERMISSIONS, true, false, false, context);
+            Permissions.revokeAsUser(packageName, AUTOMOTIVE_PERMISSIONS, true, false, false,
+                    user, context);
         }
 
         // Before T, ALLOW_SLIPPERY_TOUCHES may either not exist, or may not be a role permission
         if (isRolePermission(android.Manifest.permission.ALLOW_SLIPPERY_TOUCHES, context)) {
-            Permissions.revoke(packageName,
+            Permissions.revokeAsUser(packageName,
                     Arrays.asList(android.Manifest.permission.ALLOW_SLIPPERY_TOUCHES),
-                    true, false, false, context);
+                    true, false, false, user, context);
+        }
+
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH)) {
+            if (SdkLevel.isAtLeastT()) {
+                Permissions.revokeAsUser(packageName, WEAR_PERMISSIONS_T, true, false, false,
+                        user, context);
+                for (String permission : WEAR_APP_OP_PERMISSIONS) {
+                    AppOpPermissions.revokeAsUser(packageName, permission, user, context);
+                }
+            }
+            if (SdkLevel.isAtLeastV()) {
+                Permissions.revokeAsUser(packageName, WEAR_PERMISSIONS_V, true, false, false,
+                        user, context);
+            }
         }
     }
 
@@ -160,5 +213,18 @@ public class HomeRoleBehavior implements RoleBehavior {
         }
         final int flags = permissionInfo.getProtectionFlags();
         return (flags & PermissionInfo.PROTECTION_FLAG_ROLE) == PermissionInfo.PROTECTION_FLAG_ROLE;
+    }
+
+    @Override
+    public boolean isVisibleAsUser(@NonNull Role role, @NonNull UserHandle user,
+            @NonNull Context context) {
+        return VisibilityMixin.isVisible("config_showDefaultHome", false, user, context);
+    }
+
+    @Override
+    public boolean isApplicationVisibleAsUser(@NonNull Role role,
+            @NonNull ApplicationInfo applicationInfo, @NonNull UserHandle user,
+            @NonNull Context context) {
+        return !isSettingsApplicationAsUser(applicationInfo, user, context);
     }
 }

@@ -26,7 +26,7 @@ import com.android.permissioncontroller.Constants.EXTRA_SESSION_ID
 import com.android.permissioncontroller.R
 import com.android.permissioncontroller.safetycenter.ui.SafetyBrandChipPreference.Companion.closeSubpage
 import com.android.permissioncontroller.safetycenter.ui.model.SafetyCenterUiData
-import com.android.safetycenter.resources.SafetyCenterResourcesContext
+import com.android.safetycenter.resources.SafetyCenterResourcesApk
 import com.android.settingslib.widget.FooterPreference
 
 /** A fragment that represents a generic subpage in Safety Center. */
@@ -72,7 +72,7 @@ class SafetyCenterSubpageFragment : SafetyCenterFragment() {
     }
 
     override fun renderSafetyCenterData(uiData: SafetyCenterUiData?) {
-        Log.d(TAG, "renderSafetyCenterEntryGroup called with $uiData")
+        Log.v(TAG, "renderSafetyCenterEntryGroup called with $uiData")
         val entryGroup = uiData?.getMatchingGroup(sourceGroupId)
         if (entryGroup == null) {
             Log.w(TAG, "$sourceGroupId doesn't match any of the existing SafetySourcesGroup IDs")
@@ -88,8 +88,7 @@ class SafetyCenterSubpageFragment : SafetyCenterFragment() {
     private fun setupIllustration() {
         val resName = "illustration_${SnakeCaseConverter.fromCamelCase(sourceGroupId)}"
         val context = requireContext()
-        val drawable =
-            SafetyCenterResourcesContext(context).getDrawableByName(resName, context.theme)
+        val drawable = SafetyCenterResourcesApk(context).getDrawableByName(resName, context.theme)
         if (drawable == null) {
             Log.w(TAG, "$sourceGroupId doesn't have any matching illustration")
             subpageIllustration.setVisible(false)
@@ -100,7 +99,7 @@ class SafetyCenterSubpageFragment : SafetyCenterFragment() {
 
     private fun setupFooter() {
         val resName = "${SnakeCaseConverter.fromCamelCase(sourceGroupId)}_footer"
-        val footerText = SafetyCenterResourcesContext(requireContext()).getStringByName(resName)
+        val footerText = SafetyCenterResourcesApk(requireContext()).getStringByName(resName)
         if (footerText.isEmpty()) {
             Log.w(TAG, "$sourceGroupId doesn't have any matching footer")
             subpageFooter.setVisible(false)
@@ -137,7 +136,7 @@ class SafetyCenterSubpageFragment : SafetyCenterFragment() {
     }
 
     private fun updateSafetyCenterEntries(entryGroup: SafetyCenterEntryGroup) {
-        Log.d(TAG, "updateSafetyCenterEntries called with $entryGroup")
+        Log.v(TAG, "updateSafetyCenterEntries called with $entryGroup")
         subpageEntryGroup.removeAll()
         for (entry in entryGroup.entries) {
             subpageEntryGroup.addPreference(

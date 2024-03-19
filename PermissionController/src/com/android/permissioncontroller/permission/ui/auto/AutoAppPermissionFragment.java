@@ -382,8 +382,9 @@ public class AutoAppPermissionFragment extends AutoSettingsFrameFragment
     private static class SelectedPermissionPreference extends TwoStatePreference {
 
         SelectedPermissionPreference(Context context) {
-            super(context, null, TypedArrayUtils.getAttr(context, R.attr.preferenceStyle,
-                    android.R.attr.preferenceStyle));
+            super(context, null,
+                    TypedArrayUtils.getAttr(context, androidx.preference.R.attr.preferenceStyle,
+                            android.R.attr.preferenceStyle));
             setPersistent(false);
             setLayoutResource(R.layout.car_radio_button_preference);
             setWidgetLayoutResource(R.layout.radio_button_preference_widget);
@@ -418,7 +419,7 @@ public class AutoAppPermissionFragment extends AutoSettingsFrameFragment
             // TODO(b/229024576): This code is duplicated, refactor ConfirmDialog for easier
             // NFF sharing
             boolean isGrantFileAccess = getArguments().getSerializable(CHANGE_REQUEST)
-                    == ChangeRequest.GRANT_All_FILE_ACCESS;
+                    == ChangeRequest.GRANT_ALL_FILE_ACCESS;
             boolean isGrantStorageSupergroup = getArguments().getSerializable(CHANGE_REQUEST)
                     == ChangeRequest.GRANT_STORAGE_SUPERGROUP;
             int positiveButtonStringResId = R.string.grant_dialog_button_deny_anyway;

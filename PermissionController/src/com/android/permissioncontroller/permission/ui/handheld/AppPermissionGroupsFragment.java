@@ -23,6 +23,7 @@ import static com.android.permissioncontroller.PermissionControllerStatsLog.APP_
 import static com.android.permissioncontroller.PermissionControllerStatsLog.APP_PERMISSIONS_FRAGMENT_VIEWED__CATEGORY__ALLOWED_FOREGROUND;
 import static com.android.permissioncontroller.PermissionControllerStatsLog.APP_PERMISSIONS_FRAGMENT_VIEWED__CATEGORY__DENIED;
 import static com.android.permissioncontroller.hibernation.HibernationPolicyKt.isHibernationEnabled;
+import static com.android.permissioncontroller.permission.ui.Category.STORAGE_FOOTER;
 import static com.android.permissioncontroller.permission.ui.handheld.UtilsKt.pressBack;
 
 import static java.util.concurrent.TimeUnit.DAYS;
@@ -318,6 +319,9 @@ public final class AppPermissionGroupsFragment extends SettingsWithLargeHeader i
 
         findPreference(Category.ALLOWED_FOREGROUND.getCategoryName()).setVisible(false);
 
+        // Hide storage footer category
+        findPreference(STORAGE_FOOTER.getCategoryName()).setVisible(false);
+
         long sessionId = getArguments().getLong(EXTRA_SESSION_ID, INVALID_SESSION_ID);
 
         for (Category grantCategory : groupMap.keySet()) {
@@ -580,7 +584,7 @@ public final class AppPermissionGroupsFragment extends SettingsWithLargeHeader i
         }
         PermissionControllerStatsLog.write(APP_PERMISSIONS_FRAGMENT_VIEWED, sessionId, viewId,
                 permissionGroupName, uid, mPackageName, category);
-        Log.v(LOG_TAG, "AppPermissionFragment view logged with sessionId=" + sessionId + " viewId="
+        Log.i(LOG_TAG, "AppPermissionFragment view logged with sessionId=" + sessionId + " viewId="
                 + viewId + " permissionGroupName=" + permissionGroupName + " uid="
                 + uid + " packageName="
                 + mPackageName + " category=" + category);

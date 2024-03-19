@@ -41,6 +41,9 @@ import static android.os.UserHandle.getUserHandleForUid;
 import static android.os.UserHandle.myUserId;
 import static android.provider.Settings.Secure.LOCATION_ACCESS_CHECK_DELAY_MILLIS;
 import static android.provider.Settings.Secure.LOCATION_ACCESS_CHECK_INTERVAL_MILLIS;
+import static android.safetycenter.SafetyCenterManager.EXTRA_SAFETY_SOURCE_ID;
+import static android.safetycenter.SafetyCenterManager.EXTRA_SAFETY_SOURCE_ISSUE_ID;
+import static android.safetycenter.SafetyCenterManager.EXTRA_SAFETY_SOURCE_USER_HANDLE;
 
 import static com.android.permissioncontroller.Constants.EXTRA_SESSION_ID;
 import static com.android.permissioncontroller.Constants.INVALID_SESSION_ID;
@@ -75,6 +78,7 @@ import static java.util.concurrent.TimeUnit.DAYS;
 import android.app.AppOpsManager;
 import android.app.AppOpsManager.OpEntry;
 import android.app.AppOpsManager.PackageOps;
+import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -123,6 +127,8 @@ import androidx.annotation.WorkerThread;
 import androidx.core.util.Preconditions;
 
 import com.android.modules.utils.build.SdkLevel;
+import com.android.permissioncontroller.Constants;
+import com.android.permissioncontroller.DeviceUtils;
 import com.android.permissioncontroller.PermissionControllerStatsLog;
 import com.android.permissioncontroller.R;
 import com.android.permissioncontroller.permission.model.AppPermissionGroup;
@@ -409,30 +415,24 @@ public class LocationAccessCheck {
     @WorkerThread
     private void addLocationNotificationIfNeeded(@NonNull JobParameters params,
             @NonNull LocationAccessCheckJobService service) {
-        if (!checkLocationAccessCheckEnabledAndUpdateEnabledTime()) {
-            Log.v(LOG_TAG, "LocationAccessCheck feature is not enabled.");
-            service.jobFinished(params, false);
-            return;
-        }
-
         synchronized (sLock) {
             try {
                 if (currentTimeMillis() - mSharedPrefs.getLong(
                         KEY_LAST_LOCATION_ACCESS_NOTIFICATION_SHOWN, 0)
                         < getInBetweenNotificationsMillis()) {
-                    Log.v(LOG_TAG, "location notification interval is not enough.");
+                    Log.i(LOG_TAG, "location notification interval is not enough.");
                     service.jobFinished(params, false);
                     return;
                 }
 
                 if (getCurrentlyShownNotificationLocked() != null) {
-                    Log.v(LOG_TAG, "already location notification exist.");
+                    Log.i(LOG_TAG, "already location notification exist.");
                     service.jobFinished(params, false);
                     return;
                 }
 
                 addLocationNotificationIfNeeded(mAppOpsManager.getPackagesForOps(
-                        new String[]{OPSTR_FINE_LOCATION}));
+                        new String[]{OPSTR_FINE_LOCATION}), service.getApplication());
                 service.jobFinished(params, false);
             } catch (Exception e) {
                 Log.e(LOG_TAG, "Could not check for location access", e);
@@ -440,20 +440,19 @@ public class LocationAccessCheck {
             } finally {
                 synchronized (sLock) {
                     service.mAddLocationNotificationIfNeededTask = null;
-                    Log.v(LOG_TAG, "LocationAccessCheck privacy job marked complete.");
                 }
             }
         }
     }
 
-    private void addLocationNotificationIfNeeded(@NonNull List<PackageOps> ops)
+    private void addLocationNotificationIfNeeded(@NonNull List<PackageOps> ops, Application app)
             throws InterruptedException {
         synchronized (sLock) {
             List<UserPackage> packages = getLocationUsersLocked(ops);
             ArraySet<UserPackage> alreadyNotifiedPackages = loadAlreadyNotifiedPackagesLocked();
             if (DEBUG) {
-                Log.v(LOG_TAG, "location packages: " + packages);
-                Log.v(LOG_TAG, "already notified packages: " + alreadyNotifiedPackages);
+                Log.d(LOG_TAG, "location packages: " + packages);
+                Log.d(LOG_TAG, "already notified packages: " + alreadyNotifiedPackages);
             }
             throwInterruptedExceptionIfTaskIsCanceled();
             // Send these issues to safety center
@@ -471,7 +470,7 @@ public class LocationAccessCheck {
 
                 if (packages.isEmpty()) {
                     if (DEBUG) {
-                        Log.v(LOG_TAG, "No package found to send a notification");
+                        Log.d(LOG_TAG, "No package found to send a notification");
                     }
                     return;
                 }
@@ -503,7 +502,7 @@ public class LocationAccessCheck {
                 }
             }
             createPermissionReminderChannel(getUserHandleForUid(pkgInfo.applicationInfo.uid));
-            createNotificationForLocationUser(pkgInfo);
+            createNotificationForLocationUser(pkgInfo, app);
         }
     }
 
@@ -583,8 +582,8 @@ public class LocationAccessCheck {
                 // to handle cases where the feature is remotely toggled since we don't want to
                 // notify for accesses before the feature was turned on.
                 long featureEnabledTime = getLocationAccessCheckEnabledTime();
-                if (featureEnabledTime >= 0 && entry.getLastAccessBackgroundTime(
-                        AppOpsManager.OP_FLAGS_ALL_TRUSTED) >= featureEnabledTime) {
+                if (entry.getLastAccessBackgroundTime(AppOpsManager.OP_FLAGS_ALL_TRUSTED)
+                        >= featureEnabledTime) {
                     pkgsWithLocationAccess.add(userPkg);
                     break;
                 }
@@ -601,36 +600,27 @@ public class LocationAccessCheck {
     }
 
     /**
-     * Checks whether the location access check feature is enabled and updates the
-     * time when the feature was first enabled. If the feature is enabled and no
-     * enabled time persisted we persist the current time as the enabled time. If
-     * the feature is disabled and an enabled time is persisted we delete the
-     * persisted time.
-     *
-     * @return Whether the location access feature is enabled.
+     * Sets the LocationAccessCheckEnabledTime if not set.
      */
-    private boolean checkLocationAccessCheckEnabledAndUpdateEnabledTime() {
-        final long enabledTime = getLocationAccessCheckEnabledTime();
-        if (Utils.isLocationAccessCheckEnabled()) {
-            if (enabledTime <= 0) {
-                mSharedPrefs.edit().putLong(KEY_LOCATION_ACCESS_CHECK_ENABLED_TIME,
-                        currentTimeMillis()).commit();
-            }
-            return true;
-        } else {
-            if (enabledTime > 0) {
-                mSharedPrefs.edit().remove(KEY_LOCATION_ACCESS_CHECK_ENABLED_TIME)
-                        .commit();
-            }
-            return false;
+    private void setLocationAccessCheckEnabledTime() {
+        if (isLocationAccessCheckEnabledTimeNotSet()) {
+            mSharedPrefs.edit().putLong(KEY_LOCATION_ACCESS_CHECK_ENABLED_TIME,
+                    currentTimeMillis()).apply();
         }
     }
 
     /**
-     * @return The time the location access check was enabled, or 0 if not enabled.
+     * @return true if the LocationAccessCheckEnabledTime has not been set, else false.
+     */
+    private boolean isLocationAccessCheckEnabledTimeNotSet() {
+        return mSharedPrefs.getLong(KEY_LOCATION_ACCESS_CHECK_ENABLED_TIME, 0) == 0;
+    }
+
+    /**
+     * @return The time the location access check was enabled, or currentTimeMillis if not set.
      */
     private long getLocationAccessCheckEnabledTime() {
-        return mSharedPrefs.getLong(KEY_LOCATION_ACCESS_CHECK_ENABLED_TIME, 0);
+        return mSharedPrefs.getLong(KEY_LOCATION_ACCESS_CHECK_ENABLED_TIME, currentTimeMillis());
     }
 
     /**
@@ -639,7 +629,7 @@ public class LocationAccessCheck {
      *
      * @param pkg The {@link PackageInfo} for the package to to be changed
      */
-    private void createNotificationForLocationUser(@NonNull PackageInfo pkg) {
+    private void createNotificationForLocationUser(@NonNull PackageInfo pkg, Application app) {
         CharSequence pkgLabel = mPackageManager.getApplicationLabel(pkg.applicationInfo);
 
         boolean safetyCenterBgLocationReminderEnabled = isSafetyCenterBgLocationReminderEnabled();
@@ -707,20 +697,27 @@ public class LocationAccessCheck {
             b.setLargeIcon(pkgIconBmp);
         }
 
+        Bundle extras = new Bundle();
+        if (DeviceUtils.isAuto(mContext)) {
+            Bitmap settingsIcon = KotlinUtils.INSTANCE.getSettingsIcon(app, user, mPackageManager);
+            b.setLargeIcon(settingsIcon);
+            extras.putBoolean(Constants.NOTIFICATION_EXTRA_USE_LAUNCHER_ICON, false);
+        }
+
         if (!TextUtils.isEmpty(appLabel)) {
-            Bundle extras = new Bundle();
             String appNameSubstitute = appLabel.toString();
             extras.putString(Notification.EXTRA_SUBSTITUTE_APP_NAME, appNameSubstitute);
-            b.addExtras(extras);
         }
+        b.addExtras(extras);
 
         notificationManager.notify(pkgName, LOCATION_ACCESS_CHECK_NOTIFICATION_ID, b.build());
         markAsNotified(pkgName, user, false);
 
-        if (DEBUG) Log.i(LOG_TAG, "Notified " + pkgName);
-
-        Log.v(LOG_TAG, "Location access check notification shown with sessionId=" + sessionId + ""
-                + " uid=" + pkg.applicationInfo.uid + " pkgName=" + pkgName);
+        if (DEBUG) {
+            Log.d(LOG_TAG,
+                    "Location access check notification shown with sessionId=" + sessionId + ""
+                            + " uid=" + pkg.applicationInfo.uid + " pkgName=" + pkgName);
+        }
         if (safetyCenterBgLocationReminderEnabled) {
             PermissionControllerStatsLog.write(
                     PRIVACY_SIGNAL_NOTIFICATION_INTERACTION,
@@ -1054,6 +1051,10 @@ public class LocationAccessCheck {
         Intent clickIntent = null;
         if (isSafetyCenterBgLocationReminderEnabled()) {
             clickIntent = new Intent(ACTION_SAFETY_CENTER);
+            clickIntent.putExtra(EXTRA_SAFETY_SOURCE_ID, BG_LOCATION_SOURCE_ID);
+            clickIntent.putExtra(
+                    EXTRA_SAFETY_SOURCE_ISSUE_ID, createSafetySourceIssueId(pkg, user));
+            clickIntent.putExtra(EXTRA_SAFETY_SOURCE_USER_HANDLE, user);
         } else {
             clickIntent = new Intent(ACTION_MANAGE_APP_PERMISSION);
             clickIntent.putExtra(EXTRA_PERMISSION_GROUP_NAME, LOCATION);
@@ -1128,7 +1129,7 @@ public class LocationAccessCheck {
             }
 
             // Init LocationAccessCheckEnabledTime if needed
-            locationAccessCheck.checkLocationAccessCheckEnabledAndUpdateEnabledTime();
+            locationAccessCheck.setLocationAccessCheckEnabledTime();
 
             if (jobScheduler.getPendingJob(PERIODIC_LOCATION_ACCESS_CHECK_JOB_ID) == null) {
                 JobInfo.Builder b = (new JobInfo.Builder(PERIODIC_LOCATION_ACCESS_CHECK_JOB_ID,
@@ -1159,7 +1160,6 @@ public class LocationAccessCheck {
 
         @Override
         public void onCreate() {
-            Log.v(LOG_TAG, "LocationAccessCheck privacy job is created");
             super.onCreate();
             mLocationAccessCheck = new LocationAccessCheck(this, () -> {
                 synchronized (sLock) {
@@ -1178,10 +1178,9 @@ public class LocationAccessCheck {
          */
         @Override
         public boolean onStartJob(JobParameters params) {
-            Log.v(LOG_TAG, "LocationAccessCheck privacy job is started");
             synchronized (LocationAccessCheck.sLock) {
                 if (mAddLocationNotificationIfNeededTask != null) {
-                    Log.v(LOG_TAG, "LocationAccessCheck old job not completed yet.");
+                    Log.i(LOG_TAG, "LocationAccessCheck old job not completed yet.");
                     return false;
                 }
 
@@ -1202,7 +1201,6 @@ public class LocationAccessCheck {
          */
         @Override
         public boolean onStopJob(JobParameters params) {
-            Log.v(LOG_TAG, "LocationAccessCheck privacy source onStopJob called.");
             AddLocationNotificationIfNeededTask task;
             synchronized (sLock) {
                 if (mAddLocationNotificationIfNeededTask == null) {
@@ -1250,7 +1248,7 @@ public class LocationAccessCheck {
             long sessionId = intent.getLongExtra(EXTRA_SESSION_ID, INVALID_SESSION_ID);
             int uid = intent.getIntExtra(EXTRA_UID, -1);
 
-            Log.v(LOG_TAG,
+            Log.i(LOG_TAG,
                     "Location access check notification declined with sessionId=" + sessionId + ""
                             + " uid=" + uid + " pkgName=" + pkg);
             LocationAccessCheck locationAccessCheck = new LocationAccessCheck(context, null);
@@ -1325,7 +1323,7 @@ public class LocationAccessCheck {
             UserHandle user = getParcelableExtraSafe(intent, EXTRA_USER);
             long sessionId = intent.getLongExtra(EXTRA_SESSION_ID, INVALID_SESSION_ID);
             int uid = intent.getIntExtra(EXTRA_UID, -1);
-            Log.v(LOG_TAG,
+            Log.i(LOG_TAG,
                     "Location access check warning card dismissed with sessionId=" + sessionId + ""
                             + " uid=" + uid + " pkgName=" + pkg);
             PermissionControllerStatsLog.write(

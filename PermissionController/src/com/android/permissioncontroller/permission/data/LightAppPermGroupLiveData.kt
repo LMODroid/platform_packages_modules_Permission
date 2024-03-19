@@ -27,6 +27,7 @@ import com.android.permissioncontroller.PermissionControllerApplication
 import com.android.permissioncontroller.permission.model.livedatatypes.LightAppPermGroup
 import com.android.permissioncontroller.permission.model.livedatatypes.LightPackageInfo
 import com.android.permissioncontroller.permission.model.livedatatypes.LightPermission
+import com.android.permissioncontroller.permission.utils.KotlinUtils
 import com.android.permissioncontroller.permission.utils.LocationUtils
 import com.android.permissioncontroller.permission.utils.Utils
 import com.android.permissioncontroller.permission.utils.Utils.OS_PKG
@@ -39,31 +40,35 @@ import com.android.permissioncontroller.permission.utils.Utils.OS_PKG
  * @param permGroupName The name of the permission group
  * @param user The user of the package
  */
-class LightAppPermGroupLiveData private constructor(
+class LightAppPermGroupLiveData
+private constructor(
     private val app: Application,
     private val packageName: String,
     private val permGroupName: String,
-    private val user: UserHandle
+    private val user: UserHandle,
+    private val deviceId: Int
 ) : SmartUpdateMediatorLiveData<LightAppPermGroup?>(), LocationUtils.LocationListener {
 
     private val LOG_TAG = this::class.java.simpleName
 
     private var isSpecialLocation = false
-    private val permStateLiveData = PermStateLiveData[packageName, permGroupName, user]
+    private val permStateLiveData = PermStateLiveData[packageName, permGroupName, user, deviceId]
     private val permGroupLiveData = PermGroupLiveData[permGroupName]
-    private val packageInfoLiveData = LightPackageInfoLiveData[packageName, user]
+    private val packageInfoLiveData = LightPackageInfoLiveData[packageName, user, deviceId]
     private val fgPermNamesLiveData = ForegroundPermNamesLiveData
 
     init {
-        isSpecialLocation = LocationUtils.isLocationGroupAndProvider(app,
-            permGroupName, packageName) ||
-            LocationUtils.isLocationGroupAndControllerExtraPackage(app, permGroupName, packageName)
+        isSpecialLocation =
+            LocationUtils.isLocationGroupAndProvider(app, permGroupName, packageName) ||
+                LocationUtils.isLocationGroupAndControllerExtraPackage(
+                    app,
+                    permGroupName,
+                    packageName
+                )
 
-        addSource(fgPermNamesLiveData) {
-            update()
-        }
+        addSource(fgPermNamesLiveData) { update() }
 
-        val key = Triple(packageName, permGroupName, user)
+        val key = KotlinUtils.Quadruple(packageName, permGroupName, user, deviceId)
 
         addSource(permStateLiveData) { permStates ->
             if (permStates == null && permStateLiveData.isInitialized) {
@@ -100,8 +105,10 @@ class LightAppPermGroupLiveData private constructor(
         val allForegroundPerms = fgPermNamesLiveData.value ?: return
 
         // Do not allow toggling pre-M custom perm groups
-        if (packageInfo.targetSdkVersion < Build.VERSION_CODES.M &&
-            permGroup.groupInfo.packageName != OS_PKG) {
+        if (
+            packageInfo.targetSdkVersion < Build.VERSION_CODES.M &&
+                permGroup.groupInfo.packageName != OS_PKG
+        ) {
             value = LightAppPermGroup(packageInfo, permGroup.groupInfo, emptyMap())
             return
         }
@@ -110,8 +117,8 @@ class LightAppPermGroupLiveData private constructor(
         for ((permName, permState) in permStates) {
             val permInfo = permGroup.permissionInfos[permName] ?: continue
             val foregroundPerms = allForegroundPerms[permName]
-            permissionMap[permName] = LightPermission(packageInfo, permInfo, permState,
-                    foregroundPerms)
+            permissionMap[permName] =
+                LightPermission(packageInfo, permInfo, permState, foregroundPerms)
         }
 
         // Determine if this app permission group is a special location package or provider
@@ -119,17 +126,24 @@ class LightAppPermGroupLiveData private constructor(
         val userContext = Utils.getUserContext(app, user)
         if (LocationUtils.isLocationGroupAndProvider(userContext, permGroupName, packageName)) {
             specialLocationGrant = LocationUtils.isLocationEnabled(userContext)
-        } else if (LocationUtils.isLocationGroupAndControllerExtraPackage(app, permGroupName,
-                packageName)) {
+        } else if (
+            LocationUtils.isLocationGroupAndControllerExtraPackage(app, permGroupName, packageName)
+        ) {
             // The permission of the extra location controller package is determined by the status
             // of the controller package itself.
-            specialLocationGrant = LocationUtils.isExtraLocationControllerPackageEnabled(
-                userContext)
+            specialLocationGrant =
+                LocationUtils.isExtraLocationControllerPackageEnabled(userContext)
         }
 
         val hasInstallToRuntimeSplit = hasInstallToRuntimeSplit(packageInfo, permissionMap)
-        value = LightAppPermGroup(packageInfo, permGroup.groupInfo, permissionMap,
-            hasInstallToRuntimeSplit, specialLocationGrant)
+        value =
+            LightAppPermGroup(
+                packageInfo,
+                permGroup.groupInfo,
+                permissionMap,
+                hasInstallToRuntimeSplit,
+                specialLocationGrant
+            )
     }
 
     /**
@@ -147,12 +161,13 @@ class LightAppPermGroupLiveData private constructor(
         for (spi in permissionManager.splitPermissions) {
             val splitPerm = spi.splitPermission
 
-            val pi = try {
-                app.packageManager.getPermissionInfo(splitPerm, 0)
-            } catch (e: PackageManager.NameNotFoundException) {
-                Log.w(LOG_TAG, "No such permission: $splitPerm", e)
-                continue
-            }
+            val pi =
+                try {
+                    app.packageManager.getPermissionInfo(splitPerm, 0)
+                } catch (e: PackageManager.NameNotFoundException) {
+                    Log.w(LOG_TAG, "No such permission: $splitPerm", e)
+                    continue
+                }
 
             // Skip if split permission is not "install" permission.
             if (pi.protection != PermissionInfo.PROTECTION_NORMAL) {
@@ -199,15 +214,25 @@ class LightAppPermGroupLiveData private constructor(
 
     /**
      * Repository for AppPermGroupLiveDatas.
+     *
      * <p> Key value is a triple of string package name, string permission group name, and
      * UserHandle, value is its corresponding LiveData.
      */
-    companion object : DataRepositoryForPackage<Triple<String, String, UserHandle>,
-        LightAppPermGroupLiveData>() {
-        override fun newValue(key: Triple<String, String, UserHandle>):
-            LightAppPermGroupLiveData {
-            return LightAppPermGroupLiveData(PermissionControllerApplication.get(),
-                key.first, key.second, key.third)
+    companion object :
+        DataRepositoryForDevice<
+            KotlinUtils.Quadruple<String, String, UserHandle, Int>, LightAppPermGroupLiveData
+        >() {
+        override fun newValue(
+            key: KotlinUtils.Quadruple<String, String, UserHandle, Int>,
+            deviceId: Int
+        ): LightAppPermGroupLiveData {
+            return LightAppPermGroupLiveData(
+                PermissionControllerApplication.get(),
+                key.first,
+                key.second,
+                key.third,
+                deviceId
+            )
         }
     }
 }

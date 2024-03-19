@@ -36,19 +36,21 @@ public final class PackageUtils {
      * Retrieve the {@link PackageInfo} of an application.
      *
      * @param packageName the package name of the application
-     * @param extraFlags the extra flags to pass to {@link PackageManager#getPackageInfo(String,
-     *                   int)}
-     * @param context the {@code Context} to retrieve system services
-     *
+     * @param extraFlags  the extra flags to pass to {@link PackageManager#getPackageInfo(String,
+     *                    int)}
+     * @param user        the user of the application
+     * @param context     the {@code Context} to retrieve system services
      * @return the {@link PackageInfo} of the application, or {@code null} if not found
      */
     @Nullable
-    public static PackageInfo getPackageInfo(@NonNull String packageName, int extraFlags,
-            @NonNull Context context) {
-        PackageManager packageManager = context.getPackageManager();
+    public static PackageInfo getPackageInfoAsUser(@NonNull String packageName, int extraFlags,
+            @NonNull UserHandle user, @NonNull Context context) {
+        Context userContext = UserUtils.getUserContext(context, user);
+        PackageManager userPackageManager = userContext.getPackageManager();
         try {
-            return packageManager.getPackageInfo(packageName, PackageManager.MATCH_DIRECT_BOOT_AWARE
-                    | PackageManager.MATCH_DIRECT_BOOT_UNAWARE | extraFlags);
+            return userPackageManager.getPackageInfo(packageName,
+                    PackageManager.MATCH_DIRECT_BOOT_AWARE
+                            | PackageManager.MATCH_DIRECT_BOOT_UNAWARE | extraFlags);
         } catch (PackageManager.NameNotFoundException e) {
             return null;
         }
@@ -58,12 +60,15 @@ public final class PackageUtils {
      * Retrieve if a package is a system package.
      *
      * @param packageName the name of the package
+     * @param user the user of the package
      * @param context the {@code Context} to retrieve system services
      *
      * @return whether the package is a system package
      */
-    public static boolean isSystemPackage(@NonNull String packageName, @NonNull Context context) {
-        return getPackageInfo(packageName, PackageManager.MATCH_SYSTEM_ONLY, context) != null;
+    public static boolean isSystemPackageAsUser(@NonNull String packageName,
+            @NonNull UserHandle user, @NonNull Context context) {
+        return getPackageInfoAsUser(packageName, PackageManager.MATCH_SYSTEM_ONLY, user, context)
+                != null;
     }
 
     /**

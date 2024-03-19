@@ -270,8 +270,7 @@
                   android:windowSoftInputMode="stateAlwaysHidden|adjustNothing"
                   android:visibleToInstantApps="true"
                   android:inheritShowWhenLocked="true"
-                  android:hardwareAccelerated="false"
-                  android:canDisplayOnRemoteDevices="false">
+                  android:canDisplayOnRemoteDevices="@bool/is_at_least_v">
             <intent-filter android:priority="1">
                 <action android:name="android.content.pm.action.REQUEST_PERMISSIONS" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -291,7 +290,7 @@
                   android:visibleToInstantApps="true"
                   android:inheritShowWhenLocked="true"
                   android:hardwareAccelerated="false"
-                  android:canDisplayOnRemoteDevices="false">
+                  android:canDisplayOnRemoteDevices="@bool/is_at_least_v">
         </activity>
 
         <activity android:name="com.android.permissioncontroller.permission.ui.ManagePermissionsActivity"
@@ -399,6 +398,7 @@
         <activity android:name="com.android.permissioncontroller.role.ui.RequestRoleActivity"
                   android:excludeFromRecents="true"
                   android:exported="true"
+                  android:launchMode="singleTop"
                   android:theme="@style/RequestRole.FilterTouches">
             <intent-filter android:priority="1">
                 <action android:name="android.app.role.action.REQUEST_ROLE" />
@@ -521,7 +521,7 @@
             </intent-filter>
         </service>
 
-        <service android:name="com.android.permissioncontroller.role.service.RoleControllerServiceImpl"
+        <service android:name="com.android.role.controller.service.RoleControllerServiceImpl"
                  android:exported="true">
             <intent-filter android:priority="1">
                 <action android:name="android.app.role.RoleControllerService"/>
@@ -577,7 +577,7 @@
         </receiver>
 
         <activity android:name="com.android.permissioncontroller.incident.ConfirmationActivity"
-                android:theme="@style/Theme.DeviceDefault.Dialog.NoActionBar.DayNight"
+                android:theme="@style/Theme.PermissionController.IncidentReportDialog"
                 android:exported="false"
                 android:excludeFromRecents="true"
                 android:finishOnCloseSystemDialogs="true"
@@ -606,8 +606,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Unexported empty activity for in-process tests -->
-        <activity android:name="android.app.Activity" />
     </application>
 
 </manifest>

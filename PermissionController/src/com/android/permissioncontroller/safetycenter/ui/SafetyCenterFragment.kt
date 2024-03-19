@@ -32,7 +32,7 @@ import com.android.permissioncontroller.safetycenter.ui.ParsedSafetyCenterIntent
 import com.android.permissioncontroller.safetycenter.ui.model.LiveSafetyCenterViewModelFactory
 import com.android.permissioncontroller.safetycenter.ui.model.SafetyCenterUiData
 import com.android.permissioncontroller.safetycenter.ui.model.SafetyCenterViewModel
-import com.android.safetycenter.resources.SafetyCenterResourcesContext
+import com.android.safetycenter.resources.SafetyCenterResourcesApk
 
 /** A base fragment that represents a page in Safety Center. */
 @RequiresApi(TIRAMISU)
@@ -50,7 +50,7 @@ abstract class SafetyCenterFragment : PreferenceFragmentCompat() {
     }
 
     override fun onCreateAdapter(
-        preferenceScreen: PreferenceScreen?
+        preferenceScreen: PreferenceScreen
     ): RecyclerView.Adapter<RecyclerView.ViewHolder> {
         /* The scroll-to-result functionality for settings search is currently implemented only for
          * subpages i.e. non expand-and-collapse type entries. Hence, we check that the flag is
@@ -72,7 +72,7 @@ abstract class SafetyCenterFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         sameTaskSourceIds =
-            SafetyCenterResourcesContext(requireContext())
+            SafetyCenterResourcesApk(requireContext())
                 .getStringByName("config_same_task_safety_source_ids")
                 .split(",")
         safetyCenterSessionId = requireArguments().getLong(EXTRA_SESSION_ID, INVALID_SESSION_ID)

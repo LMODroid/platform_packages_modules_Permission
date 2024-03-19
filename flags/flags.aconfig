@@ -1,0 +1,22 @@
+package: "com.android.permission.flags"
+
+flag {
+    name: "voice_activation_op_enabled"
+    namespace: "permissions"
+    description: "This flag is used to support hotword activation events in privacy dashboard"
+    bug: "287264308"
+}
+
+flag {
+    name: "device_aware_permission_grant"
+    namespace: "permissions"
+    description: "Enables device aware grant permission flow"
+    bug: "292252664"
+}
+
+flag {
+    name: "wear_privacy_dashboard_enabled"
+    namespace: "wear_security"
+    description: "This flag is used to support Privacy dashboard for Wear"
+    bug: "309721061"
+}

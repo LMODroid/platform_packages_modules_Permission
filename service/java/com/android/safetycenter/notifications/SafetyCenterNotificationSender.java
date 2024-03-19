@@ -16,13 +16,11 @@
 
 package com.android.safetycenter.notifications;
 
-import static android.os.Build.VERSION_CODES.TIRAMISU;
 import static android.safetycenter.SafetyEvent.SAFETY_EVENT_TYPE_RESOLVING_ACTION_SUCCEEDED;
 
 import static com.android.safetycenter.internaldata.SafetyCenterIds.toUserFriendlyString;
 
 import android.annotation.IntDef;
-import android.annotation.Nullable;
 import android.annotation.UserIdInt;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -36,18 +34,19 @@ import android.util.ArrayMap;
 import android.util.ArraySet;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
+import androidx.annotation.Nullable;
 
 import com.android.modules.utils.build.SdkLevel;
 import com.android.permission.util.UserUtils;
 import com.android.safetycenter.SafetyCenterFlags;
 import com.android.safetycenter.SafetySourceIssueInfo;
+import com.android.safetycenter.SafetySourceIssues;
 import com.android.safetycenter.UserProfileGroup;
 import com.android.safetycenter.data.SafetyCenterDataManager;
 import com.android.safetycenter.internaldata.SafetyCenterIds;
 import com.android.safetycenter.internaldata.SafetyCenterIssueKey;
 import com.android.safetycenter.logging.SafetyCenterStatsdLogger;
-import com.android.safetycenter.resources.SafetyCenterResourcesContext;
+import com.android.safetycenter.resources.SafetyCenterResourcesApk;
 
 import java.io.PrintWriter;
 import java.lang.annotation.Retention;
@@ -66,7 +65,6 @@ import javax.annotation.concurrent.NotThreadSafe;
  *
  * @hide
  */
-@RequiresApi(TIRAMISU)
 @NotThreadSafe
 public final class SafetyCenterNotificationSender {
 
@@ -120,13 +118,13 @@ public final class SafetyCenterNotificationSender {
 
     public static SafetyCenterNotificationSender newInstance(
             Context context,
-            SafetyCenterResourcesContext resourcesContext,
+            SafetyCenterResourcesApk safetyCenterResourcesApk,
             SafetyCenterNotificationChannels notificationChannels,
             SafetyCenterDataManager dataManager) {
         return new SafetyCenterNotificationSender(
                 context,
                 new SafetyCenterNotificationFactory(
-                        context, notificationChannels, resourcesContext),
+                        context, notificationChannels, safetyCenterResourcesApk),
                 dataManager);
     }
 
@@ -137,7 +135,7 @@ public final class SafetyCenterNotificationSender {
      * <p>The given {@link SafetyEvent} have type {@link
      * SafetyEvent#SAFETY_EVENT_TYPE_RESOLVING_ACTION_SUCCEEDED} and include issue and action IDs
      * that correspond to a {@link SafetySourceIssue} for which a notification is currently
-     * displayed. Otherwise this method has no effect.
+     * displayed. Otherwise, this method has no effect.
      *
      * @param sourceId of the source which reported the issue
      * @param safetyEvent the source provided upon successful action resolution
@@ -145,6 +143,12 @@ public final class SafetyCenterNotificationSender {
      */
     public void notifyActionSuccess(
             String sourceId, SafetyEvent safetyEvent, @UserIdInt int userId) {
+        if (!SafetyCenterFlags.getNotificationsEnabled()) {
+            // TODO(b/284271124): Decide what to do with existing notifications if flag gets
+            // toggled.
+            return;
+        }
+
         if (safetyEvent.getType() != SAFETY_EVENT_TYPE_RESOLVING_ACTION_SUCCEEDED) {
             Log.w(TAG, "Received safety event of wrong type");
             return;
@@ -174,12 +178,8 @@ public final class SafetyCenterNotificationSender {
             return;
         }
 
-        SafetySourceIssue.Action successfulAction = null;
-        for (int i = 0; i < notifiedIssue.getActions().size(); i++) {
-            if (notifiedIssue.getActions().get(i).getId().equals(sourceIssueActionId)) {
-                successfulAction = notifiedIssue.getActions().get(i);
-            }
-        }
+        SafetySourceIssue.Action successfulAction =
+                SafetySourceIssues.findAction(notifiedIssue, sourceIssueActionId);
         if (successfulAction == null) {
             Log.w(TAG, "Successful action not found");
             return;
@@ -224,6 +224,7 @@ public final class SafetyCenterNotificationSender {
      */
     public void updateNotifications(@UserIdInt int userId) {
         if (!SafetyCenterFlags.getNotificationsEnabled()) {
+            // TODO(b/284271124): Decide what to do with existing notifications
             return;
         }
 
@@ -286,7 +287,7 @@ public final class SafetyCenterNotificationSender {
         fout.println();
     }
 
-    /** Get all of the key-issue pairs for which notifications should be posted or updated now. */
+    /** Gets all the key-issue pairs for which notifications should be posted or updated now. */
     private ArrayMap<SafetyCenterIssueKey, SafetySourceIssue> getIssuesToNotify(
             @UserIdInt int userId) {
         ArrayMap<SafetyCenterIssueKey, SafetySourceIssue> result = new ArrayMap<>();
@@ -325,14 +326,20 @@ public final class SafetyCenterNotificationSender {
     @NotificationBehaviorInternal
     private int getBehavior(SafetySourceIssue issue, SafetyCenterIssueKey issueKey) {
         if (SdkLevel.isAtLeastU()) {
-            switch (issue.getNotificationBehavior()) {
+            int notificationBehavior = issue.getNotificationBehavior();
+            switch (notificationBehavior) {
                 case SafetySourceIssue.NOTIFICATION_BEHAVIOR_NEVER:
                     return NOTIFICATION_BEHAVIOR_INTERNAL_NEVER;
                 case SafetySourceIssue.NOTIFICATION_BEHAVIOR_DELAYED:
                     return NOTIFICATION_BEHAVIOR_INTERNAL_DELAYED;
                 case SafetySourceIssue.NOTIFICATION_BEHAVIOR_IMMEDIATELY:
                     return NOTIFICATION_BEHAVIOR_INTERNAL_IMMEDIATELY;
+                case SafetySourceIssue.NOTIFICATION_BEHAVIOR_UNSPECIFIED:
+                    return getBehaviorForIssueWithUnspecifiedBehavior(issue, issueKey);
             }
+            Log.w(
+                    TAG,
+                    "Unexpected SafetySourceIssue.NotificationBehavior: " + notificationBehavior);
         }
         // On Android T all issues are assumed to have "unspecified" behavior
         return getBehaviorForIssueWithUnspecifiedBehavior(issue, issueKey);

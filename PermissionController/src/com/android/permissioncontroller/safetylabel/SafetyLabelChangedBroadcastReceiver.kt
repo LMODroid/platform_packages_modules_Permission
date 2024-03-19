@@ -31,6 +31,7 @@ import androidx.annotation.MainThread
 import androidx.annotation.RequiresApi
 import com.android.permission.safetylabel.SafetyLabel as AppMetadataSafetyLabel
 import com.android.permissioncontroller.permission.data.LightPackageInfoLiveData
+import com.android.permissioncontroller.permission.data.get
 import com.android.permissioncontroller.permission.data.v34.LightInstallSourceInfoLiveData
 import com.android.permissioncontroller.permission.model.livedatatypes.LightPackageInfo
 import com.android.permissioncontroller.permission.utils.KotlinUtils
@@ -56,8 +57,10 @@ class SafetyLabelChangedBroadcastReceiver : BroadcastReceiver() {
         }
 
         val packageChangeEvent = getPackageChangeEvent(intent)
-        if (!(packageChangeEvent == PackageChangeEvent.NEW_INSTALL ||
-            packageChangeEvent == PackageChangeEvent.UPDATE)) {
+        if (
+            !(packageChangeEvent == PackageChangeEvent.NEW_INSTALL ||
+                packageChangeEvent == PackageChangeEvent.UPDATE)
+        ) {
             return
         }
 
@@ -74,7 +77,8 @@ class SafetyLabelChangedBroadcastReceiver : BroadcastReceiver() {
                 "received broadcast packageName: $packageName, current user: $currentUser," +
                     " packageChangeEvent: $packageChangeEvent, intent user:" +
                     " ${intent.getParcelableExtra(Intent.EXTRA_USER, UserHandle::class.java)
-                                    ?: currentUser}")
+                                    ?: currentUser}"
+            )
         }
         val userManager = Utils.getSystemServiceSafe(context, UserManager::class.java)
         if (userManager.isProfile) {
@@ -127,7 +131,8 @@ class SafetyLabelChangedBroadcastReceiver : BroadcastReceiver() {
             Log.i(
                 TAG,
                 "writeSafetyLabel called for packageName: $packageName, currentUser:" +
-                    " ${Process.myUserHandle()}")
+                    " ${Process.myUserHandle()}"
+            )
         }
 
         // Get the context for the user in which the app is installed.
@@ -155,7 +160,10 @@ class SafetyLabelChangedBroadcastReceiver : BroadcastReceiver() {
 
         val safetyLabelForPersistence: SafetyLabelForPersistence =
             AppsSafetyLabelHistory.SafetyLabel.extractLocationSharingSafetyLabel(
-                packageName, Instant.ofEpochMilli(receivedAtMs), safetyLabel)
+                packageName,
+                Instant.ofEpochMilli(receivedAtMs),
+                safetyLabel
+            )
         val historyFile = AppsSafetyLabelHistoryPersistence.getSafetyLabelHistoryFile(context)
 
         AppsSafetyLabelHistoryPersistence.recordSafetyLabel(safetyLabelForPersistence, historyFile)
@@ -212,12 +220,14 @@ class SafetyLabelChangedBroadcastReceiver : BroadcastReceiver() {
             Log.i(
                 TAG,
                 "Forwarding intent from current user: $currentUser to profile parent" +
-                    " $profileParent")
+                    " $profileParent"
+            )
             context.sendBroadcastAsUser(
                 Intent(intent)
                     .setAction(ACTION_PACKAGE_ADDED_PERMISSIONCONTROLLER_FORWARDED)
                     .putExtra(Intent.EXTRA_USER, currentUser),
-                profileParent)
+                profileParent
+            )
         }
 
         /** Types of package change events. */

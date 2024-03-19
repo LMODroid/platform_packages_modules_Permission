@@ -28,7 +28,6 @@ import android.os.Build.VERSION_CODES.TIRAMISU
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.test.uiautomator.By
-import com.android.compatibility.common.util.RetryableException
 import com.android.compatibility.common.util.UiAutomatorUtils2.getUiDevice
 import com.android.safetycenter.testing.ShellPermissions.callWithShellPermissionIdentity
 import com.android.safetycenter.testing.UiTestHelper.waitDisplayed
@@ -46,13 +45,14 @@ object SafetyCenterActivityLauncher {
      */
     fun Context.launchSafetyCenterActivity(
         intentExtras: Bundle? = null,
+        intentAction: String = ACTION_SAFETY_CENTER,
         withReceiverPermission: Boolean = false,
         preventTrampolineToSettings: Boolean = true,
         block: () -> Unit
     ) {
         val launchSafetyCenterIntent =
             createIntent(
-                ACTION_SAFETY_CENTER,
+                intentAction,
                 intentExtras,
                 preventTrampolineToSettings = preventTrampolineToSettings
             )
@@ -80,19 +80,6 @@ object SafetyCenterActivityLauncher {
         executeBlockAndExit(block) { waitDisplayed(By.text(entryPoint)) { it.click() } }
     }
 
-    /**
-     * Launches a page in Safety Center and exits it once [block] completes, throwing a
-     * [RetryableException] for any [RuntimeException] thrown by [block] to allow [RetryRule] to
-     * retry the test invocation.
-     */
-    fun openPageAndExitAllowingRetries(entryPoint: String, block: () -> Unit) {
-        try {
-            openPageAndExit(entryPoint, block)
-        } catch (e: Throwable) {
-            throw RetryableException(e, "Exception occurred when checking a Safety Center page")
-        }
-    }
-
     private fun createIntent(
         intentAction: String,
         intentExtras: Bundle?,
@@ -107,6 +94,7 @@ object SafetyCenterActivityLauncher {
         return launchIntent
     }
 
+    /** Executes the given [block] and presses the back button to exit. */
     fun executeBlockAndExit(block: () -> Unit, launchActivity: () -> Unit) {
         val uiDevice = getUiDevice()
         uiDevice.waitForIdle()

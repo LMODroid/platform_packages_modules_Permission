@@ -16,7 +16,6 @@
 
 package com.android.safetycenter;
 
-import static android.os.Build.VERSION_CODES.TIRAMISU;
 import static android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE;
 import static android.safetycenter.SafetyCenterManager.EXTRA_REFRESH_REQUEST_TYPE_FETCH_FRESH_DATA;
 import static android.safetycenter.SafetyCenterManager.EXTRA_REFRESH_REQUEST_TYPE_GET_DATA;
@@ -33,12 +32,7 @@ import android.safetycenter.SafetyCenterManager.RefreshReason;
 import android.safetycenter.SafetyCenterManager.RefreshRequestType;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
-
-import com.android.modules.utils.build.SdkLevel;
-
 /** Helpers to do with {@link RefreshReason}. */
-@RequiresApi(TIRAMISU)
 final class RefreshReasons {
 
     private static final String TAG = "RefreshReasons";
@@ -49,6 +43,7 @@ final class RefreshReasons {
      * Validates the given {@link RefreshReason}, and throws an {@link IllegalArgumentException} in
      * case of unexpected value.
      */
+    @TargetApi(UPSIDE_DOWN_CAKE)
     static void validate(@RefreshReason int refreshReason) {
         switch (refreshReason) {
             case REFRESH_REASON_RESCAN_BUTTON_CLICK:
@@ -57,10 +52,8 @@ final class RefreshReasons {
             case REFRESH_REASON_DEVICE_LOCALE_CHANGE:
             case REFRESH_REASON_SAFETY_CENTER_ENABLED:
             case REFRESH_REASON_OTHER:
+            case REFRESH_REASON_PERIODIC:
                 return;
-        }
-        if (SdkLevel.isAtLeastU() && refreshReason == REFRESH_REASON_PERIODIC) {
-            return;
         }
         throw new IllegalArgumentException("Unexpected refresh reason: " + refreshReason);
     }

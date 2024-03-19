@@ -55,44 +55,47 @@ class IssueCardAnimator(val callback: AnimationCallback) {
         // Ensure AVD is reset before transition starts
         (resolvedImageView.drawable as AnimatedVectorDrawable).reset()
 
-        val defaultIssueContentGroup = holder.findViewById(R.id.default_issue_content)
-        val resolvedIssueContentGroup = holder.findViewById(R.id.resolved_issue_content)
+        val defaultIssueContentGroup = holder.findViewById(R.id.default_issue_content)!!
+        val resolvedIssueContentGroup = holder.findViewById(R.id.resolved_issue_content)!!
 
-        val transitionSet = TransitionSet()
-            .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
-            .setInterpolator(linearInterpolator)
-            .addTransition(hideIssueContentTransition)
-            .addTransition(
-                showResolvedImageTransition
-                    .clone()
-                    .addListener(
-                        object : TransitionListenerAdapter() {
-                            override fun onTransitionEnd(
-                                transition: Transition
-                            ) {
-                                super.onTransitionEnd(transition)
-                                startIssueResolvedAnimation(
-                                    resolvedIssueContentGroup,
-                                    resolvedImageView
-                                )
+        val transitionSet =
+            TransitionSet()
+                .setOrdering(TransitionSet.ORDERING_SEQUENTIAL)
+                .setInterpolator(linearInterpolator)
+                .addTransition(hideIssueContentTransition)
+                .addTransition(
+                    showResolvedImageTransition
+                        .clone()
+                        .addListener(
+                            object : TransitionListenerAdapter() {
+                                override fun onTransitionEnd(transition: Transition) {
+                                    super.onTransitionEnd(transition)
+                                    startIssueResolvedAnimation(
+                                        resolvedIssueContentGroup,
+                                        resolvedImageView
+                                    )
+                                }
                             }
-                        })
-            )
-            .addTransition(showResolvedTextTransition)
+                        )
+                )
+                .addTransition(showResolvedTextTransition)
 
         // Defer transition so that it's called after the root ViewGroup has been laid out.
         holder.itemView.post {
             TransitionManager.beginDelayedTransition(
-                defaultIssueContentGroup.parent as ViewGroup?, transitionSet
+                defaultIssueContentGroup.parent as ViewGroup?,
+                transitionSet
             )
 
             // Setting INVISIBLE rather than GONE to ensure consistent card height between
             // view groups.
             defaultIssueContentGroup.visibility = View.INVISIBLE
 
-            // These two views are outside of the group since their visibility must be set
+            // These views are outside of the group since their visibility must be set
             // independently of the rest of the group, and some frustrating constraints of
             // constraint layout's behavior. See b/242705351 for context.
+            makeInvisibleIfVisible(holder.findViewById(R.id.issue_card_attribution_title))
+            makeInvisibleIfVisible(holder.findViewById(R.id.issue_card_dismiss_btn))
             makeInvisibleIfVisible(holder.findViewById(R.id.issue_card_subtitle))
             makeInvisibleIfVisible(holder.findViewById(R.id.issue_card_protected_by_android))
 
@@ -111,7 +114,8 @@ class IssueCardAnimator(val callback: AnimationCallback) {
                         resolvedImageView
                     )
                 }
-            })
+            }
+        )
     }
 
     private fun makeInvisibleIfVisible(view: View?) {
@@ -133,23 +137,27 @@ class IssueCardAnimator(val callback: AnimationCallback) {
                     super.onAnimationEnd(drawable)
                     transitionResolvedIssueUiToHiddenAndMarkComplete(resolvedIssueContentGroup)
                 }
-            })
+            }
+        )
         animatedDrawable.start()
     }
 
     private fun transitionResolvedIssueUiToHiddenAndMarkComplete(resolvedIssueContentGroup: View) {
-        val hideTransition = hideResolvedUiTransition
-            .clone()
-            .setInterpolator(linearInterpolator)
-            .addListener(
-                object : TransitionListenerAdapter() {
-                    override fun onTransitionEnd(transition: Transition) {
-                        super.onTransitionEnd(transition)
-                        callback.markIssueResolvedUiCompleted()
+        val hideTransition =
+            hideResolvedUiTransition
+                .clone()
+                .setInterpolator(linearInterpolator)
+                .addListener(
+                    object : TransitionListenerAdapter() {
+                        override fun onTransitionEnd(transition: Transition) {
+                            super.onTransitionEnd(transition)
+                            callback.markIssueResolvedUiCompleted()
+                        }
                     }
-                })
+                )
         TransitionManager.beginDelayedTransition(
-            resolvedIssueContentGroup.parent as ViewGroup, hideTransition
+            resolvedIssueContentGroup.parent as ViewGroup,
+            hideTransition
         )
         resolvedIssueContentGroup.visibility = View.GONE
     }
@@ -191,10 +199,14 @@ class IssueCardAnimator(val callback: AnimationCallback) {
 
         // Using getter due to reliance on DeviceConfig property modification in tests
         private val hideResolvedUiTransitionDelay
-            get() = Duration.ofMillis(
-                DeviceConfig.getLong(DeviceConfig.NAMESPACE_PRIVACY,
-                    PROPERTY_HIDE_RESOLVED_UI_TRANSITION_DELAY_MILLIS,
-                    400))
+            get() =
+                Duration.ofMillis(
+                    DeviceConfig.getLong(
+                        DeviceConfig.NAMESPACE_PRIVACY,
+                        PROPERTY_HIDE_RESOLVED_UI_TRANSITION_DELAY_MILLIS,
+                        400
+                    )
+                )
 
         private val linearInterpolator = LinearInterpolator()
 
@@ -207,14 +219,16 @@ class IssueCardAnimator(val callback: AnimationCallback) {
                 .setDuration(0)
                 .addTarget(R.id.resolved_issue_image)
 
-        private val showResolvedTextTransition = Fade(Fade.IN)
-            .setStartDelay(SHOW_RESOLVED_TEXT_TRANSITION_DELAY.toMillis())
-            .setDuration(SHOW_RESOLVED_TEXT_TRANSITION_DURATION.toMillis())
-            .addTarget(R.id.resolved_issue_text)
+        private val showResolvedTextTransition =
+            Fade(Fade.IN)
+                .setStartDelay(SHOW_RESOLVED_TEXT_TRANSITION_DELAY.toMillis())
+                .setDuration(SHOW_RESOLVED_TEXT_TRANSITION_DURATION.toMillis())
+                .addTarget(R.id.resolved_issue_text)
 
         private val hideResolvedUiTransition
-            get() = Fade(Fade.OUT)
-                .setStartDelay(hideResolvedUiTransitionDelay.toMillis())
-                .setDuration(HIDE_RESOLVED_UI_TRANSITION_DURATION.toMillis())
+            get() =
+                Fade(Fade.OUT)
+                    .setStartDelay(hideResolvedUiTransitionDelay.toMillis())
+                    .setDuration(HIDE_RESOLVED_UI_TRANSITION_DURATION.toMillis())
     }
 }

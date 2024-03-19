@@ -31,18 +31,14 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 
 @RunWith(DeviceJUnit4ClassRunner::class)
 class SafetyCenterSystemEventReportedLoggingHostTest : BaseHostJUnit4Test() {
 
-    private val safetyCenterRule = RequireSafetyCenterRule(this)
-    private val helperAppRule = HelperAppRule(this, HelperApp.APK_NAME, HelperApp.PACKAGE_NAME)
-
-    @Rule
-    @JvmField
-    val rules: RuleChain = RuleChain.outerRule(safetyCenterRule).around(helperAppRule)
+    @get:Rule(order = 1) val safetyCenterRule = RequireSafetyCenterRule(this)
+    @get:Rule(order = 2)
+    val helperAppRule = HelperAppRule(this, HelperApp.APK_NAME, HelperApp.PACKAGE_NAME)
 
     @Before
     fun setUp() {
@@ -143,6 +139,7 @@ class SafetyCenterSystemEventReportedLoggingHostTest : BaseHostJUnit4Test() {
             .that(systemEventAtoms.count { it.refreshReason == REFRESH_REASON_BUTTON_CLICK })
     }
 
+    @Test
     fun refreshAllSources_firstTime_allSourcesSuccessful_dataChangedTrueForAll() {
         helperAppRule.runTest(
             ".SafetySourceStateCollectedLoggingHelperTests",
@@ -183,18 +180,50 @@ class SafetyCenterSystemEventReportedLoggingHostTest : BaseHostJUnit4Test() {
     @Test
     fun refreshAllSources_secondTime_someSourcesChanged_dataChangedCorrect() {
         helperAppRule.runTest(
-                ".SafetySourceStateCollectedLoggingHelperTests",
-                "refreshAllSources_twiceDifferentData_onlySource1Unchanged"
+            ".SafetySourceStateCollectedLoggingHelperTests",
+            "refreshAllSources_twiceDifferentData_onlySource1Unchanged"
         )
 
         val systemEventAtoms =
-                ReportUtils.getEventMetricDataList(device).mapNotNull {
-                    it.atom.safetyCenterSystemEventReported
-                }
+            ReportUtils.getEventMetricDataList(device).mapNotNull {
+                it.atom.safetyCenterSystemEventReported
+            }
 
         assertWithMessage("the number of atoms with dataChanged=false")
-                .that(systemEventAtoms.count { !it.dataChanged })
-                .isEqualTo(1) // Only source 1
+            .that(systemEventAtoms.count { !it.dataChanged })
+            .isEqualTo(1) // Only source 1
+    }
+
+    @Test
+    fun resolveAction_success_resolvingActionSuccessEvent() {
+        helperAppRule.runTest(
+            ".SafetySourceStateCollectedLoggingHelperTests",
+            "resolvingAction_success"
+        )
+
+        val resolvingActionEvent =
+            ReportUtils.getEventMetricDataList(device)
+                .mapNotNull { it.atom.safetyCenterSystemEventReported }
+                .single { it.eventType == EventType.INLINE_ACTION }
+
+        assertThat(resolvingActionEvent.result).isEqualTo(Result.SUCCESS)
+        assertThat(resolvingActionEvent.encodedIssueTypeId).isNotEqualTo(0)
+    }
+
+    @Test
+    fun resolveAction_error_resolvingActionErrorEvent() {
+        helperAppRule.runTest(
+            ".SafetySourceStateCollectedLoggingHelperTests",
+            "resolvingAction_error"
+        )
+
+        val resolvingActionEvent =
+            ReportUtils.getEventMetricDataList(device)
+                .mapNotNull { it.atom.safetyCenterSystemEventReported }
+                .single { it.eventType == EventType.INLINE_ACTION }
+
+        assertThat(resolvingActionEvent.result).isEqualTo(Result.ERROR)
+        assertThat(resolvingActionEvent.encodedIssueTypeId).isNotEqualTo(0)
     }
 
     companion object {

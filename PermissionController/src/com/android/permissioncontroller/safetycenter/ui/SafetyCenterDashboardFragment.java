@@ -38,18 +38,22 @@ import android.safetycenter.SafetyCenterIssue;
 import android.safetycenter.SafetyCenterStaticEntry;
 import android.safetycenter.SafetyCenterStaticEntryGroup;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceGroup;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.permissioncontroller.R;
 import com.android.permissioncontroller.safetycenter.ui.model.SafetyCenterUiData;
 import com.android.permissioncontroller.safetycenter.ui.model.StatusUiData;
 import com.android.safetycenter.internaldata.SafetyCenterBundles;
-import com.android.safetycenter.resources.SafetyCenterResourcesContext;
+import com.android.safetycenter.resources.SafetyCenterResourcesApk;
 
 import kotlin.Unit;
 
@@ -113,6 +117,7 @@ public final class SafetyCenterDashboardFragment extends SafetyCenterFragment {
         mIssuesGroup = getPreferenceScreen().findPreference(ISSUES_GROUP_KEY);
         mEntriesGroup = getPreferenceScreen().findPreference(ENTRIES_GROUP_KEY);
         mStaticEntriesGroup = getPreferenceScreen().findPreference(STATIC_ENTRIES_GROUP_KEY);
+
         if (mIsQuickSettingsFragment) {
             getPreferenceScreen().removePreference(mEntriesGroup);
             mEntriesGroup = null;
@@ -124,6 +129,19 @@ public final class SafetyCenterDashboardFragment extends SafetyCenterFragment {
         getSafetyCenterViewModel().getStatusUiLiveData().observe(this, this::updateStatus);
 
         prerenderCurrentSafetyCenterData();
+    }
+
+    @Override
+    public RecyclerView onCreateRecyclerView(
+            LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+        RecyclerView recyclerView =
+                super.onCreateRecyclerView(inflater, parent, savedInstanceState);
+
+        if (mIsQuickSettingsFragment) {
+            recyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+            recyclerView.setVerticalScrollBarEnabled(false);
+        }
+        return recyclerView;
     }
 
     // Set the default divider line between preferences to be transparent
@@ -162,10 +180,10 @@ public final class SafetyCenterDashboardFragment extends SafetyCenterFragment {
 
     private void updateStatus(StatusUiData statusUiData) {
         if (mIsQuickSettingsFragment) {
-            SafetyCenterResourcesContext safetyCenterResourcesContext =
-                    new SafetyCenterResourcesContext(requireContext());
+            SafetyCenterResourcesApk safetyCenterResourcesApk =
+                    new SafetyCenterResourcesApk(requireContext());
             boolean hasPendingActions =
-                    safetyCenterResourcesContext
+                    safetyCenterResourcesApk
                             .getStringByName("overall_severity_level_ok_review_summary")
                             .equals(statusUiData.getOriginalSummary().toString());
 
@@ -180,8 +198,7 @@ public final class SafetyCenterDashboardFragment extends SafetyCenterFragment {
         if (uiData == null) return;
         SafetyCenterData data = uiData.getSafetyCenterData();
 
-        Log.i(TAG, String.format("renderSafetyCenterData called with: %s", data));
-
+        Log.v(TAG, String.format("renderSafetyCenterData called with: %s", data));
         Context context = getContext();
         if (context == null) {
             return;

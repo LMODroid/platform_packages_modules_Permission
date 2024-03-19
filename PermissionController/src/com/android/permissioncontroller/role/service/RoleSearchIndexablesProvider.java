@@ -20,6 +20,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.os.Binder;
+import android.os.Process;
 import android.provider.SearchIndexablesContract;
 import android.util.ArrayMap;
 
@@ -28,7 +29,6 @@ import androidx.annotation.Nullable;
 import com.android.permissioncontroller.R;
 import com.android.permissioncontroller.permission.service.BaseSearchIndexablesProvider;
 import com.android.permissioncontroller.role.model.RoleParserInitializer;
-import com.android.permissioncontroller.role.utils.RoleUiBehaviorUtils;
 import com.android.role.controller.model.Role;
 import com.android.role.controller.model.Roles;
 
@@ -61,8 +61,8 @@ public class RoleSearchIndexablesProvider extends BaseSearchIndexablesProvider {
 
             long token = Binder.clearCallingIdentity();
             try {
-                if (!role.isAvailable(context) || !RoleUiBehaviorUtils.isVisible(role,
-                        context)) {
+                if (!role.isAvailableAsUser(Process.myUserHandle(), context)
+                        || !role.isVisibleAsUser(Process.myUserHandle(), context)) {
                     continue;
                 }
             } finally {

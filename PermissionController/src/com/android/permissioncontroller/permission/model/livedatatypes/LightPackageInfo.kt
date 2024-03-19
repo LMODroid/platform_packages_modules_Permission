@@ -24,6 +24,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.UserHandle
 import com.android.modules.utils.build.SdkLevel
+import com.android.permissioncontroller.permission.utils.ContextCompat
 import com.android.permissioncontroller.permission.utils.Utils
 
 /**
@@ -43,7 +44,7 @@ data class LightPackageInfo(
     val packageName: String,
     val permissions: List<LightPermInfo>,
     val requestedPermissions: List<String>,
-    val requestedPermissionsFlags: List<Int>,
+    var requestedPermissionsFlags: List<Int>,
     val uid: Int,
     val targetSdkVersion: Int,
     val isInstantApp: Boolean,
@@ -52,7 +53,8 @@ data class LightPackageInfo(
     val firstInstallTime: Long,
     val lastUpdateTime: Long,
     val areAttributionsUserVisible: Boolean,
-    val attributionTagsToLabels: Map<String, Int>
+    val attributionTagsToLabels: Map<String, Int>,
+    var deviceId: Int
 ) {
     constructor(
         pI: PackageInfo
@@ -61,23 +63,35 @@ data class LightPackageInfo(
         pI.permissions?.map { perm -> LightPermInfo(perm) } ?: emptyList(),
         pI.requestedPermissions?.toList() ?: emptyList(),
         pI.requestedPermissionsFlags?.toList() ?: emptyList(),
-        pI.applicationInfo.uid,
-        pI.applicationInfo.targetSdkVersion,
-        pI.applicationInfo.isInstantApp,
-        pI.applicationInfo.enabled,
-        pI.applicationInfo.flags,
+        pI.applicationInfo!!.uid,
+        pI.applicationInfo!!.targetSdkVersion,
+        pI.applicationInfo!!.isInstantApp,
+        pI.applicationInfo!!.enabled,
+        pI.applicationInfo!!.flags,
         pI.firstInstallTime,
         pI.lastUpdateTime,
-        if (SdkLevel.isAtLeastS()) pI.applicationInfo.areAttributionsUserVisible() else false,
-        if (SdkLevel.isAtLeastS()) buildAttributionTagsToLabelsMap(pI.attributions) else emptyMap())
+        if (SdkLevel.isAtLeastS()) pI.applicationInfo!!.areAttributionsUserVisible() else false,
+        if (SdkLevel.isAtLeastS()) buildAttributionTagsToLabelsMap(pI.attributions) else emptyMap(),
+        ContextCompat.DEVICE_ID_DEFAULT
+    )
+
+    constructor(
+        pI: PackageInfo,
+        deviceId: Int,
+        requestedPermissionsFlagsForDevice: List<Int>
+    ) : this(pI) {
+        this.deviceId = deviceId
+        this.requestedPermissionsFlags = requestedPermissionsFlagsForDevice
+    }
 
     /** Permissions which are granted according to the [requestedPermissionsFlags] */
     val grantedPermissions: List<String>
         get() {
             val grantedPermissions = mutableListOf<String>()
             for (i in 0 until requestedPermissions.size) {
-                if ((requestedPermissionsFlags[i] and PackageInfo.REQUESTED_PERMISSION_GRANTED) !=
-                    0) {
+                if (
+                    (requestedPermissionsFlags[i] and PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0
+                ) {
                     grantedPermissions.add(requestedPermissions[i])
                 }
             }
@@ -89,9 +103,8 @@ data class LightPackageInfo(
      * often.
      *
      * @param app The current application, which will be used to get the ApplicationInfo
-     *
      * @return The ApplicationInfo corresponding to this package, with this UID, or null, if no such
-     * package exists
+     *   package exists
      */
     fun getApplicationInfo(app: Application): ApplicationInfo? {
         try {
@@ -112,7 +125,9 @@ data class LightPackageInfo(
         try {
             val userContext = Utils.getUserContext(app, UserHandle.getUserHandleForUid(uid))
             return userContext.packageManager.getPackageInfo(
-                packageName, PackageManager.GET_PERMISSIONS)
+                packageName,
+                PackageManager.GET_PERMISSIONS
+            )
         } catch (e: PackageManager.NameNotFoundException) {}
         return null
     }

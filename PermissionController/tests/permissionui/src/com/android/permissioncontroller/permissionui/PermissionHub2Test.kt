@@ -25,78 +25,49 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager.FLAG_PERMISSION_USER_SENSITIVE_WHEN_GRANTED
 import android.os.Process.myUserHandle
-import android.provider.DeviceConfig
-import android.provider.DeviceConfig.NAMESPACE_PRIVACY
 import androidx.test.platform.app.InstrumentationRegistry
 import com.android.compatibility.common.util.SystemUtil.eventually
-import com.android.compatibility.common.util.SystemUtil.runShellCommand
 import com.android.compatibility.common.util.SystemUtil.runWithShellPermissionIdentity
 import com.google.common.truth.Truth.assertThat
-import org.junit.AfterClass
-import org.junit.BeforeClass
 
-/**
- * Super class with utilities for testing permission hub 2 code
- */
+/** Super class with utilities for testing permission hub 2 code */
 open class PermissionHub2Test {
     private val APP = "com.android.permissioncontroller.tests.appthatrequestpermission"
 
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     protected val context = instrumentation.targetContext
 
-    companion object {
-        private const val PROPERTY_PERMISSIONS_HUB_2_ENABLED = "permissions_hub_2_enabled"
-
-        private var wasPermissionHubEnabled = false
-
-        @JvmStatic
-        @BeforeClass
-        fun enablePermissionHub2() {
-
-            runWithShellPermissionIdentity {
-                wasPermissionHubEnabled = DeviceConfig.getBoolean(NAMESPACE_PRIVACY,
-                    PROPERTY_PERMISSIONS_HUB_2_ENABLED, false)
-            }
-
-            if (!wasPermissionHubEnabled) {
-                runShellCommand(
-                    "device_config put privacy $PROPERTY_PERMISSIONS_HUB_2_ENABLED true")
-            }
-        }
-
-        @JvmStatic
-        @AfterClass
-        fun disablePermissionHub2() {
-            if (!wasPermissionHubEnabled) {
-                runShellCommand(
-                    "device_config put privacy $PROPERTY_PERMISSIONS_HUB_2_ENABLED false")
-            }
-        }
-    }
-
-    /**
-     * Make {@value #APP} access the camera
-     */
+    /** Make {@value #APP} access the camera */
     protected fun accessCamera() {
         // App needs to be in foreground to be able to access camera
         context.startActivity(
-            Intent().setComponent(ComponentName.createRelative(APP, ".DummyActivity"))
-                .setFlags(FLAG_ACTIVITY_NEW_TASK))
+            Intent()
+                .setComponent(ComponentName.createRelative(APP, ".DummyActivity"))
+                .setFlags(FLAG_ACTIVITY_NEW_TASK)
+        )
 
         runWithShellPermissionIdentity {
             eventually {
                 assertThat(
-                    context.packageManager.getPermissionFlags(CAMERA, APP, myUserHandle()) and
-                        FLAG_PERMISSION_USER_SENSITIVE_WHEN_GRANTED
-                ).isNotEqualTo(0)
+                        context.packageManager.getPermissionFlags(CAMERA, APP, myUserHandle()) and
+                            FLAG_PERMISSION_USER_SENSITIVE_WHEN_GRANTED
+                    )
+                    .isNotEqualTo(0)
             }
 
             eventually {
                 assertThat(
-                    context.getSystemService(AppOpsManager::class.java).startOp(
-                        OPSTR_CAMERA, context.packageManager.getPackageUid(APP, 0), APP, null, null
+                        context
+                            .getSystemService(AppOpsManager::class.java)
+                            .startOp(
+                                OPSTR_CAMERA,
+                                context.packageManager.getPackageUid(APP, 0),
+                                APP,
+                                null,
+                                null
+                            )
                     )
-                ).isEqualTo(MODE_ALLOWED)
+                    .isEqualTo(MODE_ALLOWED)
             }
         }
     }

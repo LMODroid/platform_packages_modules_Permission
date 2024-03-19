@@ -17,7 +17,6 @@
 package android.safetycenter.cts
 
 import android.content.Context
-import android.os.Build
 import android.os.Build.VERSION_CODES.TIRAMISU
 import android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE
 import android.os.UserHandle.USER_NULL
@@ -40,7 +39,7 @@ import android.safetycenter.cts.testing.FakeExecutor
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
-import com.android.safetycenter.resources.SafetyCenterResourcesContext
+import com.android.safetycenter.resources.SafetyCenterResourcesApk
 import com.android.safetycenter.testing.Coroutines.TIMEOUT_LONG
 import com.android.safetycenter.testing.Coroutines.TIMEOUT_SHORT
 import com.android.safetycenter.testing.SafetyCenterApisWithShellPermissions.addOnSafetyCenterDataChangedListenerWithPermission
@@ -59,7 +58,6 @@ import com.android.safetycenter.testing.SafetyCenterApisWithShellPermissions.set
 import com.android.safetycenter.testing.SafetyCenterApisWithShellPermissions.setSafetySourceDataWithPermission
 import com.android.safetycenter.testing.SafetyCenterEnabledChangedReceiver
 import com.android.safetycenter.testing.SafetyCenterFlags
-import com.android.safetycenter.testing.SafetyCenterFlags.deviceSupportsSafetyCenter
 import com.android.safetycenter.testing.SafetyCenterTestConfigs
 import com.android.safetycenter.testing.SafetyCenterTestConfigs.Companion.DYNAMIC_ALL_OPTIONAL_ID
 import com.android.safetycenter.testing.SafetyCenterTestConfigs.Companion.DYNAMIC_BAREBONE_ID
@@ -77,6 +75,7 @@ import com.android.safetycenter.testing.SafetyCenterTestConfigs.Companion.STATIC
 import com.android.safetycenter.testing.SafetyCenterTestData
 import com.android.safetycenter.testing.SafetyCenterTestHelper
 import com.android.safetycenter.testing.SafetyCenterTestListener
+import com.android.safetycenter.testing.SafetyCenterTestRule
 import com.android.safetycenter.testing.SafetySourceIntentHandler.Request
 import com.android.safetycenter.testing.SafetySourceIntentHandler.Response
 import com.android.safetycenter.testing.SafetySourceReceiver
@@ -89,15 +88,15 @@ import com.android.safetycenter.testing.SafetySourceTestData.Companion.CRITICAL_
 import com.android.safetycenter.testing.SafetySourceTestData.Companion.CRITICAL_ISSUE_ID
 import com.android.safetycenter.testing.SafetySourceTestData.Companion.EVENT_SOURCE_STATE_CHANGED
 import com.android.safetycenter.testing.SafetySourceTestData.Companion.RECOMMENDATION_ISSUE_ID
+import com.android.safetycenter.testing.SupportsSafetyCenterRule
 import com.google.common.base.Preconditions.checkState
 import com.google.common.truth.Truth.assertThat
 import com.google.common.util.concurrent.MoreExecutors.directExecutor
+import kotlin.test.assertFails
 import kotlin.test.assertFailsWith
 import kotlinx.coroutines.TimeoutCancellationException
-import org.junit.After
-import org.junit.Assume.assumeFalse
 import org.junit.Assume.assumeTrue
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -105,36 +104,14 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class SafetyCenterManagerTest {
     private val context: Context = getApplicationContext()
-    private val safetyCenterResourcesContext = SafetyCenterResourcesContext.forTests(context)
+    private val safetyCenterResourcesApk = SafetyCenterResourcesApk.forTests(context)
     private val safetyCenterTestHelper = SafetyCenterTestHelper(context)
     private val safetySourceTestData = SafetySourceTestData(context)
     private val safetyCenterTestConfigs = SafetyCenterTestConfigs(context)
     private val safetyCenterManager = context.getSystemService(SafetyCenterManager::class.java)!!
 
-    // JUnit's Assume is not supported in @BeforeClass by the CTS tests runner, so this is used to
-    // manually skip the setup and teardown methods.
-    private val shouldRunTests = context.deviceSupportsSafetyCenter()
-
-    @Before
-    fun assumeDeviceSupportsSafetyCenterToRunTests() {
-        assumeTrue(shouldRunTests)
-    }
-
-    @Before
-    fun enableSafetyCenterBeforeTest() {
-        if (!shouldRunTests) {
-            return
-        }
-        safetyCenterTestHelper.setup()
-    }
-
-    @After
-    fun clearDataAfterTest() {
-        if (!shouldRunTests) {
-            return
-        }
-        safetyCenterTestHelper.reset()
-    }
+    @get:Rule(order = 1) val supportsSafetyCenterRule = SupportsSafetyCenterRule(context)
+    @get:Rule(order = 2) val safetyCenterTestRule = SafetyCenterTestRule(safetyCenterTestHelper)
 
     @Test
     fun isSafetyCenterEnabled_withFlagEnabled_returnsTrue() {
@@ -251,7 +228,7 @@ class SafetyCenterManagerTest {
     }
 
     @Test
-    @SdkSuppress(minSdkVersion = UPSIDE_DOWN_CAKE, codeName = "UpsideDownCake")
+    @SdkSuppress(minSdkVersion = UPSIDE_DOWN_CAKE)
     fun setSafetySourceData_wronglySignedPackage_throwsIllegalArgumentException() {
         safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.singleSourceWithFakeCert)
 
@@ -266,7 +243,7 @@ class SafetyCenterManagerTest {
     }
 
     @Test
-    @SdkSuppress(minSdkVersion = UPSIDE_DOWN_CAKE, codeName = "UpsideDownCake")
+    @SdkSuppress(minSdkVersion = UPSIDE_DOWN_CAKE)
     fun setSafetySourceData_wronglySignedPackageButAllowedByFlag_isAllowed() {
         SafetyCenterFlags.allowedAdditionalPackageCerts =
             mapOf(context.packageName to setOf(safetyCenterTestConfigs.packageCertHash))
@@ -281,7 +258,7 @@ class SafetyCenterManagerTest {
     }
 
     @Test
-    @SdkSuppress(minSdkVersion = UPSIDE_DOWN_CAKE, codeName = "UpsideDownCake")
+    @SdkSuppress(minSdkVersion = UPSIDE_DOWN_CAKE)
     fun setSafetySourceData_invalidPackageCertificate_throwsIllegalArgumentException() {
         safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.singleSourceWithInvalidCert)
 
@@ -309,9 +286,9 @@ class SafetyCenterManagerTest {
 
         assertThat(thrown)
             .hasMessageThat()
-            .isEqualTo(
-                "Safety source: $DYNAMIC_IN_STATELESS_ID is in a stateless group but specified a " +
-                    "severity level: $SEVERITY_LEVEL_INFORMATION"
+            .matches(
+                "Safety source: $DYNAMIC_IN_STATELESS_ID is in a (stateless|rigid) group but " +
+                    "specified a severity level: $SEVERITY_LEVEL_INFORMATION"
             )
     }
 
@@ -834,10 +811,7 @@ class SafetyCenterManagerTest {
         val enabledChangedReceiver = SafetyCenterEnabledChangedReceiver(context)
 
         assertFailsWith(TimeoutCancellationException::class) {
-            enabledChangedReceiver.setSafetyCenterEnabledWithoutReceiverPermissionAndWait(
-                false,
-                TIMEOUT_SHORT
-            )
+            enabledChangedReceiver.setSafetyCenterEnabledWithoutReceiverPermissionAndWait(false)
         }
         enabledChangedReceiver.unregister()
     }
@@ -874,10 +848,7 @@ class SafetyCenterManagerTest {
         safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.singleSourceConfig)
 
         assertFailsWith(TimeoutCancellationException::class) {
-            SafetySourceReceiver.setSafetyCenterEnabledWithoutReceiverPermissionAndWait(
-                false,
-                TIMEOUT_SHORT
-            )
+            SafetySourceReceiver.setSafetyCenterEnabledWithoutReceiverPermissionAndWait(false)
         }
     }
 
@@ -955,7 +926,7 @@ class SafetyCenterManagerTest {
         assertFailsWith(TimeoutCancellationException::class) {
             safetyCenterManager.refreshSafetySourcesWithReceiverPermissionAndWait(
                 REFRESH_REASON_PAGE_OPEN,
-                TIMEOUT_SHORT
+                timeout = TIMEOUT_SHORT
             )
         }
 
@@ -980,71 +951,6 @@ class SafetyCenterManagerTest {
         val apiSafetySourceData =
             safetyCenterManager.getSafetySourceDataWithPermission(SINGLE_SOURCE_ID)
         assertThat(apiSafetySourceData).isEqualTo(safetySourceTestData.informationWithIssue)
-    }
-
-    @Test
-    fun refreshSafetySources_reasonPageOpen_allowedByFlag_broadcastSent() {
-        safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.noPageOpenConfig)
-        safetyCenterTestHelper.setData(SINGLE_SOURCE_ID, safetySourceTestData.information)
-        SafetyCenterFlags.overrideRefreshOnPageOpenSources = setOf(SINGLE_SOURCE_ID)
-        SafetySourceReceiver.setResponse(
-            Request.Refresh(SINGLE_SOURCE_ID),
-            Response.SetData(safetySourceTestData.informationWithIssue)
-        )
-
-        safetyCenterManager.refreshSafetySourcesWithReceiverPermissionAndWait(
-            REFRESH_REASON_PAGE_OPEN
-        )
-
-        val apiSafetySourceData =
-            safetyCenterManager.getSafetySourceDataWithPermission(SINGLE_SOURCE_ID)
-        assertThat(apiSafetySourceData).isEqualTo(safetySourceTestData.informationWithIssue)
-    }
-
-    @Test
-    fun refreshSafetySources_reasonPageOpen_allowedByFlagLater_broadcastSentLater() {
-        safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.noPageOpenConfig)
-        safetyCenterTestHelper.setData(SINGLE_SOURCE_ID, safetySourceTestData.information)
-        SafetySourceReceiver.setResponse(
-            Request.Refresh(SINGLE_SOURCE_ID),
-            Response.SetData(safetySourceTestData.informationWithIssue)
-        )
-
-        assertFailsWith(TimeoutCancellationException::class) {
-            safetyCenterManager.refreshSafetySourcesWithReceiverPermissionAndWait(
-                REFRESH_REASON_PAGE_OPEN,
-                TIMEOUT_SHORT
-            )
-        }
-        val apiSafetySourceDataBeforeSettingFlag =
-            safetyCenterManager.getSafetySourceDataWithPermission(SINGLE_SOURCE_ID)
-        SafetyCenterFlags.overrideRefreshOnPageOpenSources = setOf(SINGLE_SOURCE_ID)
-        safetyCenterManager.refreshSafetySourcesWithReceiverPermissionAndWait(
-            REFRESH_REASON_PAGE_OPEN
-        )
-        val apiSafetySourceDataAfterSettingFlag =
-            safetyCenterManager.getSafetySourceDataWithPermission(SINGLE_SOURCE_ID)
-
-        assertThat(apiSafetySourceDataBeforeSettingFlag).isEqualTo(safetySourceTestData.information)
-        assertThat(apiSafetySourceDataAfterSettingFlag)
-            .isEqualTo(safetySourceTestData.informationWithIssue)
-    }
-
-    @Test
-    fun refreshSafetySources_reasonPageOpen_noDataForSource_broadcastSent() {
-        safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.noPageOpenConfig)
-        SafetySourceReceiver.setResponse(
-            Request.Refresh(SINGLE_SOURCE_ID),
-            Response.SetData(safetySourceTestData.information)
-        )
-
-        safetyCenterManager.refreshSafetySourcesWithReceiverPermissionAndWait(
-            REFRESH_REASON_PAGE_OPEN
-        )
-
-        val apiSafetySourceData =
-            safetyCenterManager.getSafetySourceDataWithPermission(SINGLE_SOURCE_ID)
-        assertThat(apiSafetySourceData).isEqualTo(safetySourceTestData.information)
     }
 
     @Test
@@ -1135,8 +1041,7 @@ class SafetyCenterManagerTest {
 
         assertFailsWith(TimeoutCancellationException::class) {
             safetyCenterManager.refreshSafetySourcesWithoutReceiverPermissionAndWait(
-                REFRESH_REASON_RESCAN_BUTTON_CLICK,
-                TIMEOUT_SHORT
+                REFRESH_REASON_RESCAN_BUTTON_CLICK
             )
         }
         val apiSafetySourceData =
@@ -1154,7 +1059,7 @@ class SafetyCenterManagerTest {
         assertFailsWith(TimeoutCancellationException::class) {
             safetyCenterManager.refreshSafetySourcesWithReceiverPermissionAndWait(
                 REFRESH_REASON_PAGE_OPEN,
-                TIMEOUT_SHORT
+                timeout = TIMEOUT_SHORT
             )
         }
     }
@@ -1206,11 +1111,11 @@ class SafetyCenterManagerTest {
         )
 
         // Because wrong ID, refresh hasn't finished. Wait for timeout.
-        listener.receiveSafetyCenterErrorDetails()
+        listener.waitForSafetyCenterRefresh(withErrorEntry = true)
         SafetyCenterFlags.setAllRefreshTimeoutsTo(TIMEOUT_LONG)
 
         SafetySourceReceiver.setResponse(
-            Request.Rescan(SINGLE_SOURCE_ID),
+            Request.Refresh(SINGLE_SOURCE_ID),
             Response.SetData(safetySourceTestData.information)
         )
         safetyCenterManager.refreshSafetySourcesWithReceiverPermissionAndWait(
@@ -1280,7 +1185,7 @@ class SafetyCenterManagerTest {
             safetyCenterManager.getSafetySourceDataWithPermission(SINGLE_SOURCE_ID)
         assertThat(apiSafetySourceData1).isNull()
         // Wait for the ongoing refresh to timeout.
-        listener.receiveSafetyCenterErrorDetails()
+        listener.waitForSafetyCenterRefresh(withErrorEntry = true)
         SafetyCenterFlags.setAllRefreshTimeoutsTo(TIMEOUT_LONG)
         SafetySourceReceiver.setResponse(
             Request.Refresh(SINGLE_SOURCE_ID),
@@ -1332,18 +1237,11 @@ class SafetyCenterManagerTest {
             REFRESH_REASON_RESCAN_BUTTON_CLICK
         )
 
-        val safetyCenterErrorDetailsFromListener = listener.receiveSafetyCenterErrorDetails()
-        assertThat(safetyCenterErrorDetailsFromListener)
-            .isEqualTo(
-                SafetyCenterErrorDetails(
-                    safetyCenterResourcesContext.getStringByName("refresh_timeout")
-                )
-            )
+        listener.waitForSafetyCenterRefresh(withErrorEntry = true)
     }
 
     @Test
     fun refreshSafetySources_withUntrackedSourceThatTimesOut_doesNotTimeOut() {
-        SafetyCenterFlags.setAllRefreshTimeoutsTo(TIMEOUT_SHORT)
         SafetyCenterFlags.untrackedSources = setOf(SOURCE_ID_1)
         safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.multipleSourcesConfig)
         // SOURCE_ID_1 will timeout
@@ -1359,14 +1257,11 @@ class SafetyCenterManagerTest {
             REFRESH_REASON_RESCAN_BUTTON_CLICK
         )
 
-        assertFailsWith(TimeoutCancellationException::class) {
-            listener.receiveSafetyCenterErrorDetails(TIMEOUT_SHORT)
-        }
+        listener.waitForSafetyCenterRefresh(withErrorEntry = false)
     }
 
     @Test
     fun refreshSafetySources_withMultipleUntrackedSourcesThatTimeOut_doesNotTimeOut() {
-        SafetyCenterFlags.setAllRefreshTimeoutsTo(TIMEOUT_SHORT)
         SafetyCenterFlags.untrackedSources = setOf(SOURCE_ID_1, SOURCE_ID_2)
         safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.multipleSourcesConfig)
         // SOURCE_ID_1 and SOURCE_ID_2 will timeout
@@ -1380,9 +1275,7 @@ class SafetyCenterManagerTest {
             REFRESH_REASON_RESCAN_BUTTON_CLICK
         )
 
-        assertFailsWith(TimeoutCancellationException::class) {
-            listener.receiveSafetyCenterErrorDetails(TIMEOUT_SHORT)
-        }
+        listener.waitForSafetyCenterRefresh(withErrorEntry = false)
     }
 
     @Test
@@ -1396,25 +1289,20 @@ class SafetyCenterManagerTest {
             REFRESH_REASON_RESCAN_BUTTON_CLICK
         )
 
-        val safetyCenterErrorDetailsFromListener = listener.receiveSafetyCenterErrorDetails()
-        assertThat(safetyCenterErrorDetailsFromListener)
-            .isEqualTo(
-                SafetyCenterErrorDetails(
-                    safetyCenterResourcesContext.getStringByName("refresh_timeout")
-                )
-            )
+        listener.waitForSafetyCenterRefresh(withErrorEntry = true)
     }
 
     @Test
     fun refreshSafetySources_withTrackedSourceThatHasNoReceiver_doesNotTimeOut() {
-        SafetyCenterFlags.setAllRefreshTimeoutsTo(TIMEOUT_SHORT)
         safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.singleSourceOtherPackageConfig)
         val listener = safetyCenterTestHelper.addListener()
 
         safetyCenterManager.refreshSafetySourcesWithPermission(REFRESH_REASON_RESCAN_BUTTON_CLICK)
 
         assertFailsWith(TimeoutCancellationException::class) {
-            listener.receiveSafetyCenterErrorDetails(TIMEOUT_SHORT)
+            // In this case a refresh isn't even started because there is only a single source
+            // without a receiver.
+            listener.receiveSafetyCenterData(TIMEOUT_SHORT)
         }
     }
 
@@ -1426,7 +1314,7 @@ class SafetyCenterManagerTest {
         assertFailsWith(TimeoutCancellationException::class) {
             safetyCenterManager.refreshSafetySourcesWithReceiverPermissionAndWait(
                 REFRESH_REASON_PAGE_OPEN,
-                TIMEOUT_SHORT
+                timeout = TIMEOUT_SHORT
             )
         }
     }
@@ -1510,7 +1398,7 @@ class SafetyCenterManagerTest {
     }
 
     @Test
-    @SdkSuppress(minSdkVersion = UPSIDE_DOWN_CAKE, codeName = "UpsideDownCake")
+    @SdkSuppress(minSdkVersion = UPSIDE_DOWN_CAKE)
     fun refreshSafetySources_withRefreshReasonPeriodic_noBackgroundRefreshSourceDoesNotSendData() {
         safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.singleSourceConfig)
         SafetySourceReceiver.setResponse(
@@ -1522,7 +1410,7 @@ class SafetyCenterManagerTest {
         assertFailsWith(TimeoutCancellationException::class) {
             safetyCenterManager.refreshSafetySourcesWithReceiverPermissionAndWait(
                 REFRESH_REASON_PERIODIC,
-                TIMEOUT_SHORT
+                timeout = TIMEOUT_SHORT
             )
         }
 
@@ -1532,7 +1420,7 @@ class SafetyCenterManagerTest {
     }
 
     @Test
-    @SdkSuppress(minSdkVersion = UPSIDE_DOWN_CAKE, codeName = "UpsideDownCake")
+    @SdkSuppress(minSdkVersion = UPSIDE_DOWN_CAKE)
     fun refreshSafetySources_withRefreshReasonPeriodic_backgroundRefreshSourceSendsData() {
         safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.singleSourceConfig)
         SafetySourceReceiver.setResponse(
@@ -1549,7 +1437,7 @@ class SafetyCenterManagerTest {
     }
 
     @Test
-    @SdkSuppress(minSdkVersion = UPSIDE_DOWN_CAKE, codeName = "UpsideDownCake")
+    @SdkSuppress(minSdkVersion = UPSIDE_DOWN_CAKE)
     fun refreshSafetySources_withSafetySourceIds_onlySpecifiedSourcesSendData() {
         safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.multipleSourcesConfig)
         SafetySourceReceiver.apply {
@@ -1584,7 +1472,7 @@ class SafetyCenterManagerTest {
     }
 
     @Test
-    @SdkSuppress(minSdkVersion = UPSIDE_DOWN_CAKE, codeName = "UpsideDownCake")
+    @SdkSuppress(minSdkVersion = UPSIDE_DOWN_CAKE)
     fun refreshSafetySources_withEmptySafetySourceIds_noSourcesSendData() {
         safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.singleSourceConfig)
         SafetySourceReceiver.setResponse(
@@ -1595,8 +1483,8 @@ class SafetyCenterManagerTest {
         assertFailsWith(TimeoutCancellationException::class) {
             safetyCenterManager.refreshSafetySourcesWithReceiverPermissionAndWait(
                 REFRESH_REASON_PAGE_OPEN,
-                TIMEOUT_SHORT,
-                emptyList()
+                safetySourceIds = emptyList(),
+                timeout = TIMEOUT_SHORT,
             )
         }
 
@@ -1606,27 +1494,19 @@ class SafetyCenterManagerTest {
 
     @Test
     @SdkSuppress(maxSdkVersion = TIRAMISU)
-    fun refreshSafetySources_versionLessThanU_throwsUnsupportedOperationException() {
-        // TODO(b/258228790): Remove after U is no longer in pre-release
-        assumeFalse(Build.VERSION.CODENAME == "UpsideDownCake")
-        assumeFalse(Build.VERSION.CODENAME == "VanillaIceCream")
+    fun refreshSafetySources_versionLessThanU_throws() {
         safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.multipleSourcesConfig)
 
-        val exception =
-            assertFailsWith(UnsupportedOperationException::class) {
-                safetyCenterManager.refreshSafetySourcesWithReceiverPermissionAndWait(
-                    REFRESH_REASON_PAGE_OPEN,
-                    safetySourceIds = listOf(SOURCE_ID_1, SOURCE_ID_3)
-                )
-            }
-
-        assertThat(exception)
-            .hasMessageThat()
-            .isEqualTo("Method not supported for versions lower than UPSIDE_DOWN_CAKE")
+        assertFails {
+            safetyCenterManager.refreshSafetySourcesWithReceiverPermissionAndWait(
+                REFRESH_REASON_PAGE_OPEN,
+                safetySourceIds = listOf(SOURCE_ID_1, SOURCE_ID_3)
+            )
+        }
     }
 
     @Test
-    @SdkSuppress(minSdkVersion = UPSIDE_DOWN_CAKE, codeName = "UpsideDownCake")
+    @SdkSuppress(minSdkVersion = UPSIDE_DOWN_CAKE)
     fun refreshSafetySources_withSafetySourceIds_withoutPermission_throwsSecurityException() {
         assertFailsWith(SecurityException::class) {
             safetyCenterManager.refreshSafetySources(REFRESH_REASON_PAGE_OPEN, listOf())
@@ -2076,7 +1956,7 @@ class SafetyCenterManagerTest {
         assertThat(error)
             .isEqualTo(
                 SafetyCenterErrorDetails(
-                    safetyCenterResourcesContext.getStringByName("redirecting_error")
+                    safetyCenterResourcesApk.getStringByName("redirecting_error")
                 )
             )
     }
@@ -2102,7 +1982,7 @@ class SafetyCenterManagerTest {
         assertThat(error)
             .isEqualTo(
                 SafetyCenterErrorDetails(
-                    safetyCenterResourcesContext.getStringByName("resolving_action_error")
+                    safetyCenterResourcesApk.getStringByName("resolving_action_error")
                 )
             )
     }

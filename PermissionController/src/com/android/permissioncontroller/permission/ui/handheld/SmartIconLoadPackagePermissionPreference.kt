@@ -30,16 +30,17 @@ import com.android.permissioncontroller.R
 import com.android.permissioncontroller.permission.utils.KotlinUtils
 
 /**
- * A Preference representing a package for a user, which loads and displays its icon only upon
- * being bound to a viewHolder. This lets us synchronously load package icons and labels, while
- * still displaying the PermissionAppsFragment instantly.
+ * A Preference representing a package for a user, which loads and displays its icon only upon being
+ * bound to a viewHolder. This lets us synchronously load package icons and labels, while still
+ * displaying the PermissionAppsFragment instantly.
  *
  * @param app The current application
  * @param packageName The name of the package whose icon this preference will retrieve
  * @param user The user whose package icon will be retrieved
  * @param context The current context
  */
-open class SmartIconLoadPackagePermissionPreference constructor(
+open class SmartIconLoadPackagePermissionPreference
+constructor(
     private val app: Application,
     private val packageName: String,
     private val user: UserHandle,
@@ -62,9 +63,13 @@ open class SmartIconLoadPackagePermissionPreference constructor(
         val imageView = holder.findViewById(android.R.id.icon) as ImageView
 
         imageView.maxWidth =
-            context.resources.getDimensionPixelSize(R.dimen.secondary_app_icon_size)
+            context.resources.getDimensionPixelSize(
+                com.android.settingslib.widget.theme.R.dimen.secondary_app_icon_size
+            )
         imageView.maxHeight =
-            context.resources.getDimensionPixelSize(R.dimen.secondary_app_icon_size)
+            context.resources.getDimensionPixelSize(
+                com.android.settingslib.widget.theme.R.dimen.secondary_app_icon_size
+            )
         imageView.setImageDrawable(KotlinUtils.getBadgedPackageIcon(app, packageName, user))
         imageView.visibility = View.VISIBLE
 

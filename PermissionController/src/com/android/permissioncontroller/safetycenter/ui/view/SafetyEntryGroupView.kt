@@ -51,7 +51,6 @@ constructor(
 ) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
 
     private companion object {
-        val TAG = SafetyEntryGroupView::class.java.simpleName
         const val EXPAND_COLLAPSE_ANIMATION_DURATION_MS = 183L
     }
 
@@ -59,20 +58,20 @@ constructor(
         inflate(context, R.layout.safety_center_group, this)
     }
 
-    private val groupHeaderView: LinearLayout? by lazy { findViewById(R.id.group_header) }
+    private val groupHeaderView: LinearLayout? by lazyView(R.id.group_header)
 
-    private val expandedHeaderView: ViewGroup? by lazy { findViewById(R.id.expanded_header) }
-    private val expandedTitleView: TextView? by lazy {
+    private val expandedHeaderView: ViewGroup? by lazyView(R.id.expanded_header)
+    private val expandedTitleView: TextView? by lazyView {
         expandedHeaderView?.findViewById(R.id.title)
     }
 
-    private val collapsedHeaderView: ViewGroup? by lazy { findViewById(R.id.collapsed_header) }
-    private val commonEntryView: SafetyEntryCommonViewsManager? by lazy {
+    private val collapsedHeaderView: ViewGroup? by lazyView(R.id.collapsed_header)
+    private val commonEntryView: SafetyEntryCommonViewsManager? by lazyView {
         SafetyEntryCommonViewsManager(collapsedHeaderView)
     }
 
-    private val chevronIconView: ImageView? by lazy { findViewById(R.id.chevron_icon) }
-    private val entriesContainerView: LinearLayout? by lazy { findViewById(R.id.entries_container) }
+    private val chevronIconView: ImageView? by lazyView(R.id.chevron_icon)
+    private val entriesContainerView: LinearLayout? by lazyView(R.id.entries_container)
 
     private var isExpanded: Boolean? = null
 
@@ -107,8 +106,15 @@ constructor(
         val params = layoutParams as MarginLayoutParams
         if (params.topMargin != topMargin) {
             params.topMargin = topMargin
-            layoutParams = params
         }
+
+        if (isLastCard) {
+            params.bottomMargin = context.resources.getDimensionPixelSize(R.dimen.sc_spacing_large)
+        } else {
+            params.bottomMargin = 0
+        }
+
+        layoutParams = params
     }
 
     private fun showGroupDetails(group: SafetyCenterEntryGroup) {

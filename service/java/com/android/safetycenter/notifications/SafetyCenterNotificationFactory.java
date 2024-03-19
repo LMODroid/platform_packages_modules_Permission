@@ -16,7 +16,6 @@
 
 package com.android.safetycenter.notifications;
 
-import static android.os.Build.VERSION_CODES.TIRAMISU;
 import static android.safetycenter.SafetyCenterManager.EXTRA_SAFETY_SOURCE_ID;
 import static android.safetycenter.SafetyCenterManager.EXTRA_SAFETY_SOURCE_ISSUE_ID;
 import static android.safetycenter.SafetyCenterManager.EXTRA_SAFETY_SOURCE_USER_HANDLE;
@@ -24,7 +23,6 @@ import static android.safetycenter.SafetyCenterManager.EXTRA_SAFETY_SOURCE_USER_
 import static com.android.safetycenter.notifications.SafetyCenterNotificationChannels.getContextAsUser;
 
 import android.annotation.ColorInt;
-import android.annotation.Nullable;
 import android.annotation.UserIdInt;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -32,7 +30,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.os.UserHandle;
@@ -40,14 +37,14 @@ import android.safetycenter.SafetySourceData;
 import android.safetycenter.SafetySourceIssue;
 import android.text.TextUtils;
 
-import androidx.annotation.RequiresApi;
+import androidx.annotation.Nullable;
 
 import com.android.modules.utils.build.SdkLevel;
 import com.android.safetycenter.PendingIntentFactory;
 import com.android.safetycenter.internaldata.SafetyCenterIds;
 import com.android.safetycenter.internaldata.SafetyCenterIssueActionId;
 import com.android.safetycenter.internaldata.SafetyCenterIssueKey;
-import com.android.safetycenter.resources.SafetyCenterResourcesContext;
+import com.android.safetycenter.resources.SafetyCenterResourcesApk;
 
 import java.time.Duration;
 import java.util.List;
@@ -56,24 +53,22 @@ import java.util.List;
  * Factory that builds {@link Notification} objects from {@link SafetySourceIssue} instances with
  * appropriate {@link PendingIntent}s for click and dismiss callbacks.
  */
-@RequiresApi(TIRAMISU)
 final class SafetyCenterNotificationFactory {
 
-    private static final String TAG = "SafetyCenterNF";
     private static final int OPEN_SAFETY_CENTER_REQUEST_CODE = 1221;
     private static final Duration SUCCESS_NOTIFICATION_TIMEOUT = Duration.ofSeconds(10);
 
     private final Context mContext;
     private final SafetyCenterNotificationChannels mNotificationChannels;
-    private final SafetyCenterResourcesContext mResourcesContext;
+    private final SafetyCenterResourcesApk mSafetyCenterResourcesApk;
 
     SafetyCenterNotificationFactory(
             Context context,
             SafetyCenterNotificationChannels notificationChannels,
-            SafetyCenterResourcesContext resourcesContext) {
+            SafetyCenterResourcesApk safetyCenterResourcesApk) {
         mContext = context;
         mNotificationChannels = notificationChannels;
-        mResourcesContext = resourcesContext;
+        mSafetyCenterResourcesApk = safetyCenterResourcesApk;
     }
 
     /**
@@ -89,6 +84,10 @@ final class SafetyCenterNotificationFactory {
             SafetySourceIssue issue,
             SafetySourceIssue.Action action,
             @UserIdInt int userId) {
+        if (action.getSuccessMessage() == null) {
+            return null;
+        }
+
         String channelId = mNotificationChannels.getCreatedChannelId(notificationManager, issue);
         if (channelId == null) {
             return null;
@@ -107,7 +106,8 @@ final class SafetyCenterNotificationFactory {
                         .setContentTitle(action.getSuccessMessage())
                         .setShowWhen(true)
                         .setTimeoutAfter(SUCCESS_NOTIFICATION_TIMEOUT.toMillis())
-                        .setContentIntent(contentIntent);
+                        .setContentIntent(contentIntent)
+                        .setAutoCancel(true);
 
         Integer color = getNotificationColor(SafetySourceData.SEVERITY_LEVEL_INFORMATION);
         if (color != null) {
@@ -175,6 +175,10 @@ final class SafetyCenterNotificationFactory {
             builder.addAction(notificationAction);
         }
 
+        if (issue.getSeverityLevel() == SafetySourceData.SEVERITY_LEVEL_INFORMATION) {
+            builder.setAutoCancel(true);
+        }
+
         return builder.build();
     }
 
@@ -231,7 +235,7 @@ final class SafetyCenterNotificationFactory {
         if (severityLevel == SafetySourceData.SEVERITY_LEVEL_CRITICAL_WARNING) {
             iconResName = "ic_notification_badge_critical";
         }
-        Icon icon = mResourcesContext.getIconByDrawableName(iconResName);
+        Icon icon = mSafetyCenterResourcesApk.getIconByDrawableName(iconResName);
         if (icon == null) {
             // In case it was impossible to fetch the above drawable for any reason use this
             // fallback which should be present on all Android devices:
@@ -247,12 +251,13 @@ final class SafetyCenterNotificationFactory {
         if (severityLevel == SafetySourceData.SEVERITY_LEVEL_CRITICAL_WARNING) {
             colorResName = "notification_tint_critical";
         }
-        return mResourcesContext.getColorByName(colorResName);
+        return mSafetyCenterResourcesApk.getColorByName(colorResName);
     }
 
     private Bundle getNotificationExtras() {
         Bundle extras = new Bundle();
-        String appName = mResourcesContext.getStringByName("notification_channel_group_name");
+        String appName =
+                mSafetyCenterResourcesApk.getStringByName("notification_channel_group_name");
         if (!TextUtils.isEmpty(appName)) {
             extras.putString(Notification.EXTRA_SUBSTITUTE_APP_NAME, appName);
         }
@@ -262,7 +267,9 @@ final class SafetyCenterNotificationFactory {
     private Notification.Action toNotificationAction(
             SafetyCenterIssueKey issueKey, SafetySourceIssue.Action issueAction) {
         PendingIntent pendingIntent = getPendingIntentForAction(issueKey, issueAction);
-        return new Notification.Action.Builder(null, issueAction.getLabel(), pendingIntent).build();
+        return new Notification.Action.Builder(
+                        /* icon= */ null, issueAction.getLabel(), pendingIntent)
+                .build();
     }
 
     private PendingIntent getPendingIntentForAction(
@@ -270,7 +277,7 @@ final class SafetyCenterNotificationFactory {
         if (issueAction.willResolve()) {
             return getReceiverPendingIntentForResolvingAction(issueKey, issueAction);
         } else {
-            return getDirectPendingIntentForNonResolvingAction(issueKey, issueAction);
+            return getDirectPendingIntentForNonResolvingAction(issueAction);
         }
     }
 
@@ -291,12 +298,7 @@ final class SafetyCenterNotificationFactory {
     }
 
     private PendingIntent getDirectPendingIntentForNonResolvingAction(
-            SafetyCenterIssueKey issueKey, SafetySourceIssue.Action issueAction) {
+            SafetySourceIssue.Action issueAction) {
         return issueAction.getPendingIntent();
-    }
-
-    private static boolean isDarkTheme(Context context) {
-        return (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
-                == Configuration.UI_MODE_NIGHT_YES;
     }
 }

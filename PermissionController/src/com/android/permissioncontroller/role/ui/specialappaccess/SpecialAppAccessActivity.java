@@ -19,6 +19,7 @@ package com.android.permissioncontroller.role.ui.specialappaccess;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Process;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -30,7 +31,6 @@ import com.android.permissioncontroller.R;
 import com.android.permissioncontroller.role.ui.SettingsActivity;
 import com.android.permissioncontroller.role.ui.auto.AutoSpecialAppAccessFragment;
 import com.android.permissioncontroller.role.ui.specialappaccess.handheld.HandheldSpecialAppAccessFragment;
-import com.android.permissioncontroller.role.utils.RoleUiBehaviorUtils;
 import com.android.role.controller.model.Role;
 import com.android.role.controller.model.Roles;
 
@@ -71,13 +71,13 @@ public class SpecialAppAccessActivity extends SettingsActivity {
             finish();
             return;
         }
-        if (!role.isAvailable(this)) {
+        if (!role.isAvailableAsUser(Process.myUserHandle(), this)) {
             Log.e(LOG_TAG, "Role is unavailable: " + roleName);
             finish();
             return;
         }
 
-        if (!RoleUiBehaviorUtils.isVisible(role, this)) {
+        if (!role.isVisibleAsUser(Process.myUserHandle(), this)) {
             Log.e(LOG_TAG, "Role is invisible: " + roleName);
             finish();
             return;

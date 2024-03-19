@@ -17,19 +17,24 @@
 package com.android.permissioncontroller.permissionui.ui
 
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.os.Build
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.SdkSuppress
 import org.junit.runner.RunWith
 
 /**
  * Simple tests for {@link PermissionAppsFragment} when showing location permission
  *
  * Currently, does NOT run on TV (same as the other tests that extend [PermissionAppsFragmentTest]).
+ *
  * TODO(b/178576541): Adapt and run on TV.
+ * TODO(b/304152870): On Android R, the package name never disappears from screen after uninstall
  */
 @RunWith(AndroidJUnit4::class)
-class StoragePermissionAppsFragmentTest : PermissionAppsFragmentTest(
-    "/data/local/tmp/permissioncontroller/tests/permissionui" +
-        "/PermissionUiUseStoragePermissionApp.apk",
-    "com.android.permissioncontroller.tests.appthatrequestpermission",
-    READ_EXTERNAL_STORAGE
-)
+@SdkSuppress(minSdkVersion = Build.VERSION_CODES.S, codeName = "S")
+class StoragePermissionAppsFragmentTest :
+    PermissionAppsFragmentTest(
+        "/data/local/tmp/pc-permissionui" + "/PermissionUiUseStoragePermissionApp.apk",
+        "com.android.permissioncontroller.tests.appthatrequestpermission",
+        READ_EXTERNAL_STORAGE
+    )

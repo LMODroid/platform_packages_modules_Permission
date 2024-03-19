@@ -100,6 +100,7 @@ java_sdk_library {
         "modules-utils-backgroundthread",
         "modules-utils-build",
         "modules-utils-os",
+        "role-controller",
         "safety-center-config",
         "safety-center-internal-data",
         "safety-center-pending-intents",
@@ -108,6 +109,7 @@ java_sdk_library {
         "service-permission-shared",
         "service-permission-statsd",
         "service-permission-proto-stream",
+        "android.permission.flags-aconfig-java",
     ],
     errorprone: {
         javacflags: ["-Xep:GuardedBy:ERROR"],
@@ -137,6 +139,10 @@ java_sdk_library {
         "com.android.role",
         "com.android.safetycenter",
     ],
+    optimize: {
+        proguard_compatibility: false, // TODO(b/215530220): remove when this is default behavior
+        proguard_flags_files: ["proguard.flags"],
+    },
 }
 
 genrule {

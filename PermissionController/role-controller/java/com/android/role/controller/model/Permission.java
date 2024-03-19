@@ -60,12 +60,27 @@ public class Permission {
      * @return whether this permission is available
      */
     public boolean isAvailable() {
-        // Workaround to match the value 34+ for U+ in roles.xml before SDK finalization.
-        if (mMinSdkVersion >= 34) {
-            return SdkLevel.isAtLeastU();
+        // Workaround to match the value 35+ for V+ in roles.xml before SDK finalization.
+        if (mMinSdkVersion >= 35) {
+            return SdkLevel.isAtLeastV();
         } else {
             return Build.VERSION.SDK_INT >= mMinSdkVersion;
         }
+    }
+
+    /**
+     * Return a new permission with the specified minimum SDK version, or this permission if it
+     * already has the same minimum SDK version.
+     *
+     * @param minSdkVersion the minimum SDK version
+     * @return a permission with the specified minimum SDK version
+     */
+    @NonNull
+    public Permission withMinSdkVersion(int minSdkVersion) {
+        if (mMinSdkVersion == minSdkVersion) {
+            return this;
+        }
+        return new Permission(mName, minSdkVersion);
     }
 
     @Override

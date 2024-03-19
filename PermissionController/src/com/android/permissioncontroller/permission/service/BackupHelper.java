@@ -136,8 +136,8 @@ public class BackupHelper {
                 case END_TAG:
                     numOpenTags--;
                     break;
-                default:
-                    // ignore
+                case END_DOCUMENT:
+                    return;
             }
         }
     }
@@ -763,8 +763,6 @@ public class BackupHelper {
                         return new BackupSigningInfoState(
                                 currentCertDigests,
                                 pastCertDigests);
-                    default:
-                        throw new XmlPullParserException("Could not parse signing info");
                 }
             }
         }

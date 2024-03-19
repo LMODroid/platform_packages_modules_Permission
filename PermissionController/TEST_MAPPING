@@ -16,17 +16,17 @@
             "name": "PermissionUiTestCases",
             "options": [
                 {
-                    "exclude-annotation": "android.platform.test.annotations.FlakyTest"
+                    "exclude-annotation": "androidx.test.filters.FlakyTest"
                 }
             ]
         }
     ],
     "presubmit-large": [
         {
-            "name": "CtsPermission3TestCases",
+            "name": "CtsPermissionUiTestCases",
             "options": [
                 {
-                    "exclude-annotation": "android.platform.test.annotations.FlakyTest"
+                    "exclude-annotation": "androidx.test.filters.FlakyTest"
                 }
             ]
         }
@@ -43,7 +43,7 @@
                     "exclude-filter": "android.app.role.cts.RoleManagerTest#removeSmsRoleHolderThenPermissionIsRevoked"
                 },
                 {
-                   "exclude-annotation": "androidx.test.filters.FlakyTest"
+                    "exclude-annotation": "androidx.test.filters.FlakyTest"
                 }
             ],
             "file_patterns": ["res/xml/roles\\.xml"]
@@ -52,7 +52,7 @@
             "name": "PermissionUiTestCases[com.google.android.permission.apex]",
             "options": [
                 {
-                    "exclude-annotation": "android.platform.test.annotations.FlakyTest"
+                    "exclude-annotation": "androidx.test.filters.FlakyTest"
                 },
                 // TODO(b/238773220): These tests currently fails on R base image
                 {
@@ -73,12 +73,63 @@
             ]
         },
         {
-            "name": "CtsPermission3TestCases[com.google.android.permission.apex]",
+            "name": "CtsPermissionUiTestCases[com.google.android.permission.apex]",
             "options": [
                 {
-                    "exclude-annotation": "android.platform.test.annotations.FlakyTest"
+                    "exclude-annotation": "androidx.test.filters.FlakyTest"
                 }
             ]
+        }
+    ],
+    "postsubmit": [
+        {
+            "name": "CtsRoleTestCases",
+            "file_patterns": ["res/xml/roles\\.xml"]
+        },
+        {
+            "name": "PermissionUiTestCases"
+        },
+        {
+            "name": "CtsPermissionUiTestCases"
+        }
+    ],
+    "mainline-postsubmit": [
+        {
+            "name": "CtsRoleTestCases[com.google.android.permission.apex]",
+            "options": [
+                // TODO(b/238677748): These two tests currently fails on R base image
+                {
+                    "exclude-filter": "android.app.role.cts.RoleManagerTest#openDefaultAppListThenIsNotDefaultAppInList"
+                },
+                {
+                    "exclude-filter": "android.app.role.cts.RoleManagerTest#removeSmsRoleHolderThenPermissionIsRevoked"
+                }
+            ],
+            "file_patterns": ["res/xml/roles\\.xml"]
+        },
+        {
+            "name": "PermissionUiTestCases[com.google.android.permission.apex]",
+            "options": [
+                // TODO(b/238773220): These tests currently fails on R base image
+                {
+                    "exclude-filter": "com.android.permissioncontroller.permissionui.ui.handheld.ManageCustomPermissionsFragmentTest#groupSummaryGetsUpdatedWhenPermissionGetsGranted"
+                },
+                {
+                    "exclude-filter": "com.android.permissioncontroller.permissionui.ui.handheld.ManageCustomPermissionsFragmentTest#groupSummaryGetsUpdatedWhenPermissionGetsRevoked"
+                },
+                {
+                    "exclude-filter": "com.android.permissioncontroller.permissionui.ui.handheld.ManageStandardPermissionsFragmentTest#additionalPermissionSummaryGetUpdateWhenAppGetsInstalled"
+                },
+                {
+                    "exclude-filter": "com.android.permissioncontroller.permissionui.ui.handheld.ManageStandardPermissionsFragmentTest#additionalPermissionSummaryGetUpdateWhenDefinerGetsUninstalled"
+                },
+                {
+                    "exclude-filter": "com.android.permissioncontroller.permissionui.ui.handheld.ManageStandardPermissionsFragmentTest#additionalPermissionSummaryGetUpdateWhenUserGetsUninstalled"
+                }
+            ]
+        },
+        {
+            "name": "CtsPermissionUiTestCases[com.google.android.permission.apex]"
         }
     ],
     "imports": [

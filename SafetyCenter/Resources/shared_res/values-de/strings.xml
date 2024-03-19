@@ -40,11 +40,10 @@
     <string name="overall_severity_n_alerts_summary" msgid="3262010942295408403">"{count,plural, =1{Benachrichtigung ansehen}other{Benachrichtigungen ansehen}}"</string>
     <string name="redirecting_error" msgid="8146983632878233202">"Seite konnte nicht geöffnet werden"</string>
     <string name="resolving_action_error" msgid="371968886143262375">"Ursache konnte nicht behoben werden"</string>
-    <string name="refresh_timeout" msgid="251734999692581852">"Einstellungen konnten nicht aktualisiert werden"</string>
     <string name="refresh_error" msgid="656062128422446177">"{count,plural, =1{Einstellung konnte nicht überprüft werden}other{Einstellungen konnten nicht überprüft werden}}"</string>
     <string name="work_profile_paused" msgid="7037400224040869079">"Arbeitsprofil pausiert"</string>
     <string name="group_unknown_summary" msgid="6951386960814105641">"Noch keine Angaben vorhanden"</string>
-    <string name="notification_channel_group_name" msgid="7155072032524876859">"Sicherheit &amp; Datenschutz"</string>
+    <string name="notification_channel_group_name" msgid="7155072032524876859">"Datenschutz &amp; Sicherheit"</string>
     <string name="notification_channel_name_information" msgid="2966444432152990166">"Empfehlungen"</string>
     <string name="notification_channel_name_recommendation" msgid="7847408286580217922">"Warnungen"</string>
     <string name="notification_channel_name_critical_warning" msgid="5994320322108351769">"Wichtige Warnungen"</string>

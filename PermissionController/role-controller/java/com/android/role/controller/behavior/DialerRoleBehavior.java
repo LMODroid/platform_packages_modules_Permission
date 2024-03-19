@@ -26,6 +26,7 @@ import com.android.modules.utils.build.SdkLevel;
 import com.android.role.controller.model.Permissions;
 import com.android.role.controller.model.Role;
 import com.android.role.controller.model.RoleBehavior;
+import com.android.role.controller.model.VisibilityMixin;
 import com.android.role.controller.util.PackageUtils;
 
 import java.util.Arrays;
@@ -55,20 +56,28 @@ public class DialerRoleBehavior implements RoleBehavior {
     }
 
     @Override
-    public void grant(@NonNull Role role, @NonNull String packageName, @NonNull Context context) {
+    public void grantAsUser(@NonNull Role role, @NonNull String packageName,
+            @NonNull UserHandle user, @NonNull Context context) {
         if (SdkLevel.isAtLeastS()) {
-            if (PackageUtils.isSystemPackage(packageName, context)) {
-                Permissions.grant(packageName, SYSTEM_DIALER_PERMISSIONS, false, false,
-                        true, false, false, context);
+            if (PackageUtils.isSystemPackageAsUser(packageName, user, context)) {
+                Permissions.grantAsUser(packageName, SYSTEM_DIALER_PERMISSIONS, false, false,
+                        true, false, false, user, context);
             }
         }
     }
 
     @Override
-    public void revoke(@NonNull Role role, @NonNull String packageName,
-            @NonNull Context context) {
+    public void revokeAsUser(@NonNull Role role, @NonNull String packageName,
+            @NonNull UserHandle user, @NonNull Context context) {
         if (SdkLevel.isAtLeastS()) {
-            Permissions.revoke(packageName, SYSTEM_DIALER_PERMISSIONS, true, false, false, context);
+            Permissions.revokeAsUser(packageName, SYSTEM_DIALER_PERMISSIONS, true, false, false,
+                    user, context);
         }
+    }
+
+    @Override
+    public boolean isVisibleAsUser(@NonNull Role role, @NonNull UserHandle user,
+            @NonNull Context context) {
+        return VisibilityMixin.isVisible("config_showDialerRole", true, user, context);
     }
 }

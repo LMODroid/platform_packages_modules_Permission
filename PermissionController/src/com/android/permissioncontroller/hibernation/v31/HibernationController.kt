@@ -25,11 +25,10 @@ import android.os.Build
 import android.os.UserHandle
 import androidx.annotation.RequiresApi
 import com.android.permissioncontroller.DumpableLog
+import com.android.permissioncontroller.permission.data.HibernatedPackagesLiveData
 import com.android.permissioncontroller.permission.model.livedatatypes.LightPackageInfo
 
-/**
- * Hibernation controller that handles modifying hibernation state.
- */
+/** Hibernation controller that handles modifying hibernation state. */
 @RequiresApi(Build.VERSION_CODES.S)
 class HibernationController(
     private val context: Context,
@@ -61,8 +60,7 @@ class HibernationController(
                     if (hibernationManager.isHibernatingForUser(pkg.packageName)) {
                         continue
                     }
-                    if (!targetsPreS &&
-                        pkg.targetSdkVersion < Build.VERSION_CODES.S) {
+                    if (!targetsPreS && pkg.targetSdkVersion < Build.VERSION_CODES.S) {
                         // Only apps targeting S or above can be truly hibernated.
                         continue
                     }
@@ -80,8 +78,10 @@ class HibernationController(
             context.getSystemService(APP_HIBERNATION_SERVICE) as AppHibernationManager
         val globallyHibernatedApps = mutableSetOf<String>()
         for ((pkgName, _) in hibernatedApps) {
-            if (globallyHibernatedApps.contains(pkgName) ||
-                hibernationManager.isHibernatingGlobally(pkgName)) {
+            if (
+                globallyHibernatedApps.contains(pkgName) ||
+                    hibernationManager.isHibernatingGlobally(pkgName)
+            ) {
                 continue
             }
 
@@ -94,10 +94,15 @@ class HibernationController(
             hibernationManager.setHibernatingGlobally(pkgName, true)
             globallyHibernatedApps.add(pkgName)
         }
+        if (hibernatedApps.isNotEmpty()) {
+            HibernatedPackagesLiveData.update()
+        }
         if (DEBUG_HIBERNATION) {
-            DumpableLog.i(LOG_TAG,
+            DumpableLog.i(
+                LOG_TAG,
                 "Done hibernating apps $hibernatedApps \n " +
-                "Globally hibernating apps $globallyHibernatedApps")
+                    "Globally hibernating apps $globallyHibernatedApps"
+            )
         }
 
         return hibernatedApps

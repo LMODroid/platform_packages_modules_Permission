@@ -78,6 +78,7 @@
         <permission name="android.permission.READ_MEDIA_AUDIO" minSdkVersion="33" />
         <permission name="android.permission.READ_MEDIA_VIDEO" minSdkVersion="33" />
         <permission name="android.permission.READ_MEDIA_IMAGES" minSdkVersion="33" />
+        <permission name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" minSdkVersion="34" />
     </permission-set>
 
     <permission-set name="nearby_devices">
@@ -163,8 +164,7 @@
         overrideUserWhenGranting="true"
         requestDescription="@string/role_browser_request_description"
         requestTitle="@string/role_browser_request_title"
-        shortLabel="@string/role_browser_short_label"
-        uiBehavior="BrowserRoleUiBehavior">
+        shortLabel="@string/role_browser_short_label">
         <!--
           ~ Required components matching is handled in BrowserRoleBehavior because it needs the
           ~ PackageManager.MATCH_ALL flag and other manual filtering, which cannot fit in our
@@ -545,10 +545,12 @@
             <permission-set name="sms" />
             <permission-set name="contacts" />
             <permission-set name="nearby_devices" />
+            <permission-set name="notifications" minSdkVersion="35" />
         </permissions>
         <app-op-permissions>
             <app-op-permission name="android.permission.MANAGE_ONGOING_CALLS" />
             <app-op-permission name="android.permission.USE_ICC_AUTH_WITH_DEVICE_IDENTIFIER" />
+            <app-op-permission name="android.permission.MEDIA_ROUTING_CONTROL" minSdkVersion="35" />
         </app-op-permissions>
     </role>
 
@@ -667,6 +669,7 @@
             <permission name="android.permission.SET_TIME" minSdkVersion="34" />
             <permission name="android.permission.SET_TIME_ZONE" minSdkVersion="34" />
             <permission name="android.permission.SATELLITE_COMMUNICATION" minSdkVersion="34" />
+            <permission name="android.permission.ALWAYS_UPDATE_WALLPAPER" minSdkVersion="35" />
         </permissions>
     </role>
 
@@ -1101,7 +1104,6 @@
       -->
     <role
         name="android.app.role.SYSTEM_UI"
-        behavior="SystemUiRoleBehavior"
         defaultHolders="config_systemUi"
         exclusive="true"
         minSdkVersion="31"
@@ -1609,5 +1611,30 @@
                 </intent-filter>
             </service>
         </required-components>
+    </role>
+
+    <role
+        name="android.app.role.RETAIL_DEMO"
+        behavior="RetailDemoRoleBehavior"
+        defaultHolders="config_defaultRetailDemo"
+        exclusive="true"
+        minSdkVersion="35"
+        static="true"
+        visible="false">
+        <permissions>
+            <permission name="android.permission.ACCESS_BLOBS_ACROSS_USERS" />
+            <permission name="android.permission.CHANGE_CONFIGURATION" />
+            <permission name="android.permission.MODIFY_DAY_NIGHT_MODE" />
+            <permission name="android.permission.MODIFY_PHONE_STATE" />
+            <permission name="android.permission.OBSERVE_APP_USAGE" />
+            <permission name="android.permission.QUERY_USERS" />
+            <permission name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
+            <permission name="android.permission.START_ACTIVITIES_FROM_BACKGROUND" />
+            <permission name="android.permission.START_FOREGROUND_SERVICES_FROM_BACKGROUND" />
+            <permission name="android.permission.WRITE_SETTINGS" />
+        </permissions>
+        <app-op-permissions>
+            <app-op-permission name="android.permission.PACKAGE_USAGE_STATS" />
+        </app-op-permissions>
     </role>
 </roles>

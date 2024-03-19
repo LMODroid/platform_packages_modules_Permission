@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
-import android.os.Process;
 import android.os.UserHandle;
 import android.util.ArraySet;
 
@@ -32,6 +31,7 @@ import com.android.modules.utils.build.SdkLevel;
 import com.android.role.controller.model.Permissions;
 import com.android.role.controller.model.Role;
 import com.android.role.controller.model.RoleBehavior;
+import com.android.role.controller.model.VisibilityMixin;
 import com.android.role.controller.util.CollectionUtils;
 import com.android.role.controller.util.PackageUtils;
 import com.android.role.controller.util.UserUtils;
@@ -61,10 +61,10 @@ public class BrowserRoleBehavior implements RoleBehavior {
 
     @Nullable
     @Override
-    public String getFallbackHolder(@NonNull Role role, @NonNull Context context) {
-        UserHandle user = Process.myUserHandle();
-        List<String> qualifyingPackageNames = getQualifyingPackagesAsUserInternal(null, false, user,
-                context);
+    public String getFallbackHolderAsUser(@NonNull Role role, @NonNull UserHandle user,
+            @NonNull Context context) {
+        List<String> qualifyingPackageNames = getQualifyingPackagesAsUserInternal(null, false,
+                user, context);
         if (qualifyingPackageNames.size() == 1) {
             return qualifyingPackageNames.get(0);
         }
@@ -76,7 +76,7 @@ public class BrowserRoleBehavior implements RoleBehavior {
                 return qualifyingSystemPackageNames.get(0);
             }
 
-            List<String> defaultPackageNames = role.getDefaultHolders(context);
+            List<String> defaultPackageNames = role.getDefaultHoldersAsUser(user, context);
             return CollectionUtils.firstOrNull(defaultPackageNames);
         } else {
             return null;
@@ -95,10 +95,10 @@ public class BrowserRoleBehavior implements RoleBehavior {
 
     @Nullable
     @Override
-    public Boolean isPackageQualified(@NonNull Role role, @NonNull String packageName,
-            @NonNull Context context) {
+    public Boolean isPackageQualifiedAsUser(@NonNull Role role, @NonNull String packageName,
+            @NonNull UserHandle user, @NonNull Context context) {
         List<String> packageNames = getQualifyingPackagesAsUserInternal(packageName, false,
-                Process.myUserHandle(), context);
+                user, context);
         return !packageNames.isEmpty();
     }
 
@@ -133,24 +133,32 @@ public class BrowserRoleBehavior implements RoleBehavior {
     }
 
     @Override
-    public void grant(@NonNull Role role, @NonNull String packageName, @NonNull Context context) {
+    public void grantAsUser(@NonNull Role role, @NonNull String packageName,
+            @NonNull UserHandle user, @NonNull Context context) {
         // @see com.android.server.pm.permission.DefaultPermissionGrantPolicy
         //      #grantDefaultPermissionsToDefaultBrowser(java.lang.String, int)
         if (SdkLevel.isAtLeastS()) {
-            if (PackageUtils.isSystemPackage(packageName, context)) {
-                Permissions.grant(packageName, SYSTEM_BROWSER_PERMISSIONS, false, false, true,
-                        false, false, context);
+            if (PackageUtils.isSystemPackageAsUser(packageName, user, context)) {
+                Permissions.grantAsUser(packageName, SYSTEM_BROWSER_PERMISSIONS, false, false,
+                        true, false, false, user, context);
             }
         }
     }
 
     @Override
-    public void revoke(@NonNull Role role, @NonNull String packageName, @NonNull Context context) {
+    public void revokeAsUser(@NonNull Role role, @NonNull String packageName,
+            @NonNull UserHandle user, @NonNull Context context) {
         if (SdkLevel.isAtLeastT()) {
-            if (PackageUtils.isSystemPackage(packageName, context)) {
-                Permissions.revoke(packageName, SYSTEM_BROWSER_PERMISSIONS, true, false, false,
-                        context);
+            if (PackageUtils.isSystemPackageAsUser(packageName, user, context)) {
+                Permissions.revokeAsUser(packageName, SYSTEM_BROWSER_PERMISSIONS, true, false,
+                        false, user, context);
             }
         }
+    }
+
+    @Override
+    public boolean isVisibleAsUser(@NonNull Role role, @NonNull UserHandle user,
+            @NonNull Context context) {
+        return VisibilityMixin.isVisible("config_showBrowserRole", true, user, context);
     }
 }

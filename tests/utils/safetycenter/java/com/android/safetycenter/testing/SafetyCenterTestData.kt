@@ -48,7 +48,7 @@ import com.android.safetycenter.internaldata.SafetyCenterIds
 import com.android.safetycenter.internaldata.SafetyCenterIssueActionId
 import com.android.safetycenter.internaldata.SafetyCenterIssueId
 import com.android.safetycenter.internaldata.SafetyCenterIssueKey
-import com.android.safetycenter.resources.SafetyCenterResourcesContext
+import com.android.safetycenter.resources.SafetyCenterResourcesApk
 import com.android.safetycenter.testing.SafetyCenterTestConfigs.Companion.SINGLE_SOURCE_GROUP_ID
 import com.android.safetycenter.testing.SafetySourceTestData.Companion.CRITICAL_ISSUE_ACTION_ID
 import com.android.safetycenter.testing.SafetySourceTestData.Companion.CRITICAL_ISSUE_ID
@@ -66,23 +66,24 @@ import java.util.Locale
 @RequiresApi(TIRAMISU)
 class SafetyCenterTestData(context: Context) {
 
-    private val safetyCenterResourcesContext = SafetyCenterResourcesContext.forTests(context)
+    private val safetyCenterResourcesApk = SafetyCenterResourcesApk.forTests(context)
     private val safetySourceTestData = SafetySourceTestData(context)
 
     /**
      * The [SafetyCenterStatus] used when the overall status is unknown and no scan is in progress.
      */
-    val safetyCenterStatusUnknown =
-        SafetyCenterStatus.Builder(
-                safetyCenterResourcesContext.getStringByName(
-                    "overall_severity_level_ok_review_title"
-                ),
-                safetyCenterResourcesContext.getStringByName(
-                    "overall_severity_level_ok_review_summary"
+    val safetyCenterStatusUnknown: SafetyCenterStatus
+        get() =
+            SafetyCenterStatus.Builder(
+                    safetyCenterResourcesApk.getStringByName(
+                        "overall_severity_level_ok_review_title"
+                    ),
+                    safetyCenterResourcesApk.getStringByName(
+                        "overall_severity_level_ok_review_summary"
+                    )
                 )
-            )
-            .setSeverityLevel(OVERALL_SEVERITY_LEVEL_UNKNOWN)
-            .build()
+                .setSeverityLevel(OVERALL_SEVERITY_LEVEL_UNKNOWN)
+                .build()
 
     /**
      * Returns a [SafetyCenterStatus] with one alert and the given [statusResource] and
@@ -103,7 +104,7 @@ class SafetyCenterTestData(context: Context) {
         numAlerts: Int,
     ): SafetyCenterStatus =
         SafetyCenterStatus.Builder(
-                safetyCenterResourcesContext.getStringByName(statusResource),
+                safetyCenterResourcesApk.getStringByName(statusResource),
                 getAlertString(numAlerts)
             )
             .setSeverityLevel(overallSeverityLevel)
@@ -117,11 +118,8 @@ class SafetyCenterTestData(context: Context) {
         numTipIssues: Int,
     ): SafetyCenterStatus =
         SafetyCenterStatus.Builder(
-                safetyCenterResourcesContext.getStringByName("overall_severity_level_ok_title"),
-                safetyCenterResourcesContext.getStringByName(
-                    "overall_severity_level_tip_summary",
-                    numTipIssues
-                )
+                safetyCenterResourcesApk.getStringByName("overall_severity_level_ok_title"),
+                getIcuPluralsString("overall_severity_level_tip_summary", numTipIssues)
             )
             .setSeverityLevel(OVERALL_SEVERITY_LEVEL_OK)
             .build()
@@ -134,8 +132,8 @@ class SafetyCenterTestData(context: Context) {
         numAutomaticIssues: Int,
     ): SafetyCenterStatus =
         SafetyCenterStatus.Builder(
-                safetyCenterResourcesContext.getStringByName("overall_severity_level_ok_title"),
-                safetyCenterResourcesContext.getStringByName(
+                safetyCenterResourcesApk.getStringByName("overall_severity_level_ok_title"),
+                getIcuPluralsString(
                     "overall_severity_level_action_taken_summary",
                     numAutomaticIssues
                 )
@@ -149,7 +147,7 @@ class SafetyCenterTestData(context: Context) {
      */
     fun safetyCenterStatusCritical(numAlerts: Int) =
         SafetyCenterStatus.Builder(
-                safetyCenterResourcesContext.getStringByName(
+                safetyCenterResourcesApk.getStringByName(
                     "overall_severity_level_critical_safety_warning_title"
                 ),
                 getAlertString(numAlerts)
@@ -166,7 +164,8 @@ class SafetyCenterTestData(context: Context) {
         sourceId: String,
         userId: Int = UserHandle.myUserId(),
         title: CharSequence = "OK",
-        pendingIntent: PendingIntent? = safetySourceTestData.testActivityRedirectPendingIntent
+        pendingIntent: PendingIntent? =
+            safetySourceTestData.createTestActivityRedirectPendingIntent()
     ) =
         SafetyCenterEntry.Builder(entryId(sourceId, userId), title)
             .setSeverityLevel(ENTRY_SEVERITY_LEVEL_UNKNOWN)
@@ -183,7 +182,8 @@ class SafetyCenterTestData(context: Context) {
         sourceId: String,
         userId: Int = UserHandle.myUserId(),
         title: CharSequence = "OK",
-        pendingIntent: PendingIntent? = safetySourceTestData.testActivityRedirectPendingIntent
+        pendingIntent: PendingIntent? =
+            safetySourceTestData.createTestActivityRedirectPendingIntent()
     ) = safetyCenterEntryDefaultBuilder(sourceId, userId, title, pendingIntent).build()
 
     /**
@@ -199,7 +199,9 @@ class SafetyCenterTestData(context: Context) {
         SafetyCenterEntry.Builder(entryId(sourceId, userId), title)
             .setSeverityLevel(ENTRY_SEVERITY_LEVEL_UNSPECIFIED)
             .setSummary("OK")
-            .setPendingIntent(safetySourceTestData.testActivityRedirectPendingIntent)
+            .setPendingIntent(
+                safetySourceTestData.createTestActivityRedirectPendingIntent(explicit = false)
+            )
             .setSeverityUnspecifiedIconType(SEVERITY_UNSPECIFIED_ICON_TYPE_NO_ICON)
 
     /**
@@ -216,7 +218,8 @@ class SafetyCenterTestData(context: Context) {
      */
     fun safetyCenterEntryUnspecified(
         sourceId: String,
-        pendingIntent: PendingIntent? = safetySourceTestData.testActivityRedirectPendingIntent
+        pendingIntent: PendingIntent? =
+            safetySourceTestData.createTestActivityRedirectPendingIntent()
     ) =
         SafetyCenterEntry.Builder(entryId(sourceId), "Unspecified title")
             .setSeverityLevel(ENTRY_SEVERITY_LEVEL_UNSPECIFIED)
@@ -239,7 +242,7 @@ class SafetyCenterTestData(context: Context) {
         SafetyCenterEntry.Builder(entryId(sourceId, userId), title)
             .setSeverityLevel(ENTRY_SEVERITY_LEVEL_OK)
             .setSummary("Ok summary")
-            .setPendingIntent(safetySourceTestData.testActivityRedirectPendingIntent)
+            .setPendingIntent(safetySourceTestData.createTestActivityRedirectPendingIntent())
             .setSeverityUnspecifiedIconType(SEVERITY_UNSPECIFIED_ICON_TYPE_NO_RECOMMENDATION)
 
     /**
@@ -264,7 +267,7 @@ class SafetyCenterTestData(context: Context) {
         SafetyCenterEntry.Builder(entryId(sourceId), "Recommendation title")
             .setSeverityLevel(ENTRY_SEVERITY_LEVEL_RECOMMENDATION)
             .setSummary(summary)
-            .setPendingIntent(safetySourceTestData.testActivityRedirectPendingIntent)
+            .setPendingIntent(safetySourceTestData.createTestActivityRedirectPendingIntent())
             .setSeverityUnspecifiedIconType(SEVERITY_UNSPECIFIED_ICON_TYPE_NO_RECOMMENDATION)
             .build()
 
@@ -276,7 +279,7 @@ class SafetyCenterTestData(context: Context) {
         SafetyCenterEntry.Builder(entryId(sourceId), "Critical title")
             .setSeverityLevel(ENTRY_SEVERITY_LEVEL_CRITICAL_WARNING)
             .setSummary("Critical summary")
-            .setPendingIntent(safetySourceTestData.testActivityRedirectPendingIntent)
+            .setPendingIntent(safetySourceTestData.createTestActivityRedirectPendingIntent())
             .setSeverityUnspecifiedIconType(SEVERITY_UNSPECIFIED_ICON_TYPE_NO_RECOMMENDATION)
             .build()
 
@@ -307,7 +310,7 @@ class SafetyCenterTestData(context: Context) {
                                 userId
                             ),
                             "Review",
-                            safetySourceTestData.testActivityRedirectPendingIntent
+                            safetySourceTestData.createTestActivityRedirectPendingIntent()
                         )
                         .build()
                 )
@@ -347,7 +350,7 @@ class SafetyCenterTestData(context: Context) {
                                 userId
                             ),
                             "See issue",
-                            safetySourceTestData.testActivityRedirectPendingIntent
+                            safetySourceTestData.createTestActivityRedirectPendingIntent()
                         )
                         .apply {
                             if (confirmationDialog && SdkLevel.isAtLeastU()) {
@@ -428,7 +431,7 @@ class SafetyCenterTestData(context: Context) {
     private fun getIcuPluralsString(name: String, count: Int, vararg formatArgs: Any): String {
         val messageFormat =
             MessageFormat(
-                safetyCenterResourcesContext.getStringByName(name, formatArgs),
+                safetyCenterResourcesApk.getStringByName(name, formatArgs),
                 Locale.getDefault()
             )
         val arguments = ArrayMap<String, Any>()

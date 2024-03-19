@@ -16,9 +16,6 @@
 
 package com.android.safetycenter.notifications;
 
-import static android.os.Build.VERSION_CODES.TIRAMISU;
-
-import android.annotation.Nullable;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,7 +24,7 @@ import android.content.IntentFilter;
 import android.safetycenter.SafetySourceIssue;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
+import androidx.annotation.Nullable;
 
 import com.android.internal.annotations.GuardedBy;
 import com.android.permission.util.UserUtils;
@@ -36,6 +33,7 @@ import com.android.safetycenter.PendingIntentFactory;
 import com.android.safetycenter.SafetyCenterDataChangeNotifier;
 import com.android.safetycenter.SafetyCenterFlags;
 import com.android.safetycenter.SafetyCenterService;
+import com.android.safetycenter.SafetySourceIssues;
 import com.android.safetycenter.UserProfileGroup;
 import com.android.safetycenter.data.SafetyCenterDataManager;
 import com.android.safetycenter.internaldata.SafetyCenterIds;
@@ -54,7 +52,6 @@ import com.android.safetycenter.logging.SafetyCenterStatsdLogger;
  *
  * @hide
  */
-@RequiresApi(TIRAMISU)
 public final class SafetyCenterNotificationReceiver extends BroadcastReceiver {
 
     private static final String TAG = "SafetyCenterNR";
@@ -120,13 +117,13 @@ public final class SafetyCenterNotificationReceiver extends BroadcastReceiver {
     private static SafetyCenterIssueActionId getIssueActionIdExtra(Intent intent) {
         String issueActionIdString = intent.getStringExtra(EXTRA_ISSUE_ACTION_ID);
         if (issueActionIdString == null) {
-            Log.w(TAG, "Received notification action broadcast with null issue action ID");
+            Log.w(TAG, "Received notification action broadcast with null issue action id");
             return null;
         }
         try {
             return SafetyCenterIds.issueActionIdFromString(issueActionIdString);
         } catch (IllegalArgumentException e) {
-            Log.w(TAG, "Could not decode the issue action ID", e);
+            Log.w(TAG, "Could not decode the issue action id", e);
             return null;
         }
     }
@@ -162,22 +159,28 @@ public final class SafetyCenterNotificationReceiver extends BroadcastReceiver {
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_NOTIFICATION_DISMISSED);
         filter.addAction(ACTION_NOTIFICATION_ACTION_CLICKED);
-        context.registerReceiver(this, filter, Context.RECEIVER_NOT_EXPORTED);
+        context.registerReceiver(/* receiver= */ this, filter, Context.RECEIVER_NOT_EXPORTED);
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (!SafetyCenterFlags.getSafetyCenterEnabled()
-                || !SafetyCenterFlags.getNotificationsEnabled()) {
+        if (!SafetyCenterFlags.getSafetyCenterEnabled()) {
+            Log.i(TAG, "Received notification broadcast but Safety Center is disabled");
             return;
         }
 
-        Log.d(TAG, "Received broadcast with action " + intent.getAction());
-        String action = intent.getAction();
-        if (action == null) {
-            Log.w(TAG, "Received broadcast with null action!");
+        if (!SafetyCenterFlags.getNotificationsEnabled()) {
+            // TODO(b/284271124): Decide what to do with existing notifications
+            Log.i(TAG, "Received notification broadcast but notifications are disabled");
             return;
         }
+
+        String action = intent.getAction();
+        if (action == null) {
+            Log.w(TAG, "Received broadcast with null action");
+            return;
+        }
+        Log.d(TAG, "Received broadcast with action: " + action);
 
         switch (action) {
             case ACTION_NOTIFICATION_DISMISSED:
@@ -240,16 +243,8 @@ public final class SafetyCenterNotificationReceiver extends BroadcastReceiver {
                     UserUtils.isManagedProfile(issueKey.getUserId(), context),
                     issue.getIssueTypeId(),
                     issue.getSeverityLevel(),
-                    isPrimaryAction(issue, issueActionId));
+                    SafetySourceIssues.isPrimaryAction(
+                            issue, issueActionId.getSafetySourceIssueActionId()));
         }
-    }
-
-    /** Returns {@code true} if {@code actionId} is the first action of {@code issue}. */
-    private boolean isPrimaryAction(SafetySourceIssue issue, SafetyCenterIssueActionId actionId) {
-        return !issue.getActions().isEmpty()
-                && issue.getActions()
-                        .get(0)
-                        .getId()
-                        .equals(actionId.getSafetySourceIssueActionId());
     }
 }

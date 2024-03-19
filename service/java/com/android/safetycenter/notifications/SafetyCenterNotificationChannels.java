@@ -16,11 +16,6 @@
 
 package com.android.safetycenter.notifications;
 
-import static android.os.Build.VERSION_CODES.TIRAMISU;
-
-import static java.util.Objects.requireNonNull;
-
-import android.annotation.Nullable;
 import android.app.NotificationChannel;
 import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
@@ -31,10 +26,11 @@ import android.safetycenter.SafetySourceData;
 import android.safetycenter.SafetySourceIssue;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
+import androidx.annotation.Nullable;
 
 import com.android.permission.util.UserUtils;
-import com.android.safetycenter.resources.SafetyCenterResourcesContext;
+import com.android.safetycenter.SafetyCenterFlags;
+import com.android.safetycenter.resources.SafetyCenterResourcesApk;
 
 import java.util.List;
 
@@ -43,7 +39,6 @@ import java.util.List;
  *
  * @hide
  */
-@RequiresApi(TIRAMISU)
 public final class SafetyCenterNotificationChannels {
 
     private static final String TAG = "SafetyCenterNC";
@@ -53,11 +48,10 @@ public final class SafetyCenterNotificationChannels {
     private static final String CHANNEL_ID_RECOMMENDATION = "safety_center_recommendation";
     private static final String CHANNEL_ID_CRITICAL_WARNING = "safety_center_critical_warning";
 
-    private final SafetyCenterResourcesContext mResourcesContext;
+    private final SafetyCenterResourcesApk mSafetyCenterResourcesApk;
 
-    public SafetyCenterNotificationChannels(
-            SafetyCenterResourcesContext safetyCenterResourceContext) {
-        mResourcesContext = safetyCenterResourceContext;
+    public SafetyCenterNotificationChannels(SafetyCenterResourcesApk safetyCenterResourcesApk) {
+        mSafetyCenterResourcesApk = safetyCenterResourcesApk;
     }
 
     /** Returns a {@link NotificationManager} which will send notifications to the given user. */
@@ -70,7 +64,10 @@ public final class SafetyCenterNotificationChannels {
                         ? contextAsUser.getSystemService(NotificationManager.class)
                         : null;
         if (notificationManager == null) {
-            Log.w(TAG, "Could not retrieve NotificationManager for user " + userHandle);
+            Log.w(
+                    TAG,
+                    "Could not retrieve NotificationManager for user id: "
+                            + userHandle.getIdentifier());
         }
         return notificationManager;
     }
@@ -80,9 +77,9 @@ public final class SafetyCenterNotificationChannels {
         // This call requires the INTERACT_ACROSS_USERS permission.
         final long callingId = Binder.clearCallingIdentity();
         try {
-            return baseContext.createContextAsUser(userHandle, 0);
+            return baseContext.createContextAsUser(userHandle, /* flags= */ 0);
         } catch (RuntimeException e) {
-            Log.w(TAG, "Could not create Context as user " + userHandle, e);
+            Log.w(TAG, "Could not create Context as user id: " + userHandle.getIdentifier(), e);
             return null;
         } finally {
             Binder.restoreCallingIdentity(callingId);
@@ -106,10 +103,18 @@ public final class SafetyCenterNotificationChannels {
 
     /**
      * Creates all Safety Center {@link NotificationChannel}s instances and their group, for all
-     * current users, dropping any calling identity so those channels can be unblockable. Throws a
-     * {@link RuntimeException} if any channel is malformed and could not be created.
+     * current users, dropping any calling identity so those channels can be unblockable.
      */
     public void createAllChannelsForAllUsers(Context context) {
+        if (!SafetyCenterFlags.getNotificationsEnabled()) {
+            // TODO(b/284271124): Decide what to do with existing channels if flag gets toggled.
+            Log.i(
+                    TAG,
+                    "Not creating notification channels because Safety Center notifications are"
+                            + " disabled");
+            return;
+        }
+
         List<UserHandle> users = UserUtils.getUserHandles(context);
         for (int i = 0; i < users.size(); i++) {
             createAllChannelsForUser(context, users.get(i));
@@ -119,31 +124,54 @@ public final class SafetyCenterNotificationChannels {
     /**
      * Creates all Safety Center {@link NotificationChannel}s instances and their group for the
      * given {@link UserHandle}, dropping any calling identity so those channels can be unblockable.
-     * Throws a {@link RuntimeException} if any channel is malformed and could not be created.
      */
     public void createAllChannelsForUser(Context context, UserHandle user) {
+        if (!SafetyCenterFlags.getNotificationsEnabled()) {
+            // TODO(b/284271124): Decide what to do with existing channels if flag gets toggled.
+            Log.i(
+                    TAG,
+                    "Not creating notification channels because Safety Center notifications are"
+                            + " disabled");
+            return;
+        }
+
+        NotificationManager notificationManager = getNotificationManagerForUser(context, user);
+        if (notificationManager == null) {
+            return;
+        }
+
         try {
-            NotificationManager notificationManager =
-                    requireNonNull(getNotificationManagerForUser(context, user));
             createAllChannelsWithoutCallingIdentity(notificationManager);
         } catch (RuntimeException e) {
-            Log.w(TAG, "Error creating notification channels for user " + user.getIdentifier(), e);
+            Log.w(
+                    TAG,
+                    "Error creating notification channels for user id: " + user.getIdentifier(),
+                    e);
         }
     }
 
     @Nullable
     private String getChannelIdForIssue(SafetySourceIssue issue) {
-        switch (issue.getSeverityLevel()) {
+        int issueSeverityLevel = issue.getSeverityLevel();
+        switch (issueSeverityLevel) {
             case SafetySourceData.SEVERITY_LEVEL_INFORMATION:
                 return CHANNEL_ID_INFORMATION;
             case SafetySourceData.SEVERITY_LEVEL_RECOMMENDATION:
                 return CHANNEL_ID_RECOMMENDATION;
             case SafetySourceData.SEVERITY_LEVEL_CRITICAL_WARNING:
                 return CHANNEL_ID_CRITICAL_WARNING;
-            default:
-                Log.w(TAG, "No applicable notification channel for issue " + issue);
+            case SafetySourceData.SEVERITY_LEVEL_UNSPECIFIED:
+                Log.w(TAG, "SafetySourceData.SeverityLevel is unspecified for issue: " + issue);
                 return null;
         }
+
+        Log.w(
+                TAG,
+                "Unexpected SafetySourceData.SeverityLevel: "
+                        + issueSeverityLevel
+                        + ", for issue: "
+                        + issue);
+        return null;
     }
 
     /**
@@ -153,13 +181,25 @@ public final class SafetyCenterNotificationChannels {
      * created.
      */
     private void createAllChannelsWithoutCallingIdentity(NotificationManager notificationManager) {
-        // Clearing calling identity to be able to make unblockable system notification channels
+        // Clearing calling identity to be able to make unblockable system notification channels and
+        // call this for other users with the INTERACT_ACROSS_USERS permission.
         final long callingId = Binder.clearCallingIdentity();
         try {
             notificationManager.createNotificationChannelGroup(getChannelGroupDefinition());
             notificationManager.createNotificationChannel(getInformationChannelDefinition());
             notificationManager.createNotificationChannel(getRecommendationChannelDefinition());
             notificationManager.createNotificationChannel(getCriticalWarningChannelDefinition());
+        } finally {
+            Binder.restoreCallingIdentity(callingId);
+        }
+    }
+
+    private void clearAllChannelsWithoutCallingIdentity(NotificationManager notificationManager) {
+        // Clearing calling identity to do this for other users with the INTERACT_ACROSS_USERS
+        // permission.
+        final long callingId = Binder.clearCallingIdentity();
+        try {
+            notificationManager.deleteNotificationChannelGroup(CHANNEL_GROUP_ID);
         } finally {
             Binder.restoreCallingIdentity(callingId);
         }
@@ -204,6 +244,6 @@ public final class SafetyCenterNotificationChannels {
     }
 
     private String getString(String name) {
-        return mResourcesContext.getStringByName(name);
+        return mSafetyCenterResourcesApk.getStringByName(name);
     }
 }

@@ -19,7 +19,6 @@ package com.android.role.controller.behavior;
 import android.app.admin.DevicePolicyManager;
 import android.app.admin.ManagedSubscriptionsPolicy;
 import android.content.Context;
-import android.os.Process;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.telephony.TelephonyManager;
@@ -31,6 +30,7 @@ import com.android.modules.utils.build.SdkLevel;
 import com.android.role.controller.model.Permissions;
 import com.android.role.controller.model.Role;
 import com.android.role.controller.model.RoleBehavior;
+import com.android.role.controller.model.VisibilityMixin;
 import com.android.role.controller.util.CollectionUtils;
 import com.android.role.controller.util.PackageUtils;
 import com.android.role.controller.util.UserUtils;
@@ -90,7 +90,7 @@ public class SmsRoleBehavior implements RoleBehavior {
         TelephonyManager telephonyManager = context.getSystemService(TelephonyManager.class);
         if (!telephonyManager.isSmsCapable()
                 // Ensure sms role is present on car despite !isSmsCapable config (b/132972702)
-                && role.getDefaultHolders(context).isEmpty()) {
+                && role.getDefaultHoldersAsUser(user, context).isEmpty()) {
             return false;
         }
         return true;
@@ -98,8 +98,9 @@ public class SmsRoleBehavior implements RoleBehavior {
 
     @Nullable
     @Override
-    public String getFallbackHolder(@NonNull Role role, @NonNull Context context) {
-        List<String> defaultPackageNames = role.getDefaultHolders(context);
+    public String getFallbackHolderAsUser(@NonNull Role role, @NonNull UserHandle user,
+            @NonNull Context context) {
+        List<String> defaultPackageNames = role.getDefaultHoldersAsUser(user, context);
         if (!defaultPackageNames.isEmpty()) {
             return defaultPackageNames.get(0);
         }
@@ -107,24 +108,32 @@ public class SmsRoleBehavior implements RoleBehavior {
         // TODO(b/132916161): This was the previous behavior, however this may allow any third-party
         //  app to suddenly become the default SMS app and get the permissions, if no system default
         //  SMS app is available.
-        List<String> qualifyingPackageNames = role.getQualifyingPackagesAsUser(
-                Process.myUserHandle(), context);
+        List<String> qualifyingPackageNames = role.getQualifyingPackagesAsUser(user, context);
         return CollectionUtils.firstOrNull(qualifyingPackageNames);
     }
 
     @Override
-    public void grant(@NonNull Role role, @NonNull String packageName, @NonNull Context context) {
-        if (SdkLevel.isAtLeastS() && PackageUtils.isSystemPackage(packageName, context)) {
-            Permissions.grant(packageName, SYSTEM_SMS_PERMISSIONS, false, false,
-                    true, false, false, context);
+    public void grantAsUser(@NonNull Role role, @NonNull String packageName,
+            @NonNull UserHandle user, @NonNull Context context) {
+        if (SdkLevel.isAtLeastS() && PackageUtils.isSystemPackageAsUser(packageName, user,
+                context)) {
+            Permissions.grantAsUser(packageName, SYSTEM_SMS_PERMISSIONS, false, false, true,
+                    false, false, user, context);
         }
     }
 
     @Override
-    public void revoke(@NonNull Role role, @NonNull String packageName,
-            @NonNull Context context) {
+    public void revokeAsUser(@NonNull Role role, @NonNull String packageName,
+            @NonNull UserHandle user, @NonNull Context context) {
         if (SdkLevel.isAtLeastS()) {
-            Permissions.revoke(packageName, SYSTEM_SMS_PERMISSIONS, true, false, false, context);
+            Permissions.revokeAsUser(packageName, SYSTEM_SMS_PERMISSIONS, true, false, false,
+                    user, context);
         }
+    }
+
+    @Override
+    public boolean isVisibleAsUser(@NonNull Role role, @NonNull UserHandle user,
+            @NonNull Context context) {
+        return VisibilityMixin.isVisible("config_showSmsRole", true, user, context);
     }
 }

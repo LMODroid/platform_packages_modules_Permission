@@ -18,7 +18,6 @@ package com.android.role.controller.behavior;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
-import android.os.Process;
 import android.os.UserHandle;
 import android.telephony.TelephonyManager;
 
@@ -27,6 +26,7 @@ import androidx.annotation.Nullable;
 
 import com.android.role.controller.model.Role;
 import com.android.role.controller.model.RoleBehavior;
+import com.android.role.controller.model.VisibilityMixin;
 import com.android.role.controller.util.PackageUtils;
 
 import java.util.List;
@@ -49,15 +49,16 @@ public class EmergencyRoleBehavior implements RoleBehavior {
 
     @Nullable
     @Override
-    public String getFallbackHolder(@NonNull Role role, @NonNull Context context) {
-        List<String> packageNames = role.getQualifyingPackagesAsUser(Process.myUserHandle(),
-                context);
+    public String getFallbackHolderAsUser(@NonNull Role role, @NonNull UserHandle user,
+            @NonNull Context context) {
+        List<String> packageNames = role.getQualifyingPackagesAsUser(user, context);
         PackageInfo fallbackPackageInfo = null;
         int packageNamesSize = packageNames.size();
         for (int i = 0; i < packageNamesSize; i++) {
             String packageName = packageNames.get(i);
 
-            PackageInfo packageInfo = PackageUtils.getPackageInfo(packageName, 0, context);
+            PackageInfo packageInfo = PackageUtils.getPackageInfoAsUser(packageName, 0,
+                    user, context);
             if (packageInfo == null) {
                 continue;
             }
@@ -67,5 +68,11 @@ public class EmergencyRoleBehavior implements RoleBehavior {
             }
         }
         return fallbackPackageInfo != null ? fallbackPackageInfo.packageName : null;
+    }
+
+    @Override
+    public boolean isVisibleAsUser(@NonNull Role role, @NonNull UserHandle user,
+            @NonNull Context context) {
+        return VisibilityMixin.isVisible("config_showDefaultEmergency", false, user, context);
     }
 }

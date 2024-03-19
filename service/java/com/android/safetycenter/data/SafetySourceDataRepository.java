@@ -16,18 +16,14 @@
 
 package com.android.safetycenter.data;
 
-import static android.os.Build.VERSION_CODES.TIRAMISU;
-
 import static com.android.permission.PermissionStatsLog.SAFETY_SOURCE_STATE_COLLECTED__SOURCE_STATE__DATA_PROVIDED;
 import static com.android.permission.PermissionStatsLog.SAFETY_SOURCE_STATE_COLLECTED__SOURCE_STATE__NO_DATA_PROVIDED;
 import static com.android.permission.PermissionStatsLog.SAFETY_SOURCE_STATE_COLLECTED__SOURCE_STATE__REFRESH_TIMEOUT;
 import static com.android.permission.PermissionStatsLog.SAFETY_SOURCE_STATE_COLLECTED__SOURCE_STATE__SOURCE_CLEARED;
 import static com.android.permission.PermissionStatsLog.SAFETY_SOURCE_STATE_COLLECTED__SOURCE_STATE__SOURCE_ERROR;
 
-import android.annotation.Nullable;
 import android.annotation.UptimeMillisLong;
 import android.annotation.UserIdInt;
-import android.content.Context;
 import android.os.SystemClock;
 import android.safetycenter.SafetyCenterData;
 import android.safetycenter.SafetyEvent;
@@ -38,7 +34,7 @@ import android.util.ArrayMap;
 import android.util.ArraySet;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
+import androidx.annotation.Nullable;
 
 import com.android.safetycenter.SafetySourceKey;
 import com.android.safetycenter.internaldata.SafetyCenterIssueActionId;
@@ -57,7 +53,6 @@ import javax.annotation.concurrent.NotThreadSafe;
  *
  * <p>This class isn't thread safe. Thread safety must be handled by the caller.
  */
-@RequiresApi(TIRAMISU)
 @NotThreadSafe
 final class SafetySourceDataRepository {
 
@@ -68,24 +63,20 @@ final class SafetySourceDataRepository {
     private final ArrayMap<SafetySourceKey, Long> mSafetySourceLastUpdated = new ArrayMap<>();
     private final ArrayMap<SafetySourceKey, Integer> mSourceStates = new ArrayMap<>();
 
-    private final Context mContext;
     private final SafetyCenterInFlightIssueActionRepository
             mSafetyCenterInFlightIssueActionRepository;
     private final SafetyCenterIssueDismissalRepository mSafetyCenterIssueDismissalRepository;
 
     SafetySourceDataRepository(
-            Context context,
             SafetyCenterInFlightIssueActionRepository safetyCenterInFlightIssueActionRepository,
             SafetyCenterIssueDismissalRepository safetyCenterIssueDismissalRepository) {
-        mContext = context;
         mSafetyCenterInFlightIssueActionRepository = safetyCenterInFlightIssueActionRepository;
         mSafetyCenterIssueDismissalRepository = safetyCenterIssueDismissalRepository;
     }
 
     /**
-     * Sets the latest {@link SafetySourceData} for the given {@code safetySourceId}, {@link
-     * SafetyEvent}, {@code packageName} and {@code userId}, and returns {@code true} if this caused
-     * any changes which would alter {@link SafetyCenterData}.
+     * Sets the latest {@link SafetySourceData} for the given {@link SafetySourceKey}, and returns
+     * {@code true} if this caused any changes which would alter {@link SafetyCenterData}.
      *
      * <p>This method does not perform any validation, {@link
      * SafetyCenterDataManager#setSafetySourceData(SafetySourceData, String, SafetyEvent, String,
@@ -98,22 +89,16 @@ final class SafetySourceDataRepository {
      * <p>This method may modify the {@link SafetyCenterIssueDismissalRepository}.
      */
     boolean setSafetySourceData(
-            @Nullable SafetySourceData safetySourceData,
-            String safetySourceId,
-            @UserIdInt int userId) {
-        SafetySourceKey key = SafetySourceKey.of(safetySourceId, userId);
-        safetySourceData =
-                AndroidLockScreenFix.maybeOverrideSafetySourceData(
-                        mContext, safetySourceId, safetySourceData);
-
-        boolean sourceDataDiffers = !Objects.equals(safetySourceData, mSafetySourceData.get(key));
-        boolean removedSourceError = mSafetySourceErrors.remove(key);
+            SafetySourceKey safetySourceKey, @Nullable SafetySourceData safetySourceData) {
+        boolean sourceDataDiffers =
+                !Objects.equals(safetySourceData, mSafetySourceData.get(safetySourceKey));
+        boolean removedSourceError = mSafetySourceErrors.remove(safetySourceKey);
 
         if (sourceDataDiffers) {
-            setSafetySourceDataInternal(key, safetySourceData);
+            setSafetySourceDataInternal(safetySourceKey, safetySourceData);
         }
 
-        setLastUpdatedNow(key);
+        setLastUpdatedNow(safetySourceKey);
         return sourceDataDiffers || removedSourceError;
     }
 
@@ -155,19 +140,33 @@ final class SafetySourceDataRepository {
     }
 
     /**
-     * Reports the given {@link SafetySourceErrorDetails} for the given {@code safetySourceId} and
-     * {@code userId}, and returns {@code true} if this changed the repository's data.
+     * Returns whether the repository has the given {@link SafetySourceData} for the given {@link
+     * SafetySourceKey}.
+     */
+    boolean sourceHasData(
+            SafetySourceKey safetySourceKey, @Nullable SafetySourceData safetySourceData) {
+        if (mSafetySourceErrors.contains(safetySourceKey)) {
+            // Any error will cause the SafetySourceData to be discarded in favor of an error
+            // message, so it can't possibly match the SafetySourceData passed in parameter.
+            return false;
+        }
+        return Objects.equals(safetySourceData, mSafetySourceData.get(safetySourceKey));
+    }
+
+    /**
+     * Reports the given {@link SafetySourceErrorDetails} for the given {@link SafetySourceKey}, and
+     * returns {@code true} if this changed the repository's data.
      *
      * <p>This method does not perform any validation, {@link
      * SafetyCenterDataManager#reportSafetySourceError(SafetySourceErrorDetails, String, String,
      * int)} should be called wherever validation is required.
      */
     boolean reportSafetySourceError(
-            SafetySourceErrorDetails safetySourceErrorDetails,
-            String safetySourceId,
-            @UserIdInt int userId) {
+            SafetySourceKey safetySourceKey, SafetySourceErrorDetails safetySourceErrorDetails) {
         SafetyEvent safetyEvent = safetySourceErrorDetails.getSafetyEvent();
-        Log.w(TAG, "Error reported from source: " + safetySourceId + ", for event: " + safetyEvent);
+        Log.w(
+                TAG,
+                "Error reported from source: " + safetySourceKey + ", for event: " + safetyEvent);
 
         int safetyEventType = safetyEvent.getType();
         if (safetyEventType == SafetyEvent.SAFETY_EVENT_TYPE_RESOLVING_ACTION_FAILED
@@ -175,9 +174,9 @@ final class SafetySourceDataRepository {
             return false;
         }
 
-        SafetySourceKey sourceKey = SafetySourceKey.of(safetySourceId, userId);
-        mSourceStates.put(sourceKey, SAFETY_SOURCE_STATE_COLLECTED__SOURCE_STATE__SOURCE_ERROR);
-        return setSafetySourceError(sourceKey);
+        mSourceStates.put(
+                safetySourceKey, SAFETY_SOURCE_STATE_COLLECTED__SOURCE_STATE__SOURCE_ERROR);
+        return setSafetySourceError(safetySourceKey);
     }
 
     /**
@@ -339,9 +338,9 @@ final class SafetySourceDataRepository {
             SafetySourceKey key = mSafetySourceErrors.valueAt(i);
             fout.println("\t[" + i + "] " + key);
         }
+        fout.println();
         dumpArrayMap(fout, mSafetySourceLastUpdated, "LAST UPDATED");
         dumpArrayMap(fout, mSourceStates, "SOURCE STATES");
-        fout.println();
     }
 
     private static <K, V> void dumpArrayMap(PrintWriter fout, ArrayMap<K, V> map, String label) {
@@ -350,5 +349,6 @@ final class SafetySourceDataRepository {
         for (int i = 0; i < count; i++) {
             fout.println("\t[" + i + "] " + map.keyAt(i) + " -> " + map.valueAt(i));
         }
+        fout.println();
     }
 }

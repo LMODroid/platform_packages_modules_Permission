@@ -16,8 +16,6 @@
 
 package com.android.safetycenter.logging;
 
-import static android.os.Build.VERSION_CODES.TIRAMISU;
-
 import static com.android.permission.PermissionStatsLog.SAFETY_CENTER_INTERACTION_REPORTED;
 import static com.android.permission.PermissionStatsLog.SAFETY_CENTER_INTERACTION_REPORTED__ACTION__ISSUE_PRIMARY_ACTION_CLICKED;
 import static com.android.permission.PermissionStatsLog.SAFETY_CENTER_INTERACTION_REPORTED__ACTION__ISSUE_SECONDARY_ACTION_CLICKED;
@@ -74,7 +72,6 @@ import static com.android.permission.PermissionStatsLog.SAFETY_STATE__OVERALL_SE
 
 import android.annotation.ElapsedRealtimeLong;
 import android.annotation.IntDef;
-import android.annotation.Nullable;
 import android.safetycenter.SafetyCenterManager;
 import android.safetycenter.SafetyCenterManager.RefreshRequestType;
 import android.safetycenter.SafetyCenterStatus;
@@ -83,7 +80,7 @@ import android.safetycenter.SafetySourceData;
 import android.util.Log;
 import android.util.StatsEvent;
 
-import androidx.annotation.RequiresApi;
+import androidx.annotation.Nullable;
 
 import com.android.permission.PermissionStatsLog;
 import com.android.safetycenter.SafetyCenterFlags;
@@ -101,7 +98,6 @@ import java.time.Duration;
  *
  * @hide
  */
-@RequiresApi(TIRAMISU)
 public final class SafetyCenterStatsdLogger {
 
     private static final String TAG = "SafetyCenterStatsdLog";

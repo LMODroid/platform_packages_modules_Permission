@@ -18,7 +18,7 @@ package com.android.role.controller.model;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.os.Process;
+import android.os.UserHandle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -73,39 +73,44 @@ public class AppOp {
      * Grant this app op to an application.
      *
      * @param packageName the package name of the application
+     * @param user the user of the application
      * @param context the {@code Context} to retrieve system services
      *
      * @return whether any app mode has changed
      */
-    public boolean grant(@NonNull String packageName, @NonNull Context context) {
-        if (!checkTargetSdkVersion(packageName, context)) {
+    public boolean grantAsUser(@NonNull String packageName, @NonNull UserHandle user,
+            @NonNull Context context) {
+        if (!checkTargetSdkVersionAsUser(packageName, user, context)) {
             return false;
         }
-        return Permissions.setAppOpUidMode(packageName, mName, mMode, context);
+        return Permissions.setAppOpUidModeAsUser(packageName, mName, mMode, user, context);
     }
 
     /**
      * Revoke this app op from an application.
      *
      * @param packageName the package name of the application
+     * @param user the user of the application
      * @param context the {@code Context} to retrieve system services
      *
      * @return whether any app mode has changed
      */
-    public boolean revoke(@NonNull String packageName, @NonNull Context context) {
-        if (!checkTargetSdkVersion(packageName, context)) {
+    public boolean revokeAsUser(@NonNull String packageName, @NonNull UserHandle user,
+            @NonNull Context context) {
+        if (!checkTargetSdkVersionAsUser(packageName, user, context)) {
             return false;
         }
         int defaultMode = Permissions.getDefaultAppOpMode(mName);
-        return Permissions.setAppOpUidMode(packageName, mName, defaultMode, context);
+        return Permissions.setAppOpUidModeAsUser(packageName, mName, defaultMode, user, context);
     }
 
-    private boolean checkTargetSdkVersion(@NonNull String packageName, @NonNull Context context) {
+    private boolean checkTargetSdkVersionAsUser(@NonNull String packageName,
+            @NonNull UserHandle user, @NonNull Context context) {
         if (mMaxTargetSdkVersion == null) {
             return true;
         }
-        ApplicationInfo applicationInfo = PackageUtils.getApplicationInfoAsUser(packageName,
-                Process.myUserHandle(), context);
+        ApplicationInfo applicationInfo = PackageUtils.getApplicationInfoAsUser(packageName, user,
+                context);
         if (applicationInfo == null) {
             return false;
         }

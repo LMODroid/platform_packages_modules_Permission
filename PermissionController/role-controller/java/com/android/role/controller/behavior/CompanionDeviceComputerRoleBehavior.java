@@ -17,7 +17,6 @@
 package com.android.role.controller.behavior;
 
 import android.content.Context;
-import android.os.Process;
 import android.os.UserHandle;
 
 import androidx.annotation.NonNull;
@@ -33,18 +32,18 @@ import com.android.role.controller.util.UserUtils;
 public class CompanionDeviceComputerRoleBehavior implements RoleBehavior {
 
     @Override
-    public void grant(@NonNull Role role, @NonNull String packageName, @NonNull Context context) {
-        UserHandle user = Process.myUserHandle();
+    public void grantAsUser(@NonNull Role role, @NonNull String packageName,
+            @NonNull UserHandle user, @NonNull Context context) {
         if (!UserUtils.isManagedProfile(user, context)) {
-            NotificationUtils.grantNotificationAccessForPackage(context, packageName);
+            NotificationUtils.grantNotificationAccessForPackageAsUser(packageName, user, context);
         }
     }
 
     @Override
-    public void revoke(@NonNull Role role, @NonNull String packageName, @NonNull Context context) {
-        UserHandle user = Process.myUserHandle();
+    public void revokeAsUser(@NonNull Role role, @NonNull String packageName,
+            @NonNull UserHandle user, @NonNull Context context) {
         if (!UserUtils.isManagedProfile(user, context)) {
-            NotificationUtils.revokeNotificationAccessForPackage(context, packageName);
+            NotificationUtils.revokeNotificationAccessForPackageAsUser(packageName, user, context);
         }
     }
 }

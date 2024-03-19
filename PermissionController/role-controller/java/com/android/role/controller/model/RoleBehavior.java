@@ -17,6 +17,7 @@
 package com.android.role.controller.model;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.os.UserHandle;
 
 import androidx.annotation.NonNull;
@@ -31,9 +32,10 @@ import java.util.List;
 public interface RoleBehavior {
 
     /**
-     * @see Role#onRoleAdded(Context)
+     * @see Role#onRoleAddedAsUser(UserHandle, Context)
      */
-    default void onRoleAdded(@NonNull Role role, @NonNull Context context) {}
+    default void onRoleAddedAsUser(@NonNull Role role, @NonNull UserHandle user,
+            @NonNull Context context) {}
 
     /**
      * @see Role#isAvailableAsUser(UserHandle, Context)
@@ -47,7 +49,8 @@ public interface RoleBehavior {
      * @see Role#getDefaultHolders(Context)
      */
     @NonNull
-    default List<String> getDefaultHolders(@NonNull Role role, @NonNull Context context) {
+    default List<String> getDefaultHoldersAsUser(@NonNull Role role, @NonNull UserHandle user,
+            @NonNull Context context) {
         return Collections.emptyList();
     }
 
@@ -55,7 +58,8 @@ public interface RoleBehavior {
      * @see Role#getFallbackHolder(Context)
      */
     @Nullable
-    default String getFallbackHolder(@NonNull Role role, @NonNull Context context) {
+    default String getFallbackHolderAsUser(@NonNull Role role, @NonNull UserHandle user,
+            @NonNull Context context) {
         return null;
     }
 
@@ -72,8 +76,8 @@ public interface RoleBehavior {
      * @see Role#isPackageQualified(String, Context)
      */
     @Nullable
-    default Boolean isPackageQualified(@NonNull Role role, @NonNull String packageName,
-            @NonNull Context context) {
+    default Boolean isPackageQualifiedAsUser(@NonNull Role role, @NonNull String packageName,
+            @NonNull UserHandle user, @NonNull Context context) {
         return null;
     }
 
@@ -87,15 +91,16 @@ public interface RoleBehavior {
     }
 
     /**
-     * @see Role#grant(String, boolean, boolean, boolean, Context)
+     * @see Role#grantAsUser(String, boolean, boolean, UserHandle, Context)
      */
-    default void grant(@NonNull Role role, @NonNull String packageName, @NonNull Context context) {}
+    default void grantAsUser(@NonNull Role role, @NonNull String packageName,
+            @NonNull UserHandle user, @NonNull Context context) {}
 
     /**
-     * @see Role#revoke(String, boolean, boolean, Context)
+     * @see Role#revokeAsUser(String, boolean, boolean, UserHandle, Context)
      */
-    default void revoke(@NonNull Role role, @NonNull String packageName,
-            @NonNull Context context) {}
+    default void revokeAsUser(@NonNull Role role, @NonNull String packageName,
+            @NonNull UserHandle user, @NonNull Context context) {}
 
     /**
      * @see Role#onHolderSelectedAsUser(String, UserHandle, Context)
@@ -108,4 +113,34 @@ public interface RoleBehavior {
      */
     default void onHolderChangedAsUser(@NonNull Role role, @NonNull UserHandle user,
             @NonNull Context context) {}
+
+    /**
+     * Check whether this role should be visible to user.
+     *
+     * @param role the role to check for
+     * @param user the user to check for
+     * @param context the `Context` to retrieve system services
+     *
+     * @return whether this role should be visible to user
+     */
+    default boolean isVisibleAsUser(@NonNull Role role, @NonNull UserHandle user,
+            @NonNull Context context) {
+        return true;
+    }
+
+    /**
+     * Check whether a qualifying application should be visible to user.
+     *
+     * @param role the role to check for
+     * @param applicationInfo the {@link ApplicationInfo} for the application
+     * @param user the user for the application
+     * @param context the {@code Context} to retrieve system services
+     *
+     * @return whether the qualifying application should be visible to user
+     */
+    default boolean isApplicationVisibleAsUser(@NonNull Role role,
+            @NonNull ApplicationInfo applicationInfo, @NonNull UserHandle user,
+            @NonNull Context context) {
+        return true;
+    }
 }

@@ -22,7 +22,7 @@
                     "include-filter": "android.permission.cts.PlatformPermissionGroupMappingTest"
                 },
                 {
-                    "exclude-annotation": "android.platform.test.annotations.FlakyTest"
+                    "exclude-annotation": "androidx.test.filters.FlakyTest"
                 }
             ]
         },
@@ -30,7 +30,7 @@
             "name": "CtsHibernationTestCases",
             "options": [
                 {
-                    "exclude-annotation": "android.platform.test.annotations.FlakyTest"
+                    "exclude-annotation": "androidx.test.filters.FlakyTest"
                 }
             ]
         }
@@ -58,7 +58,68 @@
                     "include-filter": "android.permission.cts.PlatformPermissionGroupMappingTest"
                 },
                 {
-                    "exclude-annotation": "android.platform.test.annotations.FlakyTest"
+                    "exclude-annotation": "androidx.test.filters.FlakyTest"
+                }
+            ]
+        },
+        {
+            "name": "CtsHibernationTestCases[com.google.android.permission.apex]",
+            "options": [
+                {
+                    "exclude-annotation": "androidx.test.filters.FlakyTest"
+                }
+            ]
+        }
+    ],
+    "postsubmit": [
+        {
+            "name": "CtsHibernationTestCases"
+        },
+        {
+            "name": "CtsPermissionTestCases",
+            "options": [
+                {
+                    "include-filter": "android.permission.cts.BackgroundPermissionsTest"
+                },
+                {
+                    "include-filter": "android.permission.cts.LocationAccessCheckTest"
+                },
+                {
+                    "include-filter": "android.permission.cts.NotificationListenerCheckTest"
+                },
+                {
+                    "include-filter": "android.permission.cts.OneTimePermissionTest"
+                },
+                {
+                    "include-filter": "android.permission.cts.PermissionControllerTest"
+                },
+                {
+                    "include-filter": "android.permission.cts.PlatformPermissionGroupMappingTest"
+                }
+            ]
+        }
+    ],
+    "mainline-postsubmit": [
+        {
+            "name": "CtsPermissionTestCases[com.google.android.permission.apex]",
+            "options": [
+                {
+                    "include-filter": "android.permission.cts.BackgroundPermissionsTest"
+                },
+                {
+                    "include-filter": "android.permission.cts.LocationAccessCheckTest"
+                },
+                {
+                    "include-filter": "android.permission.cts.NotificationListenerCheckTest"
+                },
+                {
+                    "include-filter": "android.permission.cts.OneTimePermissionTest"
+                },
+                {
+                    "include-filter": "android.permission.cts.PermissionControllerTest"
+                },
+                {
+                    "include-filter": "android.permission.cts.PlatformPermissionGroupMappingTest"
                 }
             ]
         },
@@ -68,9 +129,6 @@
                 // TODO(b/238677038): This test currently fails on R base image
                 {
                     "exclude-filter": "android.hibernation.cts.AutoRevokeTest#testUnusedApp_uninstallApp"
-                },
-                {
-                    "exclude-annotation": "android.platform.test.annotations.FlakyTest"
                 }
             ]
         }

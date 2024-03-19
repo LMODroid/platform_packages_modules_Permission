@@ -16,10 +16,8 @@
 
 package com.android.safetycenter;
 
-import static android.os.Build.VERSION_CODES.TIRAMISU;
 import static android.safetycenter.SafetyCenterManager.RefreshReason;
 
-import android.annotation.Nullable;
 import android.os.Binder;
 import android.provider.DeviceConfig;
 import android.safetycenter.SafetySourceData;
@@ -27,20 +25,22 @@ import android.safetycenter.SafetySourceIssue;
 import android.util.ArraySet;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
+import androidx.annotation.Nullable;
 
 import com.android.modules.utils.build.SdkLevel;
-import com.android.safetycenter.resources.SafetyCenterResourcesContext;
+import com.android.safetycenter.resources.SafetyCenterResourcesApk;
 
 import java.io.PrintWriter;
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A class to access the Safety Center {@link DeviceConfig} flags.
  *
  * @hide
  */
-@RequiresApi(TIRAMISU)
 public final class SafetyCenterFlags {
 
     private static final String TAG = "SafetyCenterFlags";
@@ -62,9 +62,6 @@ public final class SafetyCenterFlags {
 
     private static final String PROPERTY_NOTIFICATION_RESURFACE_INTERVAL =
             "safety_center_notification_resurface_interval";
-
-    private static final String PROPERTY_SHOW_ERROR_ENTRIES_ON_TIMEOUT =
-            "safety_center_show_error_entries_on_timeout";
 
     private static final String PROPERTY_REPLACE_LOCK_SCREEN_ICON_ACTION =
             "safety_center_replace_lock_screen_icon_action";
@@ -108,6 +105,9 @@ public final class SafetyCenterFlags {
     private static final String PROPERTY_TEMP_HIDDEN_ISSUE_RESURFACE_DELAY_MILLIS =
             "safety_center_temp_hidden_issue_resurface_delay_millis";
 
+    private static final String PROPERTY_ACTIONS_TO_OVERRIDE_WITH_DEFAULT_INTENT =
+            "safety_center_actions_to_override_with_default_intent";
+
     private static final Duration RESOLVING_ACTION_TIMEOUT_DEFAULT_DURATION =
             Duration.ofSeconds(10);
 
@@ -131,29 +131,39 @@ public final class SafetyCenterFlags {
 
     private static volatile String sIssueCategoryAllowlistDefault = "";
 
-    private static volatile String sRefreshOnPageOpenSourcesDefault =
-            "AndroidBiometrics,AndroidLockScreen";
+    private static volatile String sRefreshOnPageOpenSourcesDefault = "AndroidBiometrics";
 
-    static void init(SafetyCenterResourcesContext resourceContext) {
+    private static volatile String sActionsToOverrideWithDefaultIntentDefault = "";
+
+    static void init(SafetyCenterResourcesApk safetyCenterResourcesApk) {
         String untrackedSourcesDefault =
-                resourceContext.getOptionalStringByName("config_defaultUntrackedSources");
+                safetyCenterResourcesApk.getOptionalStringByName("config_defaultUntrackedSources");
         if (untrackedSourcesDefault != null) {
             sUntrackedSourcesDefault = untrackedSourcesDefault;
         }
         String backgroundRefreshDenyDefault =
-                resourceContext.getOptionalStringByName("config_defaultBackgroundRefreshDeny");
+                safetyCenterResourcesApk.getOptionalStringByName(
+                        "config_defaultBackgroundRefreshDeny");
         if (backgroundRefreshDenyDefault != null) {
             sBackgroundRefreshDenyDefault = backgroundRefreshDenyDefault;
         }
         String issueCategoryAllowlistDefault =
-                resourceContext.getOptionalStringByName("config_defaultIssueCategoryAllowlist");
+                safetyCenterResourcesApk.getOptionalStringByName(
+                        "config_defaultIssueCategoryAllowlist");
         if (issueCategoryAllowlistDefault != null) {
             sIssueCategoryAllowlistDefault = issueCategoryAllowlistDefault;
         }
         String refreshOnPageOpenSourcesDefault =
-                resourceContext.getOptionalStringByName("config_defaultRefreshOnPageOpenSources");
+                safetyCenterResourcesApk.getOptionalStringByName(
+                        "config_defaultRefreshOnPageOpenSources");
         if (refreshOnPageOpenSourcesDefault != null) {
             sRefreshOnPageOpenSourcesDefault = refreshOnPageOpenSourcesDefault;
+        }
+        String actionsToOverrideWithDefaultIntentDefault =
+                safetyCenterResourcesApk.getOptionalStringByName(
+                        "config_defaultActionsToOverrideWithDefaultIntent");
+        if (actionsToOverrideWithDefaultIntentDefault != null) {
+            sActionsToOverrideWithDefaultIntentDefault = actionsToOverrideWithDefaultIntentDefault;
         }
     }
 
@@ -173,7 +183,6 @@ public final class SafetyCenterFlags {
                 getImmediateNotificationBehaviorIssues());
         printFlag(
                 fout, PROPERTY_NOTIFICATION_RESURFACE_INTERVAL, getNotificationResurfaceInterval());
-        printFlag(fout, PROPERTY_SHOW_ERROR_ENTRIES_ON_TIMEOUT, getShowErrorEntriesOnTimeout());
         printFlag(fout, PROPERTY_REPLACE_LOCK_SCREEN_ICON_ACTION, getReplaceLockScreenIconAction());
         printFlag(fout, PROPERTY_RESOLVING_ACTION_TIMEOUT_MILLIS, getResolvingActionTimeout());
         printFlag(fout, PROPERTY_FGS_ALLOWLIST_DURATION_MILLIS, getFgsAllowlistDuration());
@@ -281,13 +290,6 @@ public final class SafetyCenterFlags {
         } else {
             return Duration.ofMillis(millis);
         }
-    }
-
-    /**
-     * Returns whether we should show error entries for sources that timeout when refreshing them.
-     */
-    static boolean getShowErrorEntriesOnTimeout() {
-        return getBoolean(PROPERTY_SHOW_ERROR_ENTRIES_ON_TIMEOUT, true);
     }
 
     /**
@@ -407,6 +409,17 @@ public final class SafetyCenterFlags {
         return getString(PROPERTY_RESURFACE_ISSUE_DELAYS_MILLIS, RESURFACE_ISSUE_DELAYS_DEFAULT);
     }
 
+    /**
+     * Returns a comma-delimited list of colon-delimited pairs of SourceId:ActionId. The action IDs
+     * listed by this flag should have their {@code PendingIntent}s overridden with the source's
+     * default intent drawn from Safety Center's config file, if available.
+     */
+    private static String getActionsToOverrideWithDefaultIntent() {
+        return getString(
+                PROPERTY_ACTIONS_TO_OVERRIDE_WITH_DEFAULT_INTENT,
+                sActionsToOverrideWithDefaultIntentDefault);
+    }
+
     /** Returns a duration after which a temporarily hidden issue will resurface. */
     public static Duration getTemporarilyHiddenIssueResurfaceDelay() {
         return getDuration(
@@ -420,19 +433,10 @@ public final class SafetyCenterFlags {
      */
     public static boolean isIssueCategoryAllowedForSource(
             @SafetySourceIssue.IssueCategory int issueCategory, String safetySourceId) {
-        String issueCategoryAllowlists = getIssueCategoryAllowlists();
-        String allowlistString =
-                getStringValueFromStringMapping(issueCategoryAllowlists, issueCategory);
-        if (allowlistString == null) {
-            return true;
-        }
-        String[] allowlistArray = allowlistString.split("\\|");
-        for (int i = 0; i < allowlistArray.length; i++) {
-            if (allowlistArray[i].equals(safetySourceId)) {
-                return true;
-            }
-        }
-        return false;
+        List<String> allowlist =
+                getStringListValueFromStringMapping(
+                        getIssueCategoryAllowlists(), Integer.toString(issueCategory));
+        return allowlist.isEmpty() || allowlist.contains(safetySourceId);
     }
 
     /** Returns a set of package certificates allowlisted for the given package name. */
@@ -442,7 +446,7 @@ public final class SafetyCenterFlags {
         if (allowlistedCertString == null) {
             return new ArraySet<>();
         }
-        return new ArraySet<String>(allowlistedCertString.split("\\|"));
+        return new ArraySet<>(allowlistedCertString.split("\\|"));
     }
 
     /**
@@ -461,6 +465,16 @@ public final class SafetyCenterFlags {
     /** Returns whether we allow statsd logging. */
     public static boolean getAllowStatsdLogging() {
         return getBoolean(PROPERTY_ALLOW_STATSD_LOGGING, true);
+    }
+
+    /**
+     * Returns a list of action IDs that should be overridden with the source's default intent drawn
+     * from the config for a given source.
+     */
+    public static List<String> getActionsToOverrideWithDefaultIntentForSource(
+            String safetySourceId) {
+        return getStringListValueFromStringMapping(
+                getActionsToOverrideWithDefaultIntent(), safetySourceId);
     }
 
     /**
@@ -527,15 +541,15 @@ public final class SafetyCenterFlags {
      * pairs of integers and longs.
      */
     @Nullable
-    private static Long getLongValueFromStringMapping(String config, int key) {
-        String valueString = getStringValueFromStringMapping(config, key);
+    private static Long getLongValueFromStringMapping(String mapping, int key) {
+        String valueString = getStringValueFromStringMapping(mapping, key);
         if (valueString == null) {
             return null;
         }
         try {
             return Long.parseLong(valueString);
         } catch (NumberFormatException e) {
-            Log.w(TAG, "Badly formatted string config: " + config, e);
+            Log.w(TAG, "Badly formatted string mapping: " + mapping, e);
             return null;
         }
     }
@@ -545,8 +559,8 @@ public final class SafetyCenterFlags {
      * of integers and strings.
      */
     @Nullable
-    private static String getStringValueFromStringMapping(String config, int key) {
-        return getStringValueFromStringMapping(config, Integer.toString(key));
+    private static String getStringValueFromStringMapping(String mapping, int key) {
+        return getStringValueFromStringMapping(mapping, Integer.toString(key));
     }
 
     /**
@@ -554,15 +568,15 @@ public final class SafetyCenterFlags {
      * string pairs.
      */
     @Nullable
-    private static String getStringValueFromStringMapping(String config, String key) {
-        if (config.isEmpty()) {
+    private static String getStringValueFromStringMapping(String mapping, String key) {
+        if (mapping.isEmpty()) {
             return null;
         }
-        String[] pairsList = config.split(",");
+        String[] pairsList = mapping.split(",");
         for (int i = 0; i < pairsList.length; i++) {
             String[] pair = pairsList[i].split(":", -1 /* allow trailing empty strings */);
             if (pair.length != 2) {
-                Log.w(TAG, "Badly formatted string config: " + config);
+                Log.w(TAG, "Badly formatted string mapping: " + mapping);
                 continue;
             }
             if (pair[0].equals(key)) {
@@ -570,6 +584,15 @@ public final class SafetyCenterFlags {
             }
         }
         return null;
+    }
+
+    private static List<String> getStringListValueFromStringMapping(String mapping, String key) {
+        String value = getStringValueFromStringMapping(mapping, key);
+        if (value == null) {
+            return Collections.emptyList();
+        }
+
+        return Arrays.asList(value.split("\\|"));
     }
 
     private SafetyCenterFlags() {}

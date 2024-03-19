@@ -11,17 +11,40 @@
   ],
    "presubmit-large": [
     {
-      "name": "CtsPermission3TestCases",
+      "name": "CtsPermissionUiTestCases",
       "options": [
         {
-          "exclude-annotation": "android.platform.test.annotations.FlakyTest"
+          "exclude-annotation": "androidx.test.filters.FlakyTest"
         }
       ]
     }
   ],
   "mainline-presubmit": [
     {
-      "name": "CtsPermission3TestCases[com.google.android.permission.apex]"
+      "name": "CtsPermissionUiTestCases[com.google.android.permission.apex]",
+      "options": [
+        {
+          "exclude-annotation": "androidx.test.filters.FlakyTest"
+        }
+      ]
+    }
+  ],
+  "postsubmit": [
+    {
+      "name": "PermissionControllerMockingTests",
+      "options": [
+        {
+          "include-filter": "com.android.permissioncontroller.tests.mocking.safetylabel"
+        }
+      ]
+    },
+    {
+      "name": "CtsPermissionUiTestCases"
+    }
+  ],
+  "mainline-postsubmit": [
+    {
+      "name": "CtsPermissionUiTestCases[com.google.android.permission.apex]"
     }
   ]
 }

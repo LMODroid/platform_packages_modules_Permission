@@ -20,11 +20,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.ComponentInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Process;
 import android.os.UserHandle;
 import android.util.ArraySet;
 
@@ -108,9 +108,9 @@ public abstract class RequiredComponent {
      * @return whether this required component is available
      */
     public boolean isAvailable() {
-        // Workaround to match the value 34+ for U+ in roles.xml before SDK finalization.
-        if (mMinTargetSdkVersion >= 34) {
-            return SdkLevel.isAtLeastU();
+        // Workaround to match the value 35+ for V+ in roles.xml before SDK finalization.
+        if (mMinTargetSdkVersion >= 35) {
+            return SdkLevel.isAtLeastV();
         } else {
             return Build.VERSION.SDK_INT >= mMinTargetSdkVersion;
         }
@@ -144,15 +144,16 @@ public abstract class RequiredComponent {
      * Get the component that matches this required component within a package, if any.
      *
      * @param packageName the package name for this query
+     * @param user the user of the component
      * @param context the {@code Context} to retrieve system services
      *
      * @return the matching component, or {@code null} if none.
      */
     @Nullable
-    public ComponentName getQualifyingComponentForPackage(@NonNull String packageName,
-            @NonNull Context context) {
-        List<ComponentName> componentNames = getQualifyingComponentsInternal(packageName,
-                Process.myUserHandle(), context);
+    public ComponentName getQualifyingComponentForPackageAsUser(@NonNull String packageName,
+            @NonNull UserHandle user, @NonNull Context context) {
+        List<ComponentName> componentNames = getQualifyingComponentsAsUserInternal(packageName,
+                user, context);
         return !componentNames.isEmpty() ? componentNames.get(0) : null;
     }
 
@@ -170,11 +171,11 @@ public abstract class RequiredComponent {
     @NonNull
     public List<ComponentName> getQualifyingComponentsAsUser(@NonNull UserHandle user,
             @NonNull Context context) {
-        return getQualifyingComponentsInternal(null, user, context);
+        return getQualifyingComponentsAsUserInternal(null, user, context);
     }
 
     @NonNull
-    private List<ComponentName> getQualifyingComponentsInternal(@Nullable String packageName,
+    private List<ComponentName> getQualifyingComponentsAsUserInternal(@Nullable String packageName,
             @NonNull UserHandle user, @NonNull Context context) {
         Intent intent = mIntentFilterData.createIntent();
         if (packageName != null) {
@@ -195,6 +196,10 @@ public abstract class RequiredComponent {
         for (int resolveInfosIndex = 0; resolveInfosIndex < resolveInfosSize; resolveInfosIndex++) {
             ResolveInfo resolveInfo = resolveInfos.get(resolveInfosIndex);
 
+            if (!isComponentQualified(resolveInfo)) {
+                continue;
+            }
+
             if (mFlags != 0) {
                 int componentFlags = getComponentFlags(resolveInfo);
                 if ((componentFlags & mFlags) != mFlags) {
@@ -209,8 +214,9 @@ public abstract class RequiredComponent {
                 }
             }
 
+            ComponentInfo componentInfo = getComponentComponentInfo(resolveInfo);
             if (hasMetaData) {
-                Bundle componentMetaData = getComponentMetaData(resolveInfo);
+                Bundle componentMetaData = componentInfo.metaData;
                 if (componentMetaData == null) {
                     componentMetaData = Bundle.EMPTY;
                 }
@@ -229,13 +235,14 @@ public abstract class RequiredComponent {
                 }
             }
 
-            ComponentName componentName = getComponentComponentName(resolveInfo);
-            String componentPackageName = componentName.getPackageName();
+            String componentPackageName = componentInfo.packageName;
             if (componentPackageNames.contains(componentPackageName)) {
                 continue;
             }
-
             componentPackageNames.add(componentPackageName);
+
+            ComponentName componentName = new ComponentName(componentPackageName,
+                    componentInfo.name);
             componentNames.add(componentName);
         }
         return componentNames;
@@ -256,15 +263,19 @@ public abstract class RequiredComponent {
     protected abstract List<ResolveInfo> queryIntentComponentsAsUser(@NonNull Intent intent,
             int flags, @NonNull UserHandle user, @NonNull Context context);
 
+    protected boolean isComponentQualified(@NonNull ResolveInfo resolveInfo) {
+        return true;
+    }
+
     /**
-     * Get the {@code ComponentName} of a component.
+     * Get the {@code ComponentInfo} of a component.
      *
      * @param resolveInfo the {@code ResolveInfo} of the component
      *
-     * @return the {@code ComponentName} of the component
+     * @return the {@code ComponentInfo} of the component
      */
     @NonNull
-    protected abstract ComponentName getComponentComponentName(@NonNull ResolveInfo resolveInfo);
+    protected abstract ComponentInfo getComponentComponentInfo(@NonNull ResolveInfo resolveInfo);
 
     /**
      * Get the flags that have been set on a component.
@@ -284,16 +295,6 @@ public abstract class RequiredComponent {
      */
     @Nullable
     protected abstract String getComponentPermission(@NonNull ResolveInfo resolveInfo);
-
-    /**
-     * Get the meta data associated with a component.
-     *
-     * @param resolveInfo the {@code ResolveInfo} of the component
-     *
-     * @return the meta data associated with a component
-     */
-    @Nullable
-    protected abstract Bundle getComponentMetaData(@NonNull ResolveInfo resolveInfo);
 
     @Override
     public String toString() {

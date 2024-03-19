@@ -30,6 +30,7 @@ import android.os.Bundle;
 import android.safetycenter.SafetyCenterIssue;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
@@ -134,9 +135,7 @@ public class IssueCardPreference extends Preference implements ComparablePrefere
         configureSafetyProtectionView(holder);
         maybeStartResolutionAnimation(holder);
 
-        mSafetyCenterViewModel
-                .getInteractionLogger()
-                .recordIssueViewed(mIssue, mIsDismissed);
+        mSafetyCenterViewModel.getInteractionLogger().recordIssueViewed(mIssue, mIsDismissed);
     }
 
     private void maybeDisplayText(@Nullable CharSequence maybeText, TextView textView) {
@@ -424,8 +423,14 @@ public class IssueCardPreference extends Preference implements ComparablePrefere
         ActionButtonBuilder(SafetyCenterIssue.Action action, Context context) {
             mAction = action;
             mContext = context;
-            mContextThemeWrapper =
-                    new ContextThemeWrapper(context, R.style.Theme_MaterialComponents_DayNight);
+
+            TypedValue buttonThemeValue = new TypedValue();
+            mContext.getTheme()
+                    .resolveAttribute(
+                            R.attr.scActionButtonTheme,
+                            buttonThemeValue,
+                            /* resolveRefs= */ false);
+            mContextThemeWrapper = new ContextThemeWrapper(context, buttonThemeValue.data);
         }
 
         public ActionButtonBuilder setIndex(int index) {
@@ -540,9 +545,11 @@ public class IssueCardPreference extends Preference implements ComparablePrefere
                 return;
             }
 
-            int margin =
-                    mContext.getResources()
-                            .getDimensionPixelSize(R.dimen.sc_action_button_list_margin);
+            int marginRes =
+                    mIsLargeScreen
+                            ? R.dimen.sc_action_button_list_margin_large_screen
+                            : R.dimen.sc_action_button_list_margin;
+            int margin = mContext.getResources().getDimensionPixelSize(marginRes);
             Space space = new Space(mContext);
             space.setLayoutParams(new ViewGroup.LayoutParams(margin, margin));
             buttonList.addView(space);

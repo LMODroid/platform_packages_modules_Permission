@@ -60,9 +60,12 @@ android_test {
         ":CtsAppThatRequestsLocationPermission29",
         ":PermissionUiUseStoragePermissionApp",
         ":PermissionUiUseCameraPermissionApp",
+        ":PermissionUiUseHealthConnectPermissionApp",
+        ":PermissionUiInvalidUseHealthConnectPermissionApp",
         ":PermissionUiDefineAdditionalPermissionApp",
         ":PermissionUiUseAdditionalPermissionApp",
         ":PermissionUiUseTwoAdditionalPermissionsApp",
+        ":PermissionUiReadCalendarPermissionApp",
     ],
     per_testcase_directory: true,
 }

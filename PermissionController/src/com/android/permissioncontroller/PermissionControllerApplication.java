@@ -21,6 +21,7 @@ import android.content.ComponentName;
 import android.content.pm.PackageItemInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Process;
 import android.util.ArrayMap;
 import android.view.accessibility.AccessibilityManager;
 
@@ -32,7 +33,6 @@ import com.android.permissioncontroller.permission.utils.Utils;
 import com.android.permissioncontroller.privacysources.SafetyCenterAccessibilityListener;
 import com.android.permissioncontroller.role.model.RoleParserInitializer;
 import com.android.permissioncontroller.role.ui.SpecialAppAccessListActivity;
-import com.android.permissioncontroller.role.utils.RoleUiBehaviorUtils;
 import com.android.role.controller.model.Role;
 import com.android.role.controller.model.Roles;
 
@@ -71,7 +71,8 @@ public final class PermissionControllerApplication extends Application {
         for (int i = 0; i < rolesSize; i++) {
             Role role = roles.valueAt(i);
 
-            if (!role.isAvailable(this) || !RoleUiBehaviorUtils.isVisible(role, this)) {
+            if (!role.isAvailableAsUser(Process.myUserHandle(), this)
+                    || !role.isVisibleAsUser(Process.myUserHandle(), this)) {
                 continue;
             }
             if (!role.isExclusive()) {

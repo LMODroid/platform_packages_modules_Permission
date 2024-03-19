@@ -16,7 +16,6 @@
 
 package com.android.safetycenter;
 
-import static android.os.Build.VERSION_CODES.TIRAMISU;
 import static android.safetycenter.SafetyCenterManager.REFRESH_REASON_DEVICE_LOCALE_CHANGE;
 import static android.safetycenter.SafetyCenterManager.REFRESH_REASON_DEVICE_REBOOT;
 import static android.safetycenter.SafetyCenterManager.REFRESH_REASON_OTHER;
@@ -27,14 +26,13 @@ import static android.safetycenter.SafetyCenterManager.REFRESH_REASON_SAFETY_CEN
 
 import static java.util.Collections.unmodifiableMap;
 
-import android.annotation.Nullable;
 import android.annotation.UserIdInt;
 import android.content.Context;
 import android.os.RemoteException;
 import android.safetycenter.ISafetyCenterManager;
 import android.safetycenter.SafetyCenterManager.RefreshReason;
 
-import androidx.annotation.RequiresApi;
+import androidx.annotation.Nullable;
 
 import com.android.modules.utils.BasicShellCommandHandler;
 import com.android.modules.utils.build.SdkLevel;
@@ -48,7 +46,6 @@ import java.util.Map;
  *
  * <p>Example usage: $ adb shell cmd safety_center refresh --reason PAGE_OPEN --user 10
  */
-@RequiresApi(TIRAMISU)
 final class SafetyCenterShellCommandHandler extends BasicShellCommandHandler {
 
     private static final Map<String, Integer> REASONS = createReasonMap();
@@ -89,9 +86,16 @@ final class SafetyCenterShellCommandHandler extends BasicShellCommandHandler {
                     return handleDefaultCommands(cmd);
             }
         } catch (RemoteException | IllegalArgumentException e) {
-            e.printStackTrace(getErrPrintWriter());
+            printError(e);
             return 1;
         }
+    }
+
+    // We want to log the stack trace on a specific PrintWriter here, this is a false positive as
+    // the warning does not consider the overload that takes a PrintWriter as an argument (yet).
+    @SuppressWarnings("CatchAndPrintStackTrace")
+    private void printError(Throwable error) {
+        error.printStackTrace(getErrPrintWriter());
     }
 
     private int onEnabled() throws RemoteException {

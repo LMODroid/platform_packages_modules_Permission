@@ -26,7 +26,6 @@ import android.content.pm.SharedLibraryInfo;
 import android.content.pm.Signature;
 import android.content.res.Resources;
 import android.os.Build;
-import android.os.Process;
 import android.os.UserHandle;
 import android.text.TextUtils;
 import android.util.ArrayMap;
@@ -360,11 +359,12 @@ public class Role {
     /**
      * Callback when this role is added to the system for the first time.
      *
+     * @param user the user to add the role for
      * @param context the {@code Context} to retrieve system services
      */
-    public void onRoleAdded(@NonNull Context context) {
+    public void onRoleAddedAsUser(@NonNull UserHandle user, @NonNull Context context) {
         if (mBehavior != null) {
-            mBehavior.onRoleAdded(this, context);
+            mBehavior.onRoleAddedAsUser(this, user, context);
         }
     }
 
@@ -392,24 +392,13 @@ public class Role {
      * @return whether this role is available based on SDK version
      */
     boolean isAvailableBySdkVersion() {
-        // Workaround to match the value 34+ for U+ in roles.xml before SDK finalization.
-        if (mMinSdkVersion >= 34) {
-            return SdkLevel.isAtLeastU();
+        // Workaround to match the value 35+ for V+ in roles.xml before SDK finalization.
+        if (mMinSdkVersion >= 35) {
+            return SdkLevel.isAtLeastV();
         } else {
             return Build.VERSION.SDK_INT >= mMinSdkVersion
                     && Build.VERSION.SDK_INT <= mMaxSdkVersion;
         }
-    }
-
-    /**
-     * Check whether this role is available, for current user.
-     *
-     * @param context the {@code Context} to retrieve system services
-     *
-     * @return whether this role is available.
-     */
-    public boolean isAvailable(@NonNull Context context) {
-        return isAvailableAsUser(Process.myUserHandle(), context);
     }
 
     public boolean isStatic() {
@@ -420,15 +409,16 @@ public class Role {
      * Get the default holders of this role, which will be added when the role is added for the
      * first time.
      *
+     * @param user the user of the role
      * @param context the {@code Context} to retrieve system services
-     *
      * @return the list of package names of the default holders
      */
     @NonNull
-    public List<String> getDefaultHolders(@NonNull Context context) {
+    public List<String> getDefaultHoldersAsUser(@NonNull UserHandle user,
+            @NonNull Context context) {
         if (mDefaultHoldersResourceName == null) {
             if (mBehavior != null) {
-                return mBehavior.getDefaultHolders(this, context);
+                return mBehavior.getDefaultHoldersAsUser(this, user, context);
             }
             return Collections.emptyList();
         }
@@ -454,7 +444,8 @@ public class Role {
         }
 
         if (isExclusive()) {
-            String packageName = getQualifiedDefaultHolderPackageName(defaultHolders, context);
+            String packageName = getQualifiedDefaultHolderPackageNameAsUser(defaultHolders, user,
+                    context);
             if (packageName == null) {
                 return Collections.emptyList();
             }
@@ -462,7 +453,8 @@ public class Role {
         } else {
             List<String> packageNames = new ArrayList<>();
             for (String defaultHolder : defaultHolders.split(DEFAULT_HOLDER_SEPARATOR)) {
-                String packageName = getQualifiedDefaultHolderPackageName(defaultHolders, context);
+                String packageName = getQualifiedDefaultHolderPackageNameAsUser(defaultHolder,
+                        user, context);
                 if (packageName != null) {
                     packageNames.add(packageName);
                 }
@@ -472,8 +464,8 @@ public class Role {
     }
 
     @Nullable
-    private String getQualifiedDefaultHolderPackageName(@NonNull String defaultHolder,
-            @NonNull Context context) {
+    private String getQualifiedDefaultHolderPackageNameAsUser(@NonNull String defaultHolder,
+            @NonNull UserHandle user, @NonNull Context context) {
         String packageName;
         byte[] certificate;
         int certificateSeparatorIndex = defaultHolder.indexOf(CERTIFICATE_SEPARATOR);
@@ -492,8 +484,9 @@ public class Role {
         }
 
         if (certificate != null) {
-            PackageManager packageManager = context.getPackageManager();
-            if (!packageManager.hasSigningCertificate(packageName, certificate,
+            Context userContext = UserUtils.getUserContext(context, user);
+            PackageManager userPackageManager = userContext.getPackageManager();
+            if (!userPackageManager.hasSigningCertificate(packageName, certificate,
                     PackageManager.CERT_INPUT_SHA256)) {
                 Log.w(LOG_TAG, "Default holder doesn't have required signing certificate: "
                         + defaultHolder);
@@ -501,7 +494,7 @@ public class Role {
             }
         } else {
             ApplicationInfo applicationInfo = PackageUtils.getApplicationInfoAsUser(packageName,
-                    Process.myUserHandle(), context);
+                    user, context);
             if (applicationInfo == null) {
                 Log.w(LOG_TAG, "Cannot get ApplicationInfo for default holder: " + packageName);
                 return null;
@@ -521,20 +514,20 @@ public class Role {
      * <p>
      * Should return {@code null} if this role {@link #mShowNone shows a "None" item}.
      *
+     * @param user the user of the role
      * @param context the {@code Context} to retrieve system services
-     *
      * @return the package name of the fallback holder, or {@code null} if none
      */
     @Nullable
-    public String getFallbackHolder(@NonNull Context context) {
-        if (!RoleManagerCompat.isRoleFallbackEnabledAsUser(this, Process.myUserHandle(), context)) {
+    public String getFallbackHolderAsUser(@NonNull UserHandle user, @NonNull Context context) {
+        if (!RoleManagerCompat.isRoleFallbackEnabledAsUser(this, user, context)) {
             return null;
         }
         if (mFallBackToDefaultHolder) {
-            return CollectionUtils.firstOrNull(getDefaultHolders(context));
+            return CollectionUtils.firstOrNull(getDefaultHoldersAsUser(user, context));
         }
         if (mBehavior != null) {
-            return mBehavior.getFallbackHolder(this, context);
+            return mBehavior.getFallbackHolderAsUser(this, user, context);
         }
         return null;
     }
@@ -562,29 +555,32 @@ public class Role {
      * components (plus meeting some other general restrictions).
      *
      * @param packageName the package name to check for
+     * @param user the user to check for
      * @param context the {@code Context} to retrieve system services
      *
      * @return whether the package is qualified for a role
      */
-    public boolean isPackageQualified(@NonNull String packageName, @NonNull Context context) {
+    public boolean isPackageQualifiedAsUser(@NonNull String packageName, @NonNull UserHandle user,
+            @NonNull Context context) {
         RoleManager roleManager = context.getSystemService(RoleManager.class);
         if (shouldAllowBypassingQualification(context)
                 && RoleManagerCompat.isBypassingRoleQualification(roleManager)) {
             return true;
         }
 
-        ApplicationInfo applicationInfo = PackageUtils.getApplicationInfoAsUser(packageName,
-                Process.myUserHandle(), context);
+        ApplicationInfo applicationInfo = PackageUtils.getApplicationInfoAsUser(packageName, user,
+                context);
         if (applicationInfo == null) {
             Log.w(LOG_TAG, "Cannot get ApplicationInfo for package: " + packageName);
             return false;
         }
-        if (!isPackageMinimallyQualifiedAsUser(applicationInfo, Process.myUserHandle(), context)) {
+        if (!isPackageMinimallyQualifiedAsUser(applicationInfo, user, context)) {
             return false;
         }
 
         if (mBehavior != null) {
-            Boolean isPackageQualified = mBehavior.isPackageQualified(this, packageName, context);
+            Boolean isPackageQualified = mBehavior.isPackageQualifiedAsUser(this, packageName,
+                    user, context);
             if (isPackageQualified != null) {
                 return isPackageQualified;
             }
@@ -598,14 +594,15 @@ public class Role {
                 continue;
             }
 
-            if (requiredComponent.getQualifyingComponentForPackage(packageName, context) == null) {
+            if (requiredComponent.getQualifyingComponentForPackageAsUser(packageName, user, context)
+                    == null) {
                 Log.i(LOG_TAG, packageName + " not qualified for " + mName
                         + " due to missing " + requiredComponent);
                 return false;
             }
         }
 
-        if (mStatic && !getDefaultHolders(context).contains(packageName)) {
+        if (mStatic && !getDefaultHoldersAsUser(user, context).contains(packageName)) {
             return false;
         }
 
@@ -778,41 +775,42 @@ public class Role {
      * @param packageName the package name of the application to be granted this role to
      * @param dontKillApp whether this application should not be killed despite changes
      * @param overrideUser whether to override user when granting privileges
+     * @param user the user of the application
      * @param context the {@code Context} to retrieve system services
      */
-    public void grant(@NonNull String packageName, boolean dontKillApp,
-            boolean overrideUser, @NonNull Context context) {
-        boolean permissionOrAppOpChanged = Permissions.grant(packageName,
+    public void grantAsUser(@NonNull String packageName, boolean dontKillApp,
+            boolean overrideUser, @NonNull UserHandle user, @NonNull Context context) {
+        boolean permissionOrAppOpChanged = Permissions.grantAsUser(packageName,
                 Permissions.filterBySdkVersion(mPermissions),
                 SdkLevel.isAtLeastS() ? !mSystemOnly : true, overrideUser, true, false, false,
-                context);
+                user, context);
 
         List<String> appOpPermissionsToGrant = Permissions.filterBySdkVersion(mAppOpPermissions);
         int appOpPermissionsSize = appOpPermissionsToGrant.size();
         for (int i = 0; i < appOpPermissionsSize; i++) {
             String appOpPermission = appOpPermissionsToGrant.get(i);
-            AppOpPermissions.grant(packageName, appOpPermission, overrideUser, context);
+            AppOpPermissions.grantAsUser(packageName, appOpPermission, overrideUser, user, context);
         }
 
         int appOpsSize = mAppOps.size();
         for (int i = 0; i < appOpsSize; i++) {
             AppOp appOp = mAppOps.get(i);
-            appOp.grant(packageName, context);
+            appOp.grantAsUser(packageName, user, context);
         }
 
         int preferredActivitiesSize = mPreferredActivities.size();
         for (int i = 0; i < preferredActivitiesSize; i++) {
             PreferredActivity preferredActivity = mPreferredActivities.get(i);
-            preferredActivity.configure(packageName, context);
+            preferredActivity.configureAsUser(packageName, user, context);
         }
 
         if (mBehavior != null) {
-            mBehavior.grant(this, packageName, context);
+            mBehavior.grantAsUser(this, packageName, user, context);
         }
 
-        if (!dontKillApp && permissionOrAppOpChanged && !Permissions.isRuntimePermissionsSupported(
-                packageName, context)) {
-            killApp(packageName, context);
+        if (!dontKillApp && permissionOrAppOpChanged
+                && !Permissions.isRuntimePermissionsSupportedAsUser(packageName, user, context)) {
+            killAppAsUser(packageName, user, context);
         }
     }
 
@@ -822,12 +820,15 @@ public class Role {
      * @param packageName the package name of the application to be granted this role to
      * @param dontKillApp whether this application should not be killed despite changes
      * @param overrideSystemFixedPermissions whether system-fixed permissions can be revoked
+     * @param user the user of the role
      * @param context the {@code Context} to retrieve system services
      */
-    public void revoke(@NonNull String packageName, boolean dontKillApp,
-            boolean overrideSystemFixedPermissions, @NonNull Context context) {
-        RoleManager roleManager = context.getSystemService(RoleManager.class);
-        List<String> otherRoleNames = roleManager.getHeldRolesFromController(packageName);
+    public void revokeAsUser(@NonNull String packageName, boolean dontKillApp,
+            boolean overrideSystemFixedPermissions, @NonNull UserHandle user,
+            @NonNull Context context) {
+        Context userContext = UserUtils.getUserContext(context, user);
+        RoleManager userRoleManager = userContext.getSystemService(RoleManager.class);
+        List<String> otherRoleNames = userRoleManager.getHeldRolesFromController(packageName);
         otherRoleNames.remove(mName);
 
         List<String> permissionsToRevoke = Permissions.filterBySdkVersion(mPermissions);
@@ -839,8 +840,8 @@ public class Role {
             permissionsToRevoke.removeAll(Permissions.filterBySdkVersion(role.mPermissions));
         }
 
-        boolean permissionOrAppOpChanged = Permissions.revoke(packageName, permissionsToRevoke,
-                true, false, overrideSystemFixedPermissions, context);
+        boolean permissionOrAppOpChanged = Permissions.revokeAsUser(packageName,
+                permissionsToRevoke, true, false, overrideSystemFixedPermissions, user, context);
 
         List<String> appOpPermissionsToRevoke = Permissions.filterBySdkVersion(mAppOpPermissions);
         for (int i = 0; i < otherRoleNamesSize; i++) {
@@ -852,7 +853,7 @@ public class Role {
         int appOpPermissionsSize = appOpPermissionsToRevoke.size();
         for (int i = 0; i < appOpPermissionsSize; i++) {
             String appOpPermission = appOpPermissionsToRevoke.get(i);
-            AppOpPermissions.revoke(packageName, appOpPermission, context);
+            AppOpPermissions.revokeAsUser(packageName, appOpPermission, user, context);
         }
 
         List<AppOp> appOpsToRevoke = new ArrayList<>(mAppOps);
@@ -864,7 +865,7 @@ public class Role {
         int appOpsSize = appOpsToRevoke.size();
         for (int i = 0; i < appOpsSize; i++) {
             AppOp appOp = appOpsToRevoke.get(i);
-            appOp.revoke(packageName, context);
+            appOp.revokeAsUser(packageName, user, context);
         }
 
         // TODO: Revoke preferred activities? But this is unnecessary for most roles using it as
@@ -873,22 +874,23 @@ public class Role {
         //  wrong thing when we are removing a exclusive role holder for adding another.
 
         if (mBehavior != null) {
-            mBehavior.revoke(this, packageName, context);
+            mBehavior.revokeAsUser(this, packageName, user, context);
         }
 
         if (!dontKillApp && permissionOrAppOpChanged) {
-            killApp(packageName, context);
+            killAppAsUser(packageName, user, context);
         }
     }
 
-    private void killApp(@NonNull String packageName, @NonNull Context context) {
+    private void killAppAsUser(@NonNull String packageName, @NonNull UserHandle user,
+            @NonNull Context context) {
         if (DEBUG) {
             Log.i(LOG_TAG, "Killing " + packageName + " due to "
                     + Thread.currentThread().getStackTrace()[3].getMethodName()
                     + "(" + mName + ")");
         }
-        ApplicationInfo applicationInfo = PackageUtils.getApplicationInfoAsUser(packageName,
-                Process.myUserHandle(), context);
+        ApplicationInfo applicationInfo = PackageUtils.getApplicationInfoAsUser(packageName, user,
+                context);
         if (applicationInfo == null) {
             Log.w(LOG_TAG, "Cannot get ApplicationInfo for package: " + packageName);
             return;
@@ -945,6 +947,40 @@ public class Role {
      */
     public void onNoneHolderSelectedAsUser(@NonNull UserHandle user, @NonNull Context context) {
         RoleManagerCompat.setRoleFallbackEnabledAsUser(this, false, user, context);
+    }
+
+    /**
+     * Check whether this role should be visible to user.
+     *
+     * @param user the user to check for
+     * @param context the `Context` to retrieve system services
+     *
+     * @return whether this role should be visible to user
+     */
+    public boolean isVisibleAsUser(@NonNull UserHandle user, @NonNull Context context) {
+        RoleBehavior behavior = getBehavior();
+        if (behavior == null) {
+            return isVisible();
+        }
+        return isVisible() && behavior.isVisibleAsUser(this, user, context);
+    }
+
+    /**
+     * Check whether a qualifying application should be visible to user.
+     *
+     * @param applicationInfo the {@link ApplicationInfo} for the application
+     * @param user the user for the application
+     * @param context the {@code Context} to retrieve system services
+     *
+     * @return whether the qualifying application should be visible to user
+     */
+    public boolean isApplicationVisibleAsUser(@NonNull ApplicationInfo applicationInfo,
+            @NonNull UserHandle user,  @NonNull Context context) {
+        RoleBehavior behavior = getBehavior();
+        if (behavior == null) {
+            return true;
+        }
+        return behavior.isApplicationVisibleAsUser(this, applicationInfo, user, context);
     }
 
     @Override
