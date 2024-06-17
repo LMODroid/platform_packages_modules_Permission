@@ -22,7 +22,7 @@ import androidx.preference.TwoStatePreference;
 /**
  * Preference for application being a candidate or holding a role.
  */
-public interface RoleApplicationPreference extends UserRestrictionAwarePreference {
+public interface RoleApplicationPreference extends RestrictionAwarePreference {
 
     /**
      * Get instance of {@code this} as {@link TwoStatePreference}.

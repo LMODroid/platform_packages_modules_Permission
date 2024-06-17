@@ -15,6 +15,7 @@
 //
 
 package {
+    default_team: "trendy_team_android_permissions",
     // See: http://go/android-license-faq
     // A large-scale-change added 'default_applicable_licenses' to import
     // all of the 'license_kinds' from "packages_modules_Permission_PermissionController_license"
@@ -116,7 +117,7 @@ android_test {
         "safety-label",
         "role-controller",
         "lottie",
-        "permissions-flags-lib",
+        "permissions-aconfig-flags-lib",
         "android.permission.flags-aconfig-java",
 
         "androidx.test.rules",

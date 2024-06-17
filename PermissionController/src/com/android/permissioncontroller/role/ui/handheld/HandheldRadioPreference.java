@@ -17,14 +17,15 @@
 package com.android.permissioncontroller.role.ui.handheld;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceViewHolder;
 
+import com.android.permissioncontroller.role.ui.RestrictionAwarePreferenceMixin;
 import com.android.permissioncontroller.role.ui.RoleApplicationPreference;
-import com.android.permissioncontroller.role.ui.UserRestrictionAwarePreferenceMixin;
 import com.android.settingslib.widget.SelectorWithWidgetPreference;
 
 /**
@@ -33,8 +34,8 @@ import com.android.settingslib.widget.SelectorWithWidgetPreference;
 public class HandheldRadioPreference extends SelectorWithWidgetPreference implements
         RoleApplicationPreference {
 
-    private final UserRestrictionAwarePreferenceMixin mUserRestrictionAwarePreferenceMixin =
-            new UserRestrictionAwarePreferenceMixin(this);
+    private final RestrictionAwarePreferenceMixin mRestrictionAwarePreferenceMixin =
+            new RestrictionAwarePreferenceMixin(this);
 
     public HandheldRadioPreference(@NonNull Context context,
             @Nullable AttributeSet attrs, int defStyle) {
@@ -55,16 +56,15 @@ public class HandheldRadioPreference extends SelectorWithWidgetPreference implem
     }
 
     @Override
-    public void setUserRestriction(
-            @Nullable String userRestriction) {
-        mUserRestrictionAwarePreferenceMixin.setUserRestriction(userRestriction);
+    public void setRestrictionIntent(@Nullable Intent restrictionIntent) {
+        mRestrictionAwarePreferenceMixin.setRestrictionIntent(restrictionIntent);
     }
 
     @Override
-    public void onBindViewHolder(PreferenceViewHolder holder) {
+    public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
 
-        mUserRestrictionAwarePreferenceMixin.onAfterBindViewHolder(holder);
+        mRestrictionAwarePreferenceMixin.onAfterBindViewHolder(holder);
     }
 
     @NonNull

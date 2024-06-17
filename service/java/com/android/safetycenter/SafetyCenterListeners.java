@@ -87,7 +87,7 @@ final class SafetyCenterListeners {
      */
     void deliverDataForUserProfileGroup(UserProfileGroup userProfileGroup) {
         ArrayMap<String, SafetyCenterData> safetyCenterDataCache = new ArrayMap<>();
-        int[] relevantUserIds = userProfileGroup.getProfileParentAndManagedRunningProfilesUserIds();
+        int[] relevantUserIds = userProfileGroup.getAllRunningProfilesUserIds();
         for (int i = 0; i < relevantUserIds.length; i++) {
             deliverUpdateForUser(
                     relevantUserIds[i],
@@ -105,7 +105,7 @@ final class SafetyCenterListeners {
     void deliverErrorForUserProfileGroup(
             UserProfileGroup userProfileGroup, SafetyCenterErrorDetails safetyCenterErrorDetails) {
         ArrayMap<String, SafetyCenterData> safetyCenterDataCache = new ArrayMap<>();
-        int[] relevantUserIds = userProfileGroup.getProfileParentAndManagedRunningProfilesUserIds();
+        int[] relevantUserIds = userProfileGroup.getAllRunningProfilesUserIds();
         for (int i = 0; i < relevantUserIds.length; i++) {
             deliverUpdateForUser(
                     relevantUserIds[i],

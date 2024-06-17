@@ -27,6 +27,7 @@ import com.android.permissioncontroller.Constants
 import com.android.permissioncontroller.permission.ui.handheld.ManageCustomPermissionsFragment
 import com.android.permissioncontroller.permission.ui.handheld.PermissionAppsFragment
 import com.android.permissioncontroller.permission.ui.model.ManageStandardPermissionsViewModel
+import com.android.permissioncontroller.permission.ui.wear.theme.WearPermissionTheme
 
 class WearManageStandardPermissionsFragment : Fragment() {
     override fun onCreateView(
@@ -63,12 +64,14 @@ class WearManageStandardPermissionsFragment : Fragment() {
 
         return ComposeView(activity).apply {
             setContent {
-                WearManageStandardPermissionScreen(
-                    viewModel,
-                    onPermGroupClick,
-                    onCustomPermGroupClick,
-                    onAutoRevokeClick
-                )
+                WearPermissionTheme {
+                    WearManageStandardPermissionScreen(
+                        viewModel,
+                        onPermGroupClick,
+                        onCustomPermGroupClick,
+                        onAutoRevokeClick
+                    )
+                }
             }
         }
     }

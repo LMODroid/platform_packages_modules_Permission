@@ -41,6 +41,7 @@ import com.android.safetycenter.SafetyCenterRefreshTracker;
 import com.android.safetycenter.SafetySourceIssueInfo;
 import com.android.safetycenter.SafetySourceKey;
 import com.android.safetycenter.UserProfileGroup;
+import com.android.safetycenter.UserProfileGroup.ProfileType;
 import com.android.safetycenter.internaldata.SafetyCenterIssueActionId;
 import com.android.safetycenter.internaldata.SafetyCenterIssueKey;
 import com.android.safetycenter.logging.SafetyCenterStatsdLogger;
@@ -567,7 +568,7 @@ public final class SafetyCenterDataManager {
      * Writes a SafetySourceStateCollected atom for the given source in response to a stats pull.
      */
     public void logSafetySourceStateCollectedAutomatic(
-            SafetySourceKey sourceKey, boolean isManagedProfile) {
-        mSafetySourceStateCollectedLogger.writeAutomaticAtom(sourceKey, isManagedProfile);
+            SafetySourceKey sourceKey, @ProfileType int profileType) {
+        mSafetySourceStateCollectedLogger.writeAutomaticAtom(sourceKey, profileType);
     }
 }

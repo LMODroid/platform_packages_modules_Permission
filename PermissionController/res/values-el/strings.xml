@@ -54,7 +54,7 @@
     <string name="grant_dialog_button_allow_foreground" msgid="501896824973636533">"Κατά τη χρήση της εφαρμογής"</string>
     <string name="grant_dialog_button_change_to_precise_location" msgid="3273115879467236033">"Αλλαγή σε ακριβή τοποθεσία"</string>
     <string name="grant_dialog_button_keey_approximate_location" msgid="438025182769080011">"Διατήρηση κατά προσέγγιση τοποθεσίας"</string>
-    <string name="grant_dialog_button_allow_one_time" msgid="2618088516449706391">"Μόνο αυτήν τη φορά"</string>
+    <string name="grant_dialog_button_allow_one_time" msgid="2618088516449706391">"Μόνο αυτή τη φορά"</string>
     <string name="grant_dialog_button_allow_background" msgid="8236044729434367833">"Να επιτρέπεται πάντα"</string>
     <string name="grant_dialog_button_allow_all_files" msgid="4955436994954829894">"Να επιτρέπεται η διαχείριση όλων των αρχείων"</string>
     <string name="grant_dialog_button_allow_media_only" msgid="4832877658422573832">"Να επιτρέπεται η πρόσβαση σε αρχεία μέσων"</string>
@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Όλες οι άδειες"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Άλλες δυνατότητες εφαρμογής"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Αίτημα άδειας"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Οι ενέργειες εγκατάστασης/απεγκατάστασης δεν υποστηρίζονται στο Wear."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Επιλέξτε σε τι θα έχει πρόσβαση η εφαρμογή &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"Η εφαρμογή &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ενημερώθηκε. Επιλέξτε σε τι θα έχει πρόσβαση αυτή η εφαρμογή."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Ακύρωση"</string>
@@ -204,9 +202,11 @@
     <string name="assistant_mic_label" msgid="1011432357152323896">"Εμφάνιση χρήσης μικροφώνου βοηθού"</string>
     <string name="unused_apps_category_title" msgid="2988455616845243901">"Ρυθμίσεις μη χρησιμοποιούμενων εφαρμογών"</string>
     <string name="auto_revoke_label" msgid="5068393642936571656">"Καταργήστε τις άδειες, εάν η εφαρμογή δεν χρησιμοποιείται."</string>
-    <string name="unused_apps_label" msgid="2595428768404901064">"Κατάργηση αδειών και απελευθέρωση χώρου"</string>
+    <string name="unused_apps_label" msgid="2595428768404901064">"Κατάργηση αδειών και αποδέσμευση χώρου"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Παύση δραστηριότητας αδρανούς εφαρμογής"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Διαχείρ. εφαρμ. αν δεν χρησιμοποιείται"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Κατάργηση αδειών, διαγραφή προσωρινών αρχείων και διακοπή ειδοποιήσεων"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Κατάργηση αδειών, διαγραφή προσωρινών αρχείων, διακοπή ειδοποιήσεων και αρχειοθέτηση της εφαρμογής"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Για την προστασία των δεδομένων σας, οι άδειες για αυτή την εφαρμογή θα καταργηθούν εάν η εφαρμογή δεν χρησιμοποιηθεί για μερικούς μήνες."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Για την προστασία των δεδομένων σας, εάν δεν έχει χρησιμοποιηθεί η εφαρμογή για μερικούς μήνες, οι παρακάτω άδειες θα καταργηθούν: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Για την προστασία των δεδομένων σας, έχουν καταργηθεί οι άδειες εφαρμογών που δεν έχετε χρησιμοποιήσει κατά τους τελευταίους μήνες."</string>
@@ -221,8 +221,8 @@
     <string name="auto_revoked_app_summary_two" msgid="1910545340763709389">"Καταργήθηκαν οι άδειες <xliff:g id="PERMISSION_NAME_0">%1$s</xliff:g> και <xliff:g id="PERMISSION_NAME_1">%2$s</xliff:g>"</string>
     <string name="auto_revoked_app_summary_many" msgid="5930976230827378798">"Καταργήθηκε η άδεια <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> και <xliff:g id="NUMBER">%2$s</xliff:g> ακόμη άδειες"</string>
     <string name="unused_apps_page_title" msgid="6986983535677572559">"Εφαρμογές που δεν χρησιμοποιούνται"</string>
-    <string name="unused_apps_page_summary" msgid="1867593913217272155">"Εάν μια εφαρμογή δεν χρησιμοποιηθεί για λίγους μήνες:\n\n• Οι άδειες καταργούνται για την προστασία των δεδομένων σας\n• Οι ειδοποιήσεις διακόπτονται για την εξοικονόμηση μπαταρίας\n• Τα προσωρινά αρχεία καταργούνται για την απελευθέρωση χώρου\n\nΓια να επιτρέψετε ξανά τις άδειες και τις ειδοποιήσεις, ανοίξτε την εφαρμογή."</string>
-    <string name="unused_apps_page_tv_summary" msgid="2624911608663778308">"Εάν μια εφαρμογή δεν χρησιμοποιηθεί για έναν μήνα:\n\n• Οι άδειες καταργούνται για την προστασία των δεδομένων σας\n• Τα προσωρινά αρχεία καταργούνται για την απελευθέρωση χώρου\n\nΓια να επιτρέψετε ξανά τις άδειες, ανοίξτε την εφαρμογή."</string>
+    <string name="unused_apps_page_summary" msgid="1867593913217272155">"Εάν μια εφαρμογή δεν χρησιμοποιηθεί για λίγους μήνες:\n\n• Οι άδειες καταργούνται για την προστασία των δεδομένων σας\n• Οι ειδοποιήσεις διακόπτονται για την εξοικονόμηση μπαταρίας\n• Τα προσωρινά αρχεία καταργούνται για την αποδέσμευση χώρου\n\nΓια να επιτρέψετε ξανά τις άδειες και τις ειδοποιήσεις, ανοίξτε την εφαρμογή."</string>
+    <string name="unused_apps_page_tv_summary" msgid="2624911608663778308">"Εάν μια εφαρμογή δεν χρησιμοποιηθεί για έναν μήνα:\n\n• Οι άδειες καταργούνται για την προστασία των δεδομένων σας\n• Τα προσωρινά αρχεία καταργούνται για την αποδέσμευση χώρου\n\nΓια να επιτρέψετε ξανά τις άδειες, ανοίξτε την εφαρμογή."</string>
     <string name="last_opened_category_title" msgid="8796557894614236128">"{count,plural, =1{Τελευταίο άνοιγμα πάνω από # μήνα πριν}other{Τελευταίο άνοιγμα πάνω από # μήνες πριν}}"</string>
     <string name="last_opened_summary" msgid="5248984030024968808">"Τελευταίο άνοιγμα εφαρμογής <xliff:g id="DATE">%s</xliff:g>"</string>
     <string name="last_opened_summary_short" msgid="1646067226191176825">"Τελευταίο άνοιγμα <xliff:g id="DATE">%s</xliff:g>"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Εφαρμογή σημειώσεων"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Εφαρμογές που σας επιτρέπουν να κρατάτε σημειώσεις στη συσκευή σας"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"σημειώσεις"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Προεπιλ. εφαρμογή πορτοφολιού"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Εφαρμογή πορτοφολιού"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Οι εφαρμογές πορτοφολιού μπορούν να αποθηκεύσουν πιστωτικές κάρτες και κάρτες επιβράβευσης αφοσιωμένων πελατών, κλειδιά αυτοκινήτου και άλλα στοιχεία για να σας βοηθήσουν με διάφορες μορφές συναλλαγών."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Ορισμός της εφαρμογής <xliff:g id="APP_NAME">%1$s</xliff:g> ως προεπιλεγμένης εφαρμογής πορτοφολιού;"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Δεν απαιτούνται άδειες"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Τρέχουσα προεπιλογή"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Να μην ερωτηθώ ξανά"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Προεπιλογή"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Ενημερώσεις κοινοποίησης δεδομένων"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Ορισμένες εφαρμογές άλλαξαν τον τρόπο με τον οποίο ενδέχεται να κοινοποιούν τα δεδομένα τοποθεσίας σας"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Ρυθμίσεις"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Πρόσβαση στις <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Πρόσβαση χθες, στις <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Πρόσβαση στις <xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Ο κωδικός πρόσβασης μίας χρήσης είναι 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Περιορισμένη ρύθμιση"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Για την ασφάλειά σας, αυτή η ρύθμιση δεν είναι διαθέσιμη αυτή τη στιγμή."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Η χρήση της άδειας <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> απορρίφθηκε"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Αυτή η εφαρμογή έχει ζητήσει την άδεια <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>, η οποία είναι περιορισμένη ρύθμιση επειδή μπορεί να θέσει σε κίνδυνο την ασφάλεια και το απόρρητό σας. Ο περιορισμός αυτής της άδειας μπορεί να εμποδίσει τη λειτουργία αυτής της εφαρμογής."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Μάθετε περισσότερα"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Το κατάλαβα"</string>
 </resources>

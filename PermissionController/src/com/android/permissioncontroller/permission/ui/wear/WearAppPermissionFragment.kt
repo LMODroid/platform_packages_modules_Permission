@@ -56,6 +56,7 @@ import com.android.permissioncontroller.permission.ui.v33.AdvancedConfirmDialogA
 import com.android.permissioncontroller.permission.ui.wear.model.AppPermissionConfirmDialogViewModel
 import com.android.permissioncontroller.permission.ui.wear.model.AppPermissionConfirmDialogViewModelFactory
 import com.android.permissioncontroller.permission.ui.wear.model.ConfirmDialogArgs
+import com.android.permissioncontroller.permission.ui.wear.theme.WearPermissionTheme
 import com.android.permissioncontroller.permission.utils.KotlinUtils.getPermGroupLabel
 import com.android.settingslib.RestrictedLockUtils
 
@@ -150,6 +151,7 @@ class WearAppPermissionFragment : Fragment(), ConfirmDialogShowingFragment {
             ViewModelProvider(this, AppPermissionConfirmDialogViewModelFactory())
                 .get(AppPermissionConfirmDialogViewModel::class.java)
 
+        @Suppress("ktlint:standard:max-line-length")
         val onLocationSwitchChanged: (Boolean) -> Unit = { checked ->
             run {
                 val changeRequest =
@@ -233,18 +235,20 @@ class WearAppPermissionFragment : Fragment(), ConfirmDialogShowingFragment {
 
         return ComposeView(activity).apply {
             setContent {
-                WearAppPermissionScreen(
-                    permGroupLabel,
-                    viewModel,
-                    confirmDialogViewModel,
-                    onLocationSwitchChanged,
-                    onGrantedStateChanged,
-                    onFooterClicked,
-                    onConfirmDialogOkButtonClick,
-                    onConfirmDialogCancelButtonClick,
-                    onAdvancedConfirmDialogOkButtonClick,
-                    onAdvancedConfirmDialogCancelButtonClick
-                )
+                WearPermissionTheme {
+                    WearAppPermissionScreen(
+                        permGroupLabel,
+                        viewModel,
+                        confirmDialogViewModel,
+                        onLocationSwitchChanged,
+                        onGrantedStateChanged,
+                        onFooterClicked,
+                        onConfirmDialogOkButtonClick,
+                        onConfirmDialogCancelButtonClick,
+                        onAdvancedConfirmDialogOkButtonClick,
+                        onAdvancedConfirmDialogCancelButtonClick
+                    )
+                }
             }
         }
     }

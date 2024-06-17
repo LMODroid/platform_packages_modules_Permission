@@ -66,6 +66,8 @@
     <uses-permission android:name="android.permission.START_TASKS_FROM_RECENTS" />
     <uses-permission android:name="android.permission.READ_APP_SPECIFIC_LOCALES" />
     <uses-permission android:name="android.permission.GET_APP_METADATA" />
+    <uses-permission android:name="android.permission.NFC_PREFERRED_PAYMENT_INFO" />
+    <uses-permission android:name="android.permission.MANAGE_ENHANCED_CONFIRMATION_STATES" />
 
     <application android:name="com.android.permissioncontroller.PermissionControllerApplication"
             android:label="@string/app_name"
@@ -281,6 +283,19 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.android.permissioncontroller.ecm.EnhancedConfirmationDialog"
+            android:theme="@style/GrantPermissions.FilterTouches"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:permission="android.permission.MANAGE_ENHANCED_CONFIRMATION_STATES"
+            android:enabled="@bool/is_at_least_v">
+            <intent-filter android:priority="1">
+                <action android:name="android.app.ecm.action.SHOW_ECM_RESTRICTED_SETTING_DIALOG" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <activity android:name="com.android.permissioncontroller.permission.ui.v34.PermissionRationaleActivity"
                   android:configChanges="keyboardHidden|screenSize"
                   android:windowSoftInputMode="stateAlwaysHidden|adjustNothing"
@@ -472,6 +487,18 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.android.permissioncontroller.role.ui.ChangeDefaultCardEmulationActivity"
+            android:enabled="@bool/is_at_least_v"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:exported="true"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter android:priority="1001">
+                <action android:name="android.nfc.cardemulation.action.ACTION_CHANGE_DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <provider android:name="com.android.permissioncontroller.permission.service.PermissionSearchIndexablesProvider"
             android:authorities="com.android.permissioncontroller"
             android:multiprocess="false"
@@ -593,6 +620,7 @@
             android:name="com.android.permissioncontroller.safetycenter.ui.SafetyCenterActivity"
             android:enabled="@bool/is_at_least_t"
             android:exported="true"
+            android:enableOnBackInvokedCallback="true"
             android:theme="@style/Theme.SafetyCenter">
             <intent-filter android:priority="1">
                 <action android:name="android.intent.action.SAFETY_CENTER"/>

@@ -21,7 +21,8 @@ import android.content.ContentValues;
 import android.platform.test.annotations.AppModeFull;
 import android.provider.ContactsContract;
 import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+
+import androidx.test.filters.SmallTest;
 
 /**
  * Verify that deprecated contacts permissions are not enforced.

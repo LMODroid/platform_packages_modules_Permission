@@ -14,6 +14,7 @@ package android.app.role {
     field public static final String ROLE_HOME = "android.app.role.HOME";
     field public static final String ROLE_NOTES = "android.app.role.NOTES";
     field public static final String ROLE_SMS = "android.app.role.SMS";
+    field @FlaggedApi("android.permission.flags.wallet_role_enabled") public static final String ROLE_WALLET = "android.app.role.WALLET";
   }
 
 }

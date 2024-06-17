@@ -35,6 +35,7 @@ import com.android.permissioncontroller.PermissionControllerStatsLog.RECENT_PERM
 import com.android.permissioncontroller.PermissionControllerStatsLog.RECENT_PERMISSION_DECISIONS_INTERACTED__ACTION__VIEW_ALL_CLICKED
 import com.android.permissioncontroller.R
 import com.android.permissioncontroller.auto.AutoSettingsFrameFragment
+import com.android.permissioncontroller.auto.DrivingDecisionReminderService
 import com.android.permissioncontroller.permission.data.v33.PermissionDecision
 import com.android.permissioncontroller.permission.ui.ManagePermissionsActivity
 import com.android.permissioncontroller.permission.ui.model.v33.ReviewPermissionDecisionsViewModel
@@ -98,6 +99,7 @@ class AutoReviewPermissionDecisionsFragment : AutoSettingsFrameFragment() {
             requireArguments().containsKey(EXTRA_SOURCE) &&
                 (requireArguments().getString(EXTRA_SOURCE) == EXTRA_SOURCE_NOTIFICATION)
         ) {
+            DrivingDecisionReminderService.cancelNotification(requireActivity())
             logDecisionReminderNotificationClicked()
         }
         val factory =

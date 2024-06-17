@@ -25,7 +25,9 @@ import android.os.UserHandle;
 import android.os.UserManager;
 
 import com.android.internal.util.Preconditions;
+import com.android.modules.utils.build.SdkLevel;
 import com.android.permission.compat.UserHandleCompat;
+import com.android.permission.flags.Flags;
 
 import java.util.List;
 
@@ -89,6 +91,39 @@ public final class UserUtils {
         } finally {
             Binder.restoreCallingIdentity(identity);
         }
+    }
+
+    /**
+     * Returns whether the given {@code userId} is a private profile. Note that private profiles are
+     * allowed from Android V+ only, so this method will return false on Sdk levels below that.
+     */
+    public static boolean isPrivateProfile(@UserIdInt int userId, @NonNull Context context) {
+        if (!isPrivateProfileSupported()) {
+            return false;
+        }
+        // It's needed to clear the calling identity because we are going to query the UserManager
+        // for isPrivateProfile() and Context for createContextAsUser, which requires one of the
+        // following permissions:
+        // MANAGE_USERS, QUERY_USERS, or INTERACT_ACROSS_USERS.
+        final long identity = Binder.clearCallingIdentity();
+        try {
+            Context userContext = context
+                    .createContextAsUser(UserHandle.of(userId), /* flags= */ 0);
+            UserManager userManager = userContext.getSystemService(UserManager.class);
+            return userManager != null && userManager.isPrivateProfile();
+        } finally {
+            Binder.restoreCallingIdentity(identity);
+        }
+    }
+
+
+    /**
+     * Returns whether private profile's allowed to exist.  This can be true iff the SdkLevel is at
+     * least V AND the permission module's private profile feature flag is enabled.
+     */
+    public static boolean isPrivateProfileSupported() {
+        //TODO(b/286539356) add the os feature flag protection when available.
+        return SdkLevel.isAtLeastV() && Flags.privateProfileSupported();
     }
 
     /**

@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Az összes engedély"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Egyéb alkalmazáslehetőségek"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Engedélykérés"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"A Wear nem támogatja a telepítés/eltávolítás műveletet."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Válassza ki, hogy a(z) &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; mihez férjen hozzá"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"A(z) &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; frissítése megtörtént. Válassza ki, hogy mihez férjen hozzá ez az alkalmazás."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Mégse"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Engedélyek eltávolítása, ha nem használja az alkalmazást"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Engedélytörlés és tárhely-felszabadítás"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"App szüneteltetése, ha nem használja"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Nem használt alkalmazás kezelése"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Engedélyek eltávolítása, ideiglenes fájlok törlése és értesítések leállítása"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Engedélyek eltávolítása, ideiglenes fájlok törlése, értesítések leállítása és az alkalmazás archiválása"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Az adatok védelme érdekében az ennek az alkalmazásnak adott engedélyek visszavonásra kerülnek, ha néhány hónapon át nem használja az alkalmazást."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Ha néhány hónapon át nem használja az alkalmazást, az adatok védelme érdekében a rendszer visszavonja a következő engedélyeket: <xliff:g id="PERMS">%1$s</xliff:g>."</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Az adatok védelme érdekében a rendszer eltávolította a néhány hónapja nem használt alkalmazások engedélyeit."</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Jegyzetkészítő alkalmazás"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Alkalmazások, amelyek lehetővé teszik, hogy jegyzeteket készítsen az eszközén."</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"jegyzetek"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Alapértelmezett Wallet-app"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Wallet-app"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"A Wallet-alkalmazások tárolhatják a hitel- és hűségkártyákat, az autókulcsokat és egyebeket a tranzakciók különböző formáinak támogatása érdekében."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"<xliff:g id="APP_NAME">%1$s</xliff:g> beállítása alapértelmezett Wallet-appként?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Nincs szükség engedélyre"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Aktuális alapérték"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Ne jelenjen meg többé"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Alapértelmezett"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Adatmegosztási frissítések"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Egyes alkalmazások módosították, hogy miként oszthatják meg az Ön helyadatait"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Beállítások"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Hozzáférés: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Hozzáférés: tegnap, <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Hozzáférés: <xliff:g id="TIME_DATE_0">%1$s</xliff:g>, <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Az Ön egyszer használatos jelszava: 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Korlátozott beállítás"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Biztonsága érdekében ez a beállítás jelenleg nem használható."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"A(z) <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> használatának engedélyezése el lett utasítva"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Az alkalmazás engedélyt kért a(z) <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> használatára, ami egy korlátozott beállítás, mert veszélyezteti az Ön és adatainak biztonságát. Az engedély korlátozása meggátolhatja az alkalmazás működését."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"További információ"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Értem"</string>
 </resources>

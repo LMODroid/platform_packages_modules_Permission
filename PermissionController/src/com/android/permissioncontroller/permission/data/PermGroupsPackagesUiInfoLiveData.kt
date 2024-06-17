@@ -21,6 +21,7 @@ import android.app.role.RoleManager
 import android.os.Handler
 import android.os.Looper
 import android.os.UserHandle
+import android.os.UserManager
 import androidx.lifecycle.LiveData
 import com.android.permissioncontroller.PermissionControllerApplication
 import com.android.permissioncontroller.permission.model.livedatatypes.AppPermGroupUiInfo
@@ -62,6 +63,8 @@ class PermGroupsPackagesUiInfoLiveData(
     private val allPackageData = mutableMapOf<String, PermGroupPackagesUiInfo?>()
 
     private lateinit var groupNames: List<String>
+    private val userManager =
+        Utils.getSystemServiceSafe(app.applicationContext, UserManager::class.java)
 
     init {
         addSource(groupNamesLiveData) {
@@ -91,9 +94,19 @@ class PermGroupsPackagesUiInfoLiveData(
         var grantedSystem = 0
         var userInteractedSystem = 0
         var firstGrantedSystemPackageName: String? = null
+        val showInSettingsByUsers = HashMap<UserHandle, Boolean>()
 
         for ((packageUserPair, appPermGroup) in appPermGroups) {
             if (!appPermGroup.shouldShow) {
+                continue
+            }
+
+            if (!showInSettingsByUsers.containsKey(packageUserPair.second)) {
+                showInSettingsByUsers[packageUserPair.second] =
+                    Utils.shouldShowInSettings(packageUserPair.second, userManager)
+            }
+
+            if (showInSettingsByUsers[packageUserPair.second] == false) {
                 continue
             }
 

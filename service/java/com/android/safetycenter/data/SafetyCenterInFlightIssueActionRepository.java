@@ -28,8 +28,8 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.android.permission.util.UserUtils;
 import com.android.safetycenter.SafetySourceIssues;
+import com.android.safetycenter.UserProfileGroup;
 import com.android.safetycenter.internaldata.SafetyCenterIssueActionId;
 import com.android.safetycenter.internaldata.SafetyCenterIssueKey;
 import com.android.safetycenter.logging.SafetyCenterStatsdLogger;
@@ -87,7 +87,7 @@ final class SafetyCenterInFlightIssueActionRepository {
 
         SafetyCenterStatsdLogger.writeInlineActionSystemEvent(
                 issueKey.getSafetySourceId(),
-                UserUtils.isManagedProfile(issueKey.getUserId(), mContext),
+                UserProfileGroup.getProfileTypeOfUser(issueKey.getUserId(), mContext),
                 issueTypeId,
                 duration,
                 result);

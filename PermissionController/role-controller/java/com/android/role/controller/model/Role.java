@@ -17,9 +17,12 @@
 package com.android.role.controller.model;
 
 import android.app.ActivityManager;
+import android.app.admin.DevicePolicyManager;
+import android.app.ecm.EnhancedConfirmationManager;
 import android.app.role.RoleManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.SharedLibraryInfo;
@@ -27,6 +30,9 @@ import android.content.pm.Signature;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.UserHandle;
+import android.os.UserManager;
+import android.permission.flags.Flags;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.ArraySet;
@@ -128,6 +134,11 @@ public class Role {
     private final int mMinSdkVersion;
 
     /**
+     * Whether this role should only grant privileges when a role holder is actively added.
+     */
+    private final boolean mOnlyGrantWhenAdded;
+
+    /**
      * Whether this role should override user's choice about privileges when granting.
      */
     private final boolean mOverrideUserWhenGranting;
@@ -224,11 +235,11 @@ public class Role {
             @Nullable RoleBehavior behavior, @Nullable String defaultHoldersResourceName,
             @StringRes int descriptionResource, boolean exclusive, boolean fallBackToDefaultHolder,
             @StringRes int labelResource, int maxSdkVersion, int minSdkVersion,
-            boolean overrideUserWhenGranting, @StringRes int requestDescriptionResource,
-            @StringRes int requestTitleResource, boolean requestable,
-            @StringRes int searchKeywordsResource, @StringRes int shortLabelResource,
-            boolean showNone, boolean statik, boolean systemOnly, boolean visible,
-            @NonNull List<RequiredComponent> requiredComponents,
+            boolean onlyGrantWhenAdded, boolean overrideUserWhenGranting,
+            @StringRes int requestDescriptionResource, @StringRes int requestTitleResource,
+            boolean requestable, @StringRes int searchKeywordsResource,
+            @StringRes int shortLabelResource, boolean showNone, boolean statik, boolean systemOnly,
+            boolean visible, @NonNull List<RequiredComponent> requiredComponents,
             @NonNull List<Permission> permissions, @NonNull List<Permission> appOpPermissions,
             @NonNull List<AppOp> appOps, @NonNull List<PreferredActivity> preferredActivities,
             @Nullable String uiBehaviorName) {
@@ -242,6 +253,7 @@ public class Role {
         mLabelResource = labelResource;
         mMaxSdkVersion = maxSdkVersion;
         mMinSdkVersion = minSdkVersion;
+        mOnlyGrantWhenAdded = onlyGrantWhenAdded;
         mOverrideUserWhenGranting = overrideUserWhenGranting;
         mRequestDescriptionResource = requestDescriptionResource;
         mRequestTitleResource = requestTitleResource;
@@ -306,6 +318,13 @@ public class Role {
     @StringRes
     public int getShortLabelResource() {
         return mShortLabelResource;
+    }
+
+    /**
+     * @see #mOnlyGrantWhenAdded
+     */
+    public boolean shouldOnlyGrantWhenAdded() {
+        return mOnlyGrantWhenAdded;
     }
 
     /**
@@ -392,13 +411,10 @@ public class Role {
      * @return whether this role is available based on SDK version
      */
     boolean isAvailableBySdkVersion() {
-        // Workaround to match the value 35+ for V+ in roles.xml before SDK finalization.
-        if (mMinSdkVersion >= 35) {
-            return SdkLevel.isAtLeastV();
-        } else {
-            return Build.VERSION.SDK_INT >= mMinSdkVersion
-                    && Build.VERSION.SDK_INT <= mMaxSdkVersion;
-        }
+        return (Build.VERSION.SDK_INT >= mMinSdkVersion
+                // Workaround to match the value 35 for V in roles.xml before SDK finalization.
+                || (mMinSdkVersion == 35 && SdkLevel.isAtLeastV()))
+                && Build.VERSION.SDK_INT <= mMaxSdkVersion;
     }
 
     public boolean isStatic() {
@@ -416,10 +432,14 @@ public class Role {
     @NonNull
     public List<String> getDefaultHoldersAsUser(@NonNull UserHandle user,
             @NonNull Context context) {
-        if (mDefaultHoldersResourceName == null) {
-            if (mBehavior != null) {
-                return mBehavior.getDefaultHoldersAsUser(this, user, context);
+        if (mBehavior != null) {
+            List<String> defaultHolders = mBehavior.getDefaultHoldersAsUser(this, user, context);
+            if (defaultHolders != null) {
+                return defaultHolders;
             }
+        }
+
+        if (mDefaultHoldersResourceName == null) {
             return Collections.emptyList();
         }
 
@@ -781,11 +801,12 @@ public class Role {
     public void grantAsUser(@NonNull String packageName, boolean dontKillApp,
             boolean overrideUser, @NonNull UserHandle user, @NonNull Context context) {
         boolean permissionOrAppOpChanged = Permissions.grantAsUser(packageName,
-                Permissions.filterBySdkVersion(mPermissions),
+                Permissions.filterBySdkVersionAsUser(mPermissions, user, context),
                 SdkLevel.isAtLeastS() ? !mSystemOnly : true, overrideUser, true, false, false,
                 user, context);
 
-        List<String> appOpPermissionsToGrant = Permissions.filterBySdkVersion(mAppOpPermissions);
+        List<String> appOpPermissionsToGrant =
+                Permissions.filterBySdkVersionAsUser(mAppOpPermissions, user, context);
         int appOpPermissionsSize = appOpPermissionsToGrant.size();
         for (int i = 0; i < appOpPermissionsSize; i++) {
             String appOpPermission = appOpPermissionsToGrant.get(i);
@@ -831,24 +852,27 @@ public class Role {
         List<String> otherRoleNames = userRoleManager.getHeldRolesFromController(packageName);
         otherRoleNames.remove(mName);
 
-        List<String> permissionsToRevoke = Permissions.filterBySdkVersion(mPermissions);
+        List<String> permissionsToRevoke =
+                Permissions.filterBySdkVersionAsUser(mPermissions, user, context);
         ArrayMap<String, Role> roles = Roles.get(context);
         int otherRoleNamesSize = otherRoleNames.size();
         for (int i = 0; i < otherRoleNamesSize; i++) {
             String roleName = otherRoleNames.get(i);
             Role role = roles.get(roleName);
-            permissionsToRevoke.removeAll(Permissions.filterBySdkVersion(role.mPermissions));
+            permissionsToRevoke.removeAll(
+                    Permissions.filterBySdkVersionAsUser(role.mPermissions, user, context));
         }
 
         boolean permissionOrAppOpChanged = Permissions.revokeAsUser(packageName,
                 permissionsToRevoke, true, false, overrideSystemFixedPermissions, user, context);
 
-        List<String> appOpPermissionsToRevoke = Permissions.filterBySdkVersion(mAppOpPermissions);
+        List<String> appOpPermissionsToRevoke = Permissions.filterBySdkVersionAsUser(
+                mAppOpPermissions, user, context);
         for (int i = 0; i < otherRoleNamesSize; i++) {
             String roleName = otherRoleNames.get(i);
             Role role = roles.get(roleName);
             appOpPermissionsToRevoke.removeAll(
-                    Permissions.filterBySdkVersion(role.mAppOpPermissions));
+                    Permissions.filterBySdkVersionAsUser(role.mAppOpPermissions, user, context));
         }
         int appOpPermissionsSize = appOpPermissionsToRevoke.size();
         for (int i = 0; i < appOpPermissionsSize; i++) {
@@ -953,7 +977,7 @@ public class Role {
      * Check whether this role should be visible to user.
      *
      * @param user the user to check for
-     * @param context the `Context` to retrieve system services
+     * @param context the {@code Context} to retrieve system services
      *
      * @return whether this role should be visible to user
      */
@@ -983,6 +1007,76 @@ public class Role {
         return behavior.isApplicationVisibleAsUser(this, applicationInfo, user, context);
     }
 
+    /**
+     * Check whether this role is restricted and return the {@code Intent} for the restriction if it
+     * is.
+     * <p>
+     * If a role is restricted, it is implied that all applications are restricted for the role as
+     * well.
+     *
+     * @param user the user to check for
+     * @param context the {@code Context} to retrieve system services
+     *
+     * @return the {@code Intent} for the restriction if this role is restricted, or {@code null}
+     *         otherwise.
+     */
+    @Nullable
+    public Intent getRestrictionIntentAsUser(@NonNull UserHandle user, @NonNull Context context) {
+        if (SdkLevel.isAtLeastU() && mExclusive) {
+            UserManager userManager = context.getSystemService(UserManager.class);
+            if (userManager.hasUserRestrictionForUser(UserManager.DISALLOW_CONFIG_DEFAULT_APPS,
+                    user)) {
+                return new Intent(Settings.ACTION_SHOW_ADMIN_SUPPORT_DETAILS)
+                    .putExtra(DevicePolicyManager.EXTRA_RESTRICTION,
+                        UserManager.DISALLOW_CONFIG_DEFAULT_APPS);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Check whether an application is restricted for this role and return the {@code Intent} for
+     * the restriction if it is.
+     * <p>
+     * If a role is restricted, it is implied that all applications are restricted for the role as
+     * well.
+     *
+     * @param applicationInfo the {@link ApplicationInfo} for the application
+     * @param user the user to check for
+     * @param context the {@code Context} to retrieve system services
+     *
+     * @return the {@code Intent} for the restriction if the application is restricted for this
+     *         role, or {@code null} otherwise.
+     */
+    @Nullable
+    public Intent getApplicationRestrictionIntentAsUser(@NonNull ApplicationInfo applicationInfo,
+            @NonNull UserHandle user, @NonNull Context context) {
+        if (SdkLevel.isAtLeastV() && Flags.enhancedConfirmationModeApisEnabled()) {
+            Context userContext = UserUtils.getUserContext(context, user);
+            EnhancedConfirmationManager userEnhancedConfirmationManager =
+                    userContext.getSystemService(EnhancedConfirmationManager.class);
+            String packageName = applicationInfo.packageName;
+            boolean isRestricted;
+            try {
+                isRestricted = userEnhancedConfirmationManager.isRestricted(packageName, mName);
+            } catch (PackageManager.NameNotFoundException e) {
+                Log.w(LOG_TAG, "Cannot check enhanced confirmation restriction for package: "
+                        + packageName, e);
+                isRestricted = false;
+            }
+            if (isRestricted) {
+                try {
+                    return userEnhancedConfirmationManager.createRestrictedSettingDialogIntent(
+                            packageName, mName);
+                } catch (PackageManager.NameNotFoundException e) {
+                    Log.w(LOG_TAG, "Cannot create enhanced confirmation restriction intent for"
+                            + " package: " + packageName, e);
+                }
+            }
+        }
+        return getRestrictionIntentAsUser(user, context);
+    }
+
     @Override
     public String toString() {
         return "Role{"
@@ -996,6 +1090,7 @@ public class Role {
                 + ", mLabelResource=" + mLabelResource
                 + ", mMaxSdkVersion=" + mMaxSdkVersion
                 + ", mMinSdkVersion=" + mMinSdkVersion
+                + ", mOnlyGrantWhenAdded=" + mOnlyGrantWhenAdded
                 + ", mOverrideUserWhenGranting=" + mOverrideUserWhenGranting
                 + ", mRequestDescriptionResource=" + mRequestDescriptionResource
                 + ", mRequestTitleResource=" + mRequestTitleResource

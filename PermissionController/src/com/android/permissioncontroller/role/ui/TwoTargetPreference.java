@@ -41,6 +41,7 @@ public interface TwoTargetPreference {
     /**
      * Return this preference as {@link Preference}.
      */
+    @NonNull
     Preference asPreference();
 
     /**

@@ -17,16 +17,19 @@
 package com.android.permissioncontroller.role.ui.auto;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 
+import androidx.annotation.AttrRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StyleRes;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
+import com.android.permissioncontroller.role.ui.RestrictionAwarePreferenceMixin;
 import com.android.permissioncontroller.role.ui.RolePreference;
 import com.android.permissioncontroller.role.ui.TwoTargetPreference;
-import com.android.permissioncontroller.role.ui.UserRestrictionAwarePreferenceMixin;
 
 /**
  * Preference for use in auto lists. Extends {@link TwoTargetPreference} in order to make sure of
@@ -34,16 +37,16 @@ import com.android.permissioncontroller.role.ui.UserRestrictionAwarePreferenceMi
  */
 public class AutoRolePreference extends Preference implements RolePreference {
 
-    private UserRestrictionAwarePreferenceMixin mUserRestrictionAwarePreferenceMixin =
-            new UserRestrictionAwarePreferenceMixin(this);
+    private RestrictionAwarePreferenceMixin mRestrictionAwarePreferenceMixin =
+            new RestrictionAwarePreferenceMixin(this);
 
     public AutoRolePreference(@NonNull Context context,
-            @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+            @Nullable AttributeSet attrs, @AttrRes int defStyleAttr, @StyleRes int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     public AutoRolePreference(@NonNull Context context, @Nullable AttributeSet attrs,
-            int defStyleAttr) {
+            @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -56,21 +59,21 @@ public class AutoRolePreference extends Preference implements RolePreference {
     }
 
     @Override
-    public void setOnSecondTargetClickListener(@Nullable OnSecondTargetClickListener listener) {
+    public void setOnSecondTargetClickListener(@Nullable OnSecondTargetClickListener listener) {}
+
+    @Override
+    public void setRestrictionIntent(@Nullable Intent restrictionIntent) {
+        mRestrictionAwarePreferenceMixin.setRestrictionIntent(restrictionIntent);
     }
 
     @Override
-    public void setUserRestriction(@Nullable String userRestriction) {
-        mUserRestrictionAwarePreferenceMixin.setUserRestriction(userRestriction);
-    }
-
-    @Override
-    public void onBindViewHolder(PreferenceViewHolder holder) {
+    public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
 
-        mUserRestrictionAwarePreferenceMixin.onAfterBindViewHolder(holder);
+        mRestrictionAwarePreferenceMixin.onAfterBindViewHolder(holder);
     }
 
+    @NonNull
     @Override
     public AutoRolePreference asPreference() {
         return this;

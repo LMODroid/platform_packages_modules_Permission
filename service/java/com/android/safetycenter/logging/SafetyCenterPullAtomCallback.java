@@ -38,6 +38,7 @@ import com.android.safetycenter.SafetyCenterFlags;
 import com.android.safetycenter.SafetySourceKey;
 import com.android.safetycenter.SafetySources;
 import com.android.safetycenter.UserProfileGroup;
+import com.android.safetycenter.UserProfileGroup.ProfileType;
 import com.android.safetycenter.data.SafetyCenterDataManager;
 
 import java.util.List;
@@ -149,19 +150,19 @@ public final class SafetyCenterPullAtomCallback implements StatsPullAtomCallback
                     continue;
                 }
 
-                writeSafetySourceStateCollectedAtomLocked(
-                        loggableSource,
-                        userProfileGroup.getProfileParentUserId(),
-                        /* isUserManaged= */ false);
+                for (int profileTypeIdx = 0;
+                        profileTypeIdx < ProfileType.ALL_PROFILE_TYPES.length;
+                        ++profileTypeIdx) {
+                    @ProfileType int profileType = ProfileType.ALL_PROFILE_TYPES[profileTypeIdx];
+                    if (!SafetySources.supportsProfileType(loggableSource, profileType)) {
+                        continue;
+                    }
 
-                if (!SafetySources.supportsManagedProfiles(loggableSource)) {
-                    continue;
-                }
-
-                int[] managedIds = userProfileGroup.getManagedRunningProfilesUserIds();
-                for (int k = 0; k < managedIds.length; k++) {
-                    writeSafetySourceStateCollectedAtomLocked(
-                            loggableSource, managedIds[k], /* isUserManaged= */ true);
+                    int[] profileIds = userProfileGroup.getProfilesOfType(profileType);
+                    for (int profileIdx = 0; profileIdx < profileIds.length; profileIdx++) {
+                        writeSafetySourceStateCollectedAtomLocked(
+                                loggableSource, profileIds[profileIdx], profileType);
+                    }
                 }
             }
         }
@@ -169,8 +170,8 @@ public final class SafetyCenterPullAtomCallback implements StatsPullAtomCallback
 
     @GuardedBy("mApiLock")
     private void writeSafetySourceStateCollectedAtomLocked(
-            SafetySource safetySource, @UserIdInt int userId, boolean isUserManaged) {
+            SafetySource safetySource, @UserIdInt int userId, @ProfileType int profileType) {
         SafetySourceKey sourceKey = SafetySourceKey.of(safetySource.getId(), userId);
-        mDataManager.logSafetySourceStateCollectedAutomatic(sourceKey, isUserManaged);
+        mDataManager.logSafetySourceStateCollectedAutomatic(sourceKey, profileType);
     }
 }

@@ -23,6 +23,7 @@ import android.safetycenter.config.SafetySourcesGroup
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.android.modules.utils.build.SdkLevel
+import com.android.permission.flags.Flags
 import com.android.safetycenter.config.tests.R
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
@@ -77,6 +78,9 @@ class ParserConfigValidTest {
                                         addPackageCertificateHash("feed1")
                                         addPackageCertificateHash("feed2")
                                     }
+                                    if (SdkLevel.isAtLeastV() && Flags.privateProfileTitleApi()) {
+                                        setTitleForPrivateProfileResId(R.string.reference)
+                                    }
                                 }
                                 .build()
                         )
@@ -100,6 +104,9 @@ class ParserConfigValidTest {
                                         setDeduplicationGroup("group")
                                         addPackageCertificateHash("feed1")
                                         addPackageCertificateHash("feed2")
+                                    }
+                                    if (SdkLevel.isAtLeastV() && Flags.privateProfileTitleApi()) {
+                                        setTitleForPrivateProfileResId(R.string.reference)
                                     }
                                 }
                                 .build()
@@ -133,6 +140,11 @@ class ParserConfigValidTest {
                                 .setProfile(SafetySource.PROFILE_ALL)
                                 .setInitialDisplayState(SafetySource.INITIAL_DISPLAY_STATE_HIDDEN)
                                 .setSearchTermsResId(R.string.reference)
+                                .apply {
+                                    if (SdkLevel.isAtLeastV() && Flags.privateProfileTitleApi()) {
+                                        setTitleForPrivateProfileResId(R.string.reference)
+                                    }
+                                }
                                 .build()
                         )
                         .build()
@@ -159,6 +171,11 @@ class ParserConfigValidTest {
                                 .setIntentAction("intent")
                                 .setProfile(SafetySource.PROFILE_ALL)
                                 .setSearchTermsResId(R.string.reference)
+                                .apply {
+                                    if (SdkLevel.isAtLeastV() && Flags.privateProfileTitleApi()) {
+                                        setTitleForPrivateProfileResId(R.string.reference)
+                                    }
+                                }
                                 .build()
                         )
                         .build()

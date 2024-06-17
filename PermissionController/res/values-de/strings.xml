@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Alle Berechtigungen"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Andere App-Funktionen"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Berechtigungsanfrage"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Installations-/Deinstallationsaktion auf Android Wear nicht unterstützt."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Worauf darf die App &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; zugreifen?"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"Die App &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; wurde aktualisiert. Worauf darf diese App zugreifen?"</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Abbrechen"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Berechtigungen entfernen, wenn die App nicht verwendet wird"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Berechtigungen löschen und Speicherplatz freigeben"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"App-Aktivität bei Nichtnutzung stoppen"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"App-Verhalten bei Nichtnutzung verwalten"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Berechtigungen entfernen, temporäre Dateien löschen und Benachrichtigungen stoppen"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Berechtigungen entfernen, temporäre Dateien löschen, Benachrichtigungen stoppen und die App archivieren"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Zum Schutz deiner Daten werden dieser App die Berechtigungen entzogen, wenn du sie einige Monate nicht verwendest."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Zum Schutz deiner Daten werden dieser App die folgenden Berechtigungen entzogen, wenn du sie einige Monate nicht verwendest: <xliff:g id="PERMS">%1$s</xliff:g>."</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Zum Schutz deiner Daten wurden Apps, die du einige Monate nicht verwendet hast, Berechtigungen entzogen."</string>
@@ -351,7 +351,7 @@
     <string name="accessibility_service_dialog_bottom_text_multiple" msgid="7009848932395519852">"Diese Apps können deinen Bildschirm, deine Aktionen und deine Eingaben sehen, Aktionen ausführen und den Bildschirm steuern."</string>
     <string name="role_assistant_label" msgid="4727586018198208128">"Standard-App digit. Assistent"</string>
     <string name="role_assistant_short_label" msgid="3369003713187703399">"App für digitalen Assistenten"</string>
-    <string name="role_assistant_description" msgid="6622458130459922952">"Assistent-Apps können dir bei bestimmten Dingen helfen. Dazu greifen sie auf die Informationen zu, die aktuell auf deinem Bildschirm angezeigt werden. Damit sie dir eine umfassende Hilfe sind, unterstützen einige Apps sowohl Launcher- als auch Spracheingabedienste."</string>
+    <string name="role_assistant_description" msgid="6622458130459922952">"Assistent-Apps können dir bei bestimmten Dingen helfen. Dazu greifen sie auf die Informationen zu, die aktuell auf deinem Bildschirm angezeigt werden. Einige Apps unterstützen sowohl Launcher- als auch Spracheingabedienste."</string>
     <string name="role_browser_label" msgid="2877796144554070207">"Standard-Browser-App"</string>
     <string name="role_browser_short_label" msgid="6745009127123292296">"Browser-App"</string>
     <string name="role_browser_description" msgid="3465253637499842671">"Apps, mit denen du auf das Internet zugreifen kannst und die die entsprechende Seite öffnen, wenn du auf einen Link tippst"</string>
@@ -365,7 +365,7 @@
     <string name="role_dialer_search_keywords" msgid="3324448983559188087">"telefon"</string>
     <string name="role_sms_label" msgid="8456999857547686640">"Standard-SMS-App"</string>
     <string name="role_sms_short_label" msgid="4371444488034692243">"SMS-App"</string>
-    <string name="role_sms_description" msgid="3424020199148153513">"Apps, mit denen du über deine Telefonnummer SMS, Fotos, Videos und mehr senden und empfangen kannst"</string>
+    <string name="role_sms_description" msgid="3424020199148153513">"Apps, mit denen du über deine Telefonnummer unter anderem SMS, Fotos oder Videos senden und empfangen kannst"</string>
     <string name="role_sms_request_title" msgid="7953552109601185602">"<xliff:g id="APP_NAME">%1$s</xliff:g>als Standard-SMS-App festlegen?"</string>
     <string name="role_sms_request_description" msgid="2691004766132144886">"Diese App erhält Zugriff auf Folgendes: Kamera, Kontakte, Mikrofon, Dateien und Medien, Telefon und SMS"</string>
     <string name="role_sms_search_keywords" msgid="8022048144395047352">"textnachricht, sms, sms schicken, sms senden, nachrichten, mms"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Notizen-App"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Apps zum Erstellen von Notizen auf deinem Gerät"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"Notizen"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Standard-Wallet-App"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Wallet-App"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"In Wallet-Apps kannst du deine Kredit- und Kundenkarten, Autoschlüssel und andere Dinge speichern, was dir bei verschiedenen Arten von Transaktionen hilft."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"<xliff:g id="APP_NAME">%1$s</xliff:g> als Standard-Wallet-App festlegen?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Keine Berechtigungen erforderlich"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Aktueller Standard"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Nicht mehr fragen"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Als Standard festlegen"</string>
@@ -461,7 +466,7 @@
     <string name="permgrouprequest_contacts" msgid="8391550064551053695">"„<xliff:g id="APP_NAME">%1$s</xliff:g>“ erlauben, auf deine Kontakte zuzugreifen?"</string>
     <string name="permgrouprequest_device_aware_contacts" msgid="2270563860206654757">"Darf &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; auf deinem &lt;b&gt;<xliff:g id="DEVICE">%2$s</xliff:g>&lt;/b&gt; auf die Kontakte zugreifen?"</string>
     <string name="permgrouprequest_location" msgid="6990232580121067883">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; erlauben, den Gerätestandort abzurufen?"</string>
-    <string name="permgrouprequest_device_aware_location" msgid="6641436550953715107">"Darf &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; auf deinem &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>s&lt;/b&gt; auf die Standortdaten zugreifen?"</string>
+    <string name="permgrouprequest_device_aware_location" msgid="6641436550953715107">"Darf &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; auf deinem &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>&lt;/b&gt; auf die Standortdaten zugreifen?"</string>
     <string name="permgrouprequestdetail_location" msgid="2635935335778429894">"Die App hat nur Zugriff auf den Gerätestandort, solange du sie verwendest"</string>
     <string name="permgroupbackgroundrequest_location" msgid="1085680897265734809">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; erlauben, den Gerätestandort abzurufen?"</string>
     <string name="permgroupbackgroundrequest_device_aware_location" msgid="7660465507029650527">"Darf &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; auf deinem &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>&lt;b&gt; auf die Standortdaten zugreifen?"</string>
@@ -609,7 +614,7 @@
     <string name="camera_toggle_title" msgid="1251201397431837666">"Kamerazugriff"</string>
     <string name="mic_toggle_title" msgid="2649991093496110162">"Mikrofonzugriff"</string>
     <string name="perm_toggle_description" msgid="7801326363741451379">"Für Apps und Dienste"</string>
-    <string name="mic_toggle_description" msgid="9163104307990677157">"Für Apps und Dienste. Wenn diese Einstellung deaktiviert ist, können Mikrofondaten dennoch freigegeben werden, wenn du den Notruf wählst."</string>
+    <string name="mic_toggle_description" msgid="9163104307990677157">"Für Apps und Dienste. Wenn du eine Notrufnummer wählst, können Mikrofondaten weitergegeben werden, auch wenn diese Berechtigung deaktiviert ist."</string>
     <string name="location_settings_subtitle" msgid="2328360561197430695">"Apps und Dienste sehen, die Zugriff auf diesen Standort haben"</string>
     <string name="show_clip_access_notification_title" msgid="5168467637351109096">"Zugriff auf Zwischenablage anzeigen"</string>
     <string name="show_clip_access_notification_summary" msgid="3532020182782112687">"Eine Meldung wird angezeigt, wenn Apps auf Text, Bilder oder andere Inhalte zugreifen, die du kopiert hast"</string>
@@ -625,7 +630,7 @@
     <string name="permission_rationale_data_sharing_varies_message" msgid="4224469559084489222">"Die Art der Datennutzung kann von der Version und Verwendung der App, von der Region und vom Alter des Nutzers abhängen. "<annotation id="link">"Weitere Informationen zur Datenweitergabe"</annotation></string>
     <string name="permission_rationale_data_sharing_varies_message_without_link" msgid="4912763761399025094">"Die Datenschutz- und Sicherheitspraktiken können je nach App-Version, Verwendung, Region und Alter des Nutzers variieren."</string>
     <string name="permission_rationale_location_settings_title" msgid="7204145004850190953">"Deine Standortdaten"</string>
-    <string name="permission_rationale_permission_settings_message" msgid="631286040979660267">"Du kannst den Zugriff dieser App in den "<annotation id="link">"Datenschutzeinstellungen"</annotation>" ändern"</string>
+    <string name="permission_rationale_permission_settings_message" msgid="631286040979660267">"Du kannst den Zugriff dieser App in den "<annotation id="link">"Daten­schutz­ein­stel­lun­gen"</annotation>" ändern"</string>
     <string name="permission_rationale_purpose_app_functionality" msgid="8397736681065841405">"Funktionen der App"</string>
     <string name="permission_rationale_purpose_analytics" msgid="2070800501189620712">"Analytics"</string>
     <string name="permission_rationale_purpose_developer_communications" msgid="6453047018892062374">"Mitteilungen des Entwicklers"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Änderungen bei der Datenweitergabepraxis"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Bei einigen Apps hat sich die Art der Weitergabe deiner Standortdaten geändert"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Einstellungen"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Zugriff: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Zugriff: gestern, <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Zugriff: <xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Dein Einmalpasswort lautet 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Eingeschränkte Einstellung"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Aus Sicherheitsgründen ist diese Einstellung derzeit nicht verfügbar."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Berechtigung zur Verwendung von „<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>“ verweigert"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Diese App hat die Berechtigung „<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>“ angefordert. Diese Berechtigung ist eine eingeschränkte Einstellung, weil sie deine Sicherheit und Privatsphäre gefährden kann. Die Einschränkung dieser Berechtigung kann dazu führen, dass die App nicht richtig funktioniert."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Weitere Informationen"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Ok"</string>
 </resources>

@@ -21,44 +21,21 @@ package {
 aconfig_declarations {
     name: "permissions-aconfig-flags",
     package: "com.android.permission.flags",
+    container: "com.android.permission",
     srcs: ["flags.aconfig"],
 }
 
 java_aconfig_library {
     name: "permissions-aconfig-flags-lib",
     aconfig_declarations: "permissions-aconfig-flags",
-    sdk_version: "system_current",
+    sdk_version: "module_current",
     min_sdk_version: "30",
     apex_available: [
         "com.android.permission",
         "test_com.android.permission",
     ],
     installable: false,
-    visibility: [
-        "//packages/modules/Permission:__subpackages__",
-    ],
-}
-
-java_library {
-    name: "permissions-flags-lib",
-    sdk_version: "system_current",
-    min_sdk_version: "30",
-    target_sdk_version: "34",
-    srcs: [
-        "java/**/*.java",
-    ],
-    static_libs: [
-        "permissions-aconfig-flags-lib",
-    ],
-    libs: [
-        "androidx.annotation_annotation",
-        "framework-annotations-lib",
-    ],
-    apex_available: [
-        "com.android.permission",
-        "test_com.android.permission",
-    ],
-    installable: false,
+    libs: ["framework-configinfrastructure"],
     visibility: [
         "//packages/modules/Permission:__subpackages__",
     ],

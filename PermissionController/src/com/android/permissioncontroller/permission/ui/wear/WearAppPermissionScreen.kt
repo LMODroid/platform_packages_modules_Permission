@@ -52,7 +52,7 @@ fun WearAppPermissionScreen(
     onAdvancedConfirmDialogOkButtonClick: (AdvancedConfirmDialogArgs) -> Unit,
     onAdvancedConfirmDialogCancelButtonClick: () -> Unit
 ) {
-    val buttonState = viewModel.buttonStateLiveData.observeAsState(emptyMap())
+    val buttonState = viewModel.buttonStateLiveData.observeAsState(null)
     val detailResIds = viewModel.detailResIdLiveData.observeAsState(null)
     val admin = viewModel.showAdminSupportLiveData.observeAsState(null)
     var isLoading by remember { mutableStateOf(true) }
@@ -84,7 +84,7 @@ fun WearAppPermissionScreen(
             onCancelButtonClick = onAdvancedConfirmDialogCancelButtonClick
         )
     }
-    if (isLoading && buttonState.value.isNotEmpty()) {
+    if (isLoading && !buttonState.value.isNullOrEmpty()) {
         isLoading = false
     }
 }
@@ -92,7 +92,7 @@ fun WearAppPermissionScreen(
 @Composable
 internal fun WearAppPermissionContent(
     title: String,
-    buttonState: Map<ButtonType, ButtonState>,
+    buttonState: Map<ButtonType, ButtonState>?,
     detailResIds: Pair<Int, Int?>?,
     admin: RestrictedLockUtils.EnforcedAdmin?,
     isLoading: Boolean,
@@ -101,7 +101,7 @@ internal fun WearAppPermissionContent(
     onFooterClicked: (RestrictedLockUtils.EnforcedAdmin) -> Unit
 ) {
     ScrollableScreen(title = title, isLoading = isLoading) {
-        buttonState[ButtonType.LOCATION_ACCURACY]?.let {
+        buttonState?.get(ButtonType.LOCATION_ACCURACY)?.let {
             if (it.isShown) {
                 item {
                     ToggleChip(
@@ -116,7 +116,7 @@ internal fun WearAppPermissionContent(
             }
         }
         for (buttonType in buttonTypeOrder) {
-            buttonState[buttonType]?.let {
+            buttonState?.get(buttonType)?.let {
                 if (it.isShown) {
                     item {
                         ToggleChip(

@@ -19,7 +19,8 @@ package android.permission.cts;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+
+import androidx.test.filters.SmallTest;
 
 import java.net.InetAddress;
 

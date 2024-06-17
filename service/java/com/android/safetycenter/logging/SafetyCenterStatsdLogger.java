@@ -25,6 +25,8 @@ import static com.android.permission.PermissionStatsLog.SAFETY_CENTER_INTERACTIO
 import static com.android.permission.PermissionStatsLog.SAFETY_CENTER_INTERACTION_REPORTED__NAVIGATION_SOURCE__SOURCE_UNKNOWN;
 import static com.android.permission.PermissionStatsLog.SAFETY_CENTER_INTERACTION_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_MANAGED;
 import static com.android.permission.PermissionStatsLog.SAFETY_CENTER_INTERACTION_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_PERSONAL;
+import static com.android.permission.PermissionStatsLog.SAFETY_CENTER_INTERACTION_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_PRIVATE;
+import static com.android.permission.PermissionStatsLog.SAFETY_CENTER_INTERACTION_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_UNKNOWN;
 import static com.android.permission.PermissionStatsLog.SAFETY_CENTER_INTERACTION_REPORTED__SENSOR__SENSOR_UNKNOWN;
 import static com.android.permission.PermissionStatsLog.SAFETY_CENTER_INTERACTION_REPORTED__SEVERITY_LEVEL__SAFETY_SEVERITY_CRITICAL_WARNING;
 import static com.android.permission.PermissionStatsLog.SAFETY_CENTER_INTERACTION_REPORTED__SEVERITY_LEVEL__SAFETY_SEVERITY_OK;
@@ -43,12 +45,15 @@ import static com.android.permission.PermissionStatsLog.SAFETY_CENTER_SYSTEM_EVE
 import static com.android.permission.PermissionStatsLog.SAFETY_CENTER_SYSTEM_EVENT_REPORTED__RESULT__TIMEOUT;
 import static com.android.permission.PermissionStatsLog.SAFETY_CENTER_SYSTEM_EVENT_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_MANAGED;
 import static com.android.permission.PermissionStatsLog.SAFETY_CENTER_SYSTEM_EVENT_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_PERSONAL;
+import static com.android.permission.PermissionStatsLog.SAFETY_CENTER_SYSTEM_EVENT_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_PRIVATE;
 import static com.android.permission.PermissionStatsLog.SAFETY_CENTER_SYSTEM_EVENT_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_UNKNOWN;
 import static com.android.permission.PermissionStatsLog.SAFETY_SOURCE_STATE_COLLECTED;
 import static com.android.permission.PermissionStatsLog.SAFETY_SOURCE_STATE_COLLECTED__COLLECTION_TYPE__AUTOMATIC;
 import static com.android.permission.PermissionStatsLog.SAFETY_SOURCE_STATE_COLLECTED__COLLECTION_TYPE__SOURCE_UPDATED;
 import static com.android.permission.PermissionStatsLog.SAFETY_SOURCE_STATE_COLLECTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_MANAGED;
 import static com.android.permission.PermissionStatsLog.SAFETY_SOURCE_STATE_COLLECTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_PERSONAL;
+import static com.android.permission.PermissionStatsLog.SAFETY_SOURCE_STATE_COLLECTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_PRIVATE;
+import static com.android.permission.PermissionStatsLog.SAFETY_SOURCE_STATE_COLLECTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_UNKNOWN;
 import static com.android.permission.PermissionStatsLog.SAFETY_SOURCE_STATE_COLLECTED__SEVERITY_LEVEL__SAFETY_SEVERITY_CRITICAL_WARNING;
 import static com.android.permission.PermissionStatsLog.SAFETY_SOURCE_STATE_COLLECTED__SEVERITY_LEVEL__SAFETY_SEVERITY_LEVEL_UNKNOWN;
 import static com.android.permission.PermissionStatsLog.SAFETY_SOURCE_STATE_COLLECTED__SEVERITY_LEVEL__SAFETY_SEVERITY_OK;
@@ -69,6 +74,9 @@ import static com.android.permission.PermissionStatsLog.SAFETY_STATE__OVERALL_SE
 import static com.android.permission.PermissionStatsLog.SAFETY_STATE__OVERALL_SEVERITY_LEVEL__SAFETY_SEVERITY_LEVEL_UNKNOWN;
 import static com.android.permission.PermissionStatsLog.SAFETY_STATE__OVERALL_SEVERITY_LEVEL__SAFETY_SEVERITY_OK;
 import static com.android.permission.PermissionStatsLog.SAFETY_STATE__OVERALL_SEVERITY_LEVEL__SAFETY_SEVERITY_RECOMMENDATION;
+import static com.android.safetycenter.UserProfileGroup.PROFILE_TYPE_MANAGED;
+import static com.android.safetycenter.UserProfileGroup.PROFILE_TYPE_PRIMARY;
+import static com.android.safetycenter.UserProfileGroup.PROFILE_TYPE_PRIVATE;
 
 import android.annotation.ElapsedRealtimeLong;
 import android.annotation.IntDef;
@@ -84,6 +92,7 @@ import androidx.annotation.Nullable;
 
 import com.android.permission.PermissionStatsLog;
 import com.android.safetycenter.SafetyCenterFlags;
+import com.android.safetycenter.UserProfileGroup.ProfileType;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -161,7 +170,7 @@ public final class SafetyCenterStatsdLogger {
     /** Writes a {@link PermissionStatsLog#SAFETY_SOURCE_STATE_COLLECTED} atom. */
     public static void writeSafetySourceStateCollected(
             String sourceId,
-            boolean isManagedProfile,
+            @ProfileType int profileType,
             @Nullable @SafetySourceData.SeverityLevel Integer sourceSeverityLevel,
             long openIssuesCount,
             long dismissedIssuesCount,
@@ -181,7 +190,7 @@ public final class SafetyCenterStatsdLogger {
         PermissionStatsLog.write(
                 SAFETY_SOURCE_STATE_COLLECTED,
                 idStringToLong(sourceId),
-                toSourceStateCollectedProfileType(isManagedProfile),
+                toSourceStateCollectedProfileType(profileType),
                 toSafetySourceStateCollectedSeverityLevel(sourceSeverityLevel),
                 openIssuesCount,
                 dismissedIssuesCount,
@@ -203,7 +212,7 @@ public final class SafetyCenterStatsdLogger {
     public static void writeSourceRefreshSystemEvent(
             @RefreshRequestType int refreshType,
             String sourceId,
-            boolean isManagedProfile,
+            @ProfileType int profileType,
             Duration duration,
             @SystemEventResult int result,
             long refreshReason,
@@ -215,7 +224,7 @@ public final class SafetyCenterStatsdLogger {
                 SAFETY_CENTER_SYSTEM_EVENT_REPORTED,
                 toSourceRefreshEventType(refreshType),
                 idStringToLong(sourceId),
-                toSystemEventProfileType(isManagedProfile),
+                toSystemEventProfileType(profileType),
                 UNSET_ISSUE_TYPE_ID,
                 duration.toMillis(),
                 result,
@@ -254,7 +263,7 @@ public final class SafetyCenterStatsdLogger {
      */
     public static void writeInlineActionSystemEvent(
             String sourceId,
-            boolean isManagedProfile,
+            @ProfileType int profileType,
             @Nullable String issueTypeId,
             Duration duration,
             @SystemEventResult int result) {
@@ -265,7 +274,7 @@ public final class SafetyCenterStatsdLogger {
                 SAFETY_CENTER_SYSTEM_EVENT_REPORTED,
                 SAFETY_CENTER_SYSTEM_EVENT_REPORTED__EVENT_TYPE__INLINE_ACTION,
                 idStringToLong(sourceId),
-                toSystemEventProfileType(isManagedProfile),
+                toSystemEventProfileType(profileType),
                 issueTypeId == null ? UNSET_ISSUE_TYPE_ID : idStringToLong(issueTypeId),
                 duration.toMillis(),
                 result,
@@ -279,13 +288,13 @@ public final class SafetyCenterStatsdLogger {
      */
     public static void writeNotificationPostedEvent(
             String sourceId,
-            boolean isManagedProfile,
+            @ProfileType int profileType,
             String issueTypeId,
             @SafetySourceData.SeverityLevel int sourceSeverityLevel) {
         writeNotificationInteractionReportedEvent(
                 SAFETY_CENTER_INTERACTION_REPORTED__ACTION__NOTIFICATION_POSTED,
                 sourceId,
-                isManagedProfile,
+                profileType,
                 issueTypeId,
                 sourceSeverityLevel);
     }
@@ -296,13 +305,13 @@ public final class SafetyCenterStatsdLogger {
      */
     public static void writeNotificationDismissedEvent(
             String sourceId,
-            boolean isManagedProfile,
+            @ProfileType int profileType,
             String issueTypeId,
             @SafetySourceData.SeverityLevel int sourceSeverityLevel) {
         writeNotificationInteractionReportedEvent(
                 SAFETY_CENTER_INTERACTION_REPORTED__ACTION__NOTIFICATION_DISMISSED,
                 sourceId,
-                isManagedProfile,
+                profileType,
                 issueTypeId,
                 sourceSeverityLevel);
     }
@@ -313,7 +322,7 @@ public final class SafetyCenterStatsdLogger {
      */
     public static void writeNotificationActionClickedEvent(
             String sourceId,
-            boolean isManagedProfile,
+            @ProfileType int profileType,
             String issueTypeId,
             @SafetySourceData.SeverityLevel int sourceSeverityLevel,
             boolean isPrimaryAction) {
@@ -322,13 +331,13 @@ public final class SafetyCenterStatsdLogger {
                         ? SAFETY_CENTER_INTERACTION_REPORTED__ACTION__ISSUE_PRIMARY_ACTION_CLICKED
                         : SAFETY_CENTER_INTERACTION_REPORTED__ACTION__ISSUE_SECONDARY_ACTION_CLICKED;
         writeNotificationInteractionReportedEvent(
-                action, sourceId, isManagedProfile, issueTypeId, sourceSeverityLevel);
+                action, sourceId, profileType, issueTypeId, sourceSeverityLevel);
     }
 
     private static void writeNotificationInteractionReportedEvent(
             int interactionReportedAction,
             String sourceId,
-            boolean isManagedProfile,
+            @ProfileType int profileType,
             String issueTypeId,
             @SafetySourceData.SeverityLevel int sourceSeverityLevel) {
         if (!SafetyCenterFlags.getAllowStatsdLogging()) {
@@ -342,7 +351,7 @@ public final class SafetyCenterStatsdLogger {
                 SAFETY_CENTER_INTERACTION_REPORTED__NAVIGATION_SOURCE__SOURCE_UNKNOWN,
                 toInteractionReportedSeverityLevel(sourceSeverityLevel),
                 idStringToLong(sourceId),
-                toInteractionReportedProfileType(isManagedProfile),
+                toInteractionReportedProfileType(profileType),
                 idStringToLong(issueTypeId),
                 SAFETY_CENTER_INTERACTION_REPORTED__SENSOR__SENSOR_UNKNOWN,
                 UNSET_SOURCE_GROUP_ID,
@@ -382,22 +391,43 @@ public final class SafetyCenterStatsdLogger {
         return SAFETY_CENTER_SYSTEM_EVENT_REPORTED__EVENT_TYPE__EVENT_TYPE_UNKNOWN;
     }
 
-    private static int toSourceStateCollectedProfileType(boolean isManagedProfile) {
-        return isManagedProfile
-                ? SAFETY_SOURCE_STATE_COLLECTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_MANAGED
-                : SAFETY_SOURCE_STATE_COLLECTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_PERSONAL;
+    private static int toSourceStateCollectedProfileType(@ProfileType int profileType) {
+        switch (profileType) {
+            case PROFILE_TYPE_PRIMARY:
+                return SAFETY_SOURCE_STATE_COLLECTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_PERSONAL;
+            case PROFILE_TYPE_MANAGED:
+                return SAFETY_SOURCE_STATE_COLLECTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_MANAGED;
+            case PROFILE_TYPE_PRIVATE:
+                return SAFETY_SOURCE_STATE_COLLECTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_PRIVATE;
+        }
+        Log.w(TAG, "state collect arg requested for unknown profile type " + profileType);
+        return SAFETY_SOURCE_STATE_COLLECTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_UNKNOWN;
     }
 
-    private static int toSystemEventProfileType(boolean isManagedProfile) {
-        return isManagedProfile
-                ? SAFETY_CENTER_SYSTEM_EVENT_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_MANAGED
-                : SAFETY_CENTER_SYSTEM_EVENT_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_PERSONAL;
+    private static int toSystemEventProfileType(@ProfileType int profileType) {
+        switch (profileType) {
+            case PROFILE_TYPE_PRIMARY:
+                return SAFETY_CENTER_SYSTEM_EVENT_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_PERSONAL;
+            case PROFILE_TYPE_MANAGED:
+                return SAFETY_CENTER_SYSTEM_EVENT_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_MANAGED;
+            case PROFILE_TYPE_PRIVATE:
+                return SAFETY_CENTER_SYSTEM_EVENT_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_PRIVATE;
+        }
+        Log.w(TAG, "system event arg requested for unknown profile type " + profileType);
+        return SAFETY_CENTER_SYSTEM_EVENT_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_UNKNOWN;
     }
 
-    private static int toInteractionReportedProfileType(boolean isManagedProfile) {
-        return isManagedProfile
-                ? SAFETY_CENTER_INTERACTION_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_MANAGED
-                : SAFETY_CENTER_INTERACTION_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_PERSONAL;
+    private static int toInteractionReportedProfileType(@ProfileType int profileType) {
+        switch (profileType) {
+            case PROFILE_TYPE_PRIMARY:
+                return SAFETY_CENTER_INTERACTION_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_PERSONAL;
+            case PROFILE_TYPE_MANAGED:
+                return SAFETY_CENTER_INTERACTION_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_MANAGED;
+            case PROFILE_TYPE_PRIVATE:
+                return SAFETY_CENTER_INTERACTION_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_PRIVATE;
+        }
+        Log.w(TAG, "interaction enum requested for unknown profile type " + profileType);
+        return SAFETY_CENTER_INTERACTION_REPORTED__SAFETY_SOURCE_PROFILE_TYPE__PROFILE_TYPE_UNKNOWN;
     }
 
     /**

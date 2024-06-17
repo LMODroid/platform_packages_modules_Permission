@@ -16,16 +16,28 @@
 
 package com.android.permissioncontroller.permission.ui.wear.elements
 
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.gestures.animateScrollBy
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.rotary.onRotaryScrollEvent
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.wear.compose.foundation.lazy.ScalingLazyListState
 import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.Icon
@@ -33,6 +45,7 @@ import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.dialog.Alert
 import androidx.wear.compose.material.dialog.Dialog
+import kotlinx.coroutines.launch
 
 /**
  * This component is an alternative to [Alert], providing the following:
@@ -41,7 +54,7 @@ import androidx.wear.compose.material.dialog.Dialog
  * - wrapped in a [Dialog];
  */
 @Composable
-public fun AlertDialog(
+fun AlertDialog(
     message: String,
     iconRes: Int? = null,
     onCancelButtonClick: () -> Unit,
@@ -117,7 +130,19 @@ internal fun Alert(
     okButtonContentDescription: String,
     cancelButtonContentDescription: String
 ) {
+    val focusRequester = remember { FocusRequester() }
+    val coroutineScope = rememberCoroutineScope()
     Alert(
+        modifier =
+            Modifier.onRotaryScrollEvent {
+                    coroutineScope.launch {
+                        scrollState.scrollBy(it.verticalScrollPixels)
+                        scrollState.animateScrollBy(0f)
+                    }
+                    true
+                }
+                .focusRequester(focusRequester)
+                .focusable(),
         contentPadding = DefaultContentPadding(),
         scrollState = scrollState,
         title = { AlertTitleText(title) },
@@ -126,6 +151,17 @@ internal fun Alert(
         negativeButton = { NegativeButton(onCancelButtonClick, cancelButtonContentDescription) },
         positiveButton = { PositiveButton(onOKButtonClick, okButtonContentDescription) }
     )
+    RequestFocusOnResume(focusRequester = focusRequester)
+}
+
+@Composable
+private fun RequestFocusOnResume(focusRequester: FocusRequester) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(Unit) {
+        lifecycleOwner.repeatOnLifecycle(state = Lifecycle.State.RESUMED) {
+            focusRequester.requestFocus()
+        }
+    }
 }
 
 @Composable

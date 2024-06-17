@@ -49,6 +49,7 @@ import androidx.annotation.Nullable;
 
 import com.android.permission.util.PackageUtils;
 import com.android.safetycenter.SafetyCenterConfigReader.Broadcast;
+import com.android.safetycenter.UserProfileGroup.ProfileType;
 import com.android.safetycenter.data.SafetyCenterDataManager;
 
 import java.time.Duration;
@@ -334,37 +335,35 @@ final class SafetyCenterBroadcastDispatcher {
      * lists of source IDs.
      *
      * <p>The set of user IDs (keys) is the profile parent user ID of {@code userProfileGroup} plus
-     * the (possibly empty) set of running managed profile user IDs in that group.
-     *
+     * all the other types of running profiles:
+     * <ol>
+     *     <li>The (possibly empty) set of running managed profile user IDs in that group.
+     *     <li>The (possibly empty) set of running private profile user ID in that group.
+     * </ol>
      * <p>Every value present is a non-empty list, but the overall result may be empty.
      */
     private SparseArray<List<String>> getUserIdsToSourceIds(
             Broadcast broadcast,
             UserProfileGroup userProfileGroup,
             @RefreshReason int refreshReason) {
-        int[] managedProfileIds = userProfileGroup.getManagedRunningProfilesUserIds();
-        SparseArray<List<String>> result = new SparseArray<>(managedProfileIds.length + 1);
-        List<String> profileParentSources =
-                getSourceIdsForRefreshReason(
-                        refreshReason,
-                        broadcast.getSourceIdsForProfileParent(),
-                        broadcast.getSourceIdsForProfileParentOnPageOpen(),
-                        userProfileGroup.getProfileParentUserId());
+        SparseArray<List<String>> result =
+                new SparseArray<>(userProfileGroup.getNumRunningProfiles());
+        for (int profilTypeIdx = 0;
+                profilTypeIdx < ProfileType.ALL_PROFILE_TYPES.length;
+                ++profilTypeIdx) {
+            @ProfileType int profileType = ProfileType.ALL_PROFILE_TYPES[profilTypeIdx];
+            int[] runningProfiles = userProfileGroup.getRunningProfilesOfType(profileType);
+            for (int profileIdx = 0; profileIdx < runningProfiles.length; ++profileIdx) {
+                List<String> profileSources =
+                        getSourceIdsForRefreshReason(
+                                refreshReason,
+                                broadcast.getSourceIdsForProfileType(profileType),
+                                broadcast.getSourceIdsOnPageOpenForProfileType(profileType),
+                                runningProfiles[profileIdx]);
 
-        if (!profileParentSources.isEmpty()) {
-            result.put(userProfileGroup.getProfileParentUserId(), profileParentSources);
-        }
-
-        for (int i = 0; i < managedProfileIds.length; i++) {
-            List<String> managedProfileSources =
-                    getSourceIdsForRefreshReason(
-                            refreshReason,
-                            broadcast.getSourceIdsForManagedProfiles(),
-                            broadcast.getSourceIdsForManagedProfilesOnPageOpen(),
-                            managedProfileIds[i]);
-
-            if (!managedProfileSources.isEmpty()) {
-                result.put(managedProfileIds[i], managedProfileSources);
+                if (!profileSources.isEmpty()) {
+                    result.put(runningProfiles[profileIdx], profileSources);
+                }
             }
         }
 

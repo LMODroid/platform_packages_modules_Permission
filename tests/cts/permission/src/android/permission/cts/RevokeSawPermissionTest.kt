@@ -17,6 +17,7 @@
 package android.permission.cts
 
 import android.content.pm.PackageManager
+import android.platform.test.annotations.AppModeFull
 import android.platform.test.annotations.AsbSecurityTest
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.After
@@ -27,6 +28,7 @@ private val APP_PKG_NAME = "android.permission.cts.usesystemalertwindowpermissio
 private val APK_22 = "/data/local/tmp/cts-permission/" + "CtsAppThatRequestsSystemAlertWindow22.apk"
 private val APK_23 = "/data/local/tmp/cts-permission/" + "CtsAppThatRequestsSystemAlertWindow23.apk"
 
+@AppModeFull
 class RevokeSawPermissionTest {
 
     fun installApp(apk: String) {

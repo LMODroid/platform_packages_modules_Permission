@@ -24,14 +24,23 @@ import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
+/** toBooleanString() doesn't seem available on all Kotlin versions we need to support. */
+private fun String.toBooleanStrictInt(): Boolean =
+    when (this) {
+        "true" -> true
+        "false" -> false
+        else ->
+            throw IllegalArgumentException("The string doesn't represent a boolean value: $this")
+    }
+
 /** JUnit rule for host side tests that requires Safety Center to be supported and enabled. */
 class RequireSafetyCenterRule(private val hostTestClass: BaseHostJUnit4Test) : TestRule {
 
     private val safetyCenterSupported: Boolean by lazy {
-        shellCommandStdoutOrThrow("cmd safety_center supported").toBooleanStrict()
+        shellCommandStdoutOrThrow("cmd safety_center supported").toBooleanStrictInt()
     }
     private val safetyCenterEnabled: Boolean by lazy {
-        shellCommandStdoutOrThrow("cmd safety_center enabled").toBooleanStrict()
+        shellCommandStdoutOrThrow("cmd safety_center enabled").toBooleanStrictInt()
     }
 
     override fun apply(base: Statement, description: Description): Statement {

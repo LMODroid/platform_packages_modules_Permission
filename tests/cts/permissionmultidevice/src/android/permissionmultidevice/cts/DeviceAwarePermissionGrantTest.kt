@@ -19,14 +19,15 @@ package android.permissionmultidevice.cts
 import android.Manifest
 import android.app.ActivityOptions
 import android.app.Instrumentation
+import android.companion.virtual.VirtualDeviceManager
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.permission.flags.Flags
 import android.permissionmultidevice.cts.PackageManagementUtils.installPackage
 import android.permissionmultidevice.cts.PackageManagementUtils.uninstallPackage
-import android.permissionmultidevice.cts.PermissionUtils.assertAppHasPermissionForDevice
 import android.permissionmultidevice.cts.PermissionUtils.getHostDeviceName
 import android.permissionmultidevice.cts.UiAutomatorUtils.click
 import android.permissionmultidevice.cts.UiAutomatorUtils.findTextForView
@@ -42,6 +43,7 @@ import com.android.compatibility.common.util.AdoptShellPermissionsRule
 import com.android.compatibility.common.util.SystemUtil
 import com.google.common.truth.Truth
 import org.junit.After
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -74,7 +76,10 @@ class DeviceAwarePermissionGrantTest {
         uninstallPackage(APP_PACKAGE_NAME, requireSuccess = false)
     }
 
-    @RequiresFlagsEnabled(Flags.FLAG_DEVICE_AWARE_PERMISSION_APIS_ENABLED)
+    @RequiresFlagsEnabled(
+        Flags.FLAG_DEVICE_AWARE_PERMISSION_APIS_ENABLED,
+        Flags.FLAG_DEVICE_AWARE_PERMISSIONS_ENABLED
+    )
     @Test
     fun onHostDevice_requestPermissionForHostDevice_shouldGrantPermission() {
         testGrantPermissionForDevice(
@@ -87,20 +92,26 @@ class DeviceAwarePermissionGrantTest {
         )
     }
 
-    @RequiresFlagsEnabled(Flags.FLAG_DEVICE_AWARE_PERMISSION_APIS_ENABLED)
+    @RequiresFlagsEnabled(
+        Flags.FLAG_DEVICE_AWARE_PERMISSION_APIS_ENABLED,
+        Flags.FLAG_DEVICE_AWARE_PERMISSIONS_ENABLED
+    )
     @Test
     fun onHostDevice_requestPermissionForRemoteDevice_shouldGrantPermission() {
         testGrantPermissionForDevice(
             Display.DEFAULT_DISPLAY,
             mFakeVirtualDeviceRule.virtualDevice.deviceId,
             true,
-            DEFAULT_REMOTE_DEVICE_NAME,
+            mFakeVirtualDeviceRule.deviceDisplayName,
             expectPermissionGrantedOnDefaultDevice = false,
             expectPermissionGrantedOnRemoteDevice = true
         )
     }
 
-    @RequiresFlagsEnabled(Flags.FLAG_DEVICE_AWARE_PERMISSION_APIS_ENABLED)
+    @RequiresFlagsEnabled(
+        Flags.FLAG_DEVICE_AWARE_PERMISSION_APIS_ENABLED,
+        Flags.FLAG_DEVICE_AWARE_PERMISSIONS_ENABLED
+    )
     @Test
     fun onRemoteDevice_requestPermissionForHostDevice_shouldGrantPermission() {
         testGrantPermissionForDevice(
@@ -113,14 +124,17 @@ class DeviceAwarePermissionGrantTest {
         )
     }
 
-    @RequiresFlagsEnabled(Flags.FLAG_DEVICE_AWARE_PERMISSION_APIS_ENABLED)
+    @RequiresFlagsEnabled(
+        Flags.FLAG_DEVICE_AWARE_PERMISSION_APIS_ENABLED,
+        Flags.FLAG_DEVICE_AWARE_PERMISSIONS_ENABLED
+    )
     @Test
     fun onRemoteDevice_requestPermissionForRemoteDevice_shouldGrantPermission() {
         testGrantPermissionForDevice(
             mFakeVirtualDeviceRule.virtualDisplayId,
             mFakeVirtualDeviceRule.virtualDevice.deviceId,
             true,
-            DEFAULT_REMOTE_DEVICE_NAME,
+            mFakeVirtualDeviceRule.deviceDisplayName,
             expectPermissionGrantedOnDefaultDevice = false,
             expectPermissionGrantedOnRemoteDevice = true
         )
@@ -134,18 +148,10 @@ class DeviceAwarePermissionGrantTest {
         expectPermissionGrantedOnDefaultDevice: Boolean,
         expectPermissionGrantedOnRemoteDevice: Boolean
     ) {
-        assertAppHasPermissionForDevice(
-            defaultDeviceContext,
-            APP_PACKAGE_NAME,
-            Manifest.permission.CAMERA,
-            DEVICE_ID_DEFAULT,
-            false
-        )
+        assertAppHasPermissionForDevice(defaultDeviceContext, DEVICE_ID_DEFAULT, false)
 
         assertAppHasPermissionForDevice(
             defaultDeviceContext,
-            APP_PACKAGE_NAME,
-            Manifest.permission.CAMERA,
             mFakeVirtualDeviceRule.virtualDevice.deviceId,
             false
         )
@@ -160,16 +166,12 @@ class DeviceAwarePermissionGrantTest {
 
         assertAppHasPermissionForDevice(
             defaultDeviceContext,
-            APP_PACKAGE_NAME,
-            Manifest.permission.CAMERA,
             DEVICE_ID_DEFAULT,
             expectPermissionGrantedOnDefaultDevice
         )
 
         assertAppHasPermissionForDevice(
             defaultDeviceContext,
-            APP_PACKAGE_NAME,
-            Manifest.permission.CAMERA,
             mFakeVirtualDeviceRule.virtualDevice.deviceId,
             expectPermissionGrantedOnRemoteDevice
         )
@@ -194,14 +196,32 @@ class DeviceAwarePermissionGrantTest {
         Truth.assertThat(text).contains(deviceName)
     }
 
+    private fun assertAppHasPermissionForDevice(
+        context: Context,
+        deviceId: Int,
+        expectPermissionGranted: Boolean
+    ) {
+        val checkPermissionResult =
+            context
+                .createDeviceContext(deviceId)
+                .packageManager
+                .checkPermission(Manifest.permission.CAMERA, APP_PACKAGE_NAME)
+
+        if (expectPermissionGranted) {
+            Assert.assertEquals(PackageManager.PERMISSION_GRANTED, checkPermissionResult)
+        } else {
+            Assert.assertEquals(PackageManager.PERMISSION_DENIED, checkPermissionResult)
+        }
+    }
+
     companion object {
         const val APK_DIRECTORY = "/data/local/tmp/cts-permissionmultidevice"
         const val APP_APK_PATH_STREAMING = "${APK_DIRECTORY}/CtsAccessRemoteDeviceCamera.apk"
         const val APP_PACKAGE_NAME = "android.permissionmultidevice.cts.accessremotedevicecamera"
         const val PERMISSION_MESSAGE_ID = "com.android.permissioncontroller:id/permission_message"
-        const val DEFAULT_REMOTE_DEVICE_NAME = "remote device"
         const val ALLOW_BUTTON =
             "com.android.permissioncontroller:id/permission_allow_foreground_only_button"
         const val DEVICE_ID_DEFAULT = 0
+        const val PERSISTENT_DEVICE_ID_DEFAULT = VirtualDeviceManager.PERSISTENT_DEVICE_ID_DEFAULT
     }
 }

@@ -142,25 +142,27 @@ class WearAppPermissionGroupsHelper(
     ): String {
         val grantSummary =
             getGrantSummary(category, groupUiInfo)?.let { context.getString(it) } ?: ""
-        if (!Flags.wearPrivacyDashboardEnabled()) {
-            return grantSummary
-        }
-        val accessSummary =
-            viewModel.getPreferenceSummary(groupUiInfo, context, lastAccessTime).let {
+        val summary = StringBuilder(grantSummary)
+        if (Flags.wearPrivacyDashboardEnabledReadOnly()) {
+            WearUtils.getPreferenceSummary(context, lastAccessTime).let {
                 if (it.isNotEmpty()) {
-                    System.lineSeparator() + it
-                } else {
-                    it
+                    summary.append(System.lineSeparator()).append(it)
                 }
             }
-        return grantSummary + accessSummary
+        }
+        return summary.toString()
     }
 
     private fun getGrantSummary(category: Category?, groupUiInfo: GroupUiInfo): Int? {
         val subtitle = groupUiInfo.subtitle
         if (category != null) {
             when (category) {
-                Category.ALLOWED -> return R.string.allowed_header
+                Category.ALLOWED ->
+                    return if (subtitle == PermSubtitle.BACKGROUND) {
+                        R.string.allowed_always_header
+                    } else {
+                        R.string.allowed_header
+                    }
                 Category.ASK -> return R.string.ask_header
                 Category.DENIED -> return R.string.denied_header
                 else -> {

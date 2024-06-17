@@ -423,7 +423,7 @@ public class PermissionControllerTest {
         }
 
         assertThat(permissionInfos).isNotEmpty();
-        assertThat(runtimePermissions.size()).isEqualTo(5);
+        assertThat(runtimePermissions.size()).isEqualTo(6);
         assertRuntimePermissionLabelsAreValid(runtimePermissions, permissionInfos, 4, APP2);
     }
 

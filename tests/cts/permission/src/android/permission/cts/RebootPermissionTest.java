@@ -18,7 +18,8 @@ package android.permission.cts;
 
 import android.content.Intent;
 import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+
+import androidx.test.filters.SmallTest;
 
 /**
  * Verify that rebooting requires Permission.

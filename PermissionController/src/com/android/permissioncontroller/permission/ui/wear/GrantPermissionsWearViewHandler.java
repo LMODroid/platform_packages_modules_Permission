@@ -168,7 +168,8 @@ public class GrantPermissionsWearViewHandler implements GrantPermissionsViewHand
     private void updateScreen() {
         mViewModel.getIconLiveData().setValue(
                 mGroupIcon == null ? null : mGroupIcon.loadDrawable(mActivity));
-        mViewModel.getGroupMessageLiveData().setValue(mGroupMessage.toString());
+        mViewModel.getGroupMessageLiveData().setValue(
+                mGroupMessage == null ? "" : mGroupMessage.toString());
         mViewModel.getDetailMessageLiveData().setValue(mDetailMessage);
         int numButtons = BUTTON_RES_ID_TO_NUM.size();
         List<Boolean> buttonVisibilityList = Arrays.asList(new Boolean[NEXT_BUTTON]);

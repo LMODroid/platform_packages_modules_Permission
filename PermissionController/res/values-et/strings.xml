@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Kõik load"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Rakenduse muud funktsioonid"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Loa taotlus"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Wear ei toeta installimist/desinstallimist."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Valige, millele lubate rakendusel &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; juurde pääseda"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"Rakendust &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; värskendati. Valige, millele lubate sellel rakendusel juurde pääseda."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Tühista"</string>
@@ -205,8 +203,10 @@
     <string name="unused_apps_category_title" msgid="2988455616845243901">"Kasutamata rakenduse seaded"</string>
     <string name="auto_revoke_label" msgid="5068393642936571656">"Eemalda load, kui rakendust ei kasutata"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Eemalda load ja vabasta ruumi"</string>
-    <string name="unused_apps_label_v2" msgid="7058776770056517980">"Tegevusetuna rakenduse tegevuste peatamine"</string>
+    <string name="unused_apps_label_v2" msgid="7058776770056517980">"Kasutamata rakenduse tegevuste peatamine"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Halda kasutamata rakendusi"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Eemaldatakse load, kustutatakse ajutised failid ja peatatakse märguanded"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Eemalda load, kustuta ajutised failid, peata märguanded ja arhiivi rakendus"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Teie andmete kaitsmiseks eemaldatakse selle rakenduse load, kui seda mõne kuu jooksul ei kasutata."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Teie andmete kaitsmiseks eemaldatakse selle rakenduse järgmised load, kui rakendust mõne kuu jooksul ei kasutata: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Teie andmete kaitsmiseks eemaldati load rakendustelt, mida te ei ole mõne kuu jooksul kasutanud."</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Märkmerakendus"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Rakendused, mis võimaldavad teie seadmes märkmeid teha"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"märkmed"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Vaikerahakotirakendus"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Rahakotirakendus"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Rahakotirakendused võivad salvestada teie krediit- ja kliendikaarte, autovõtmeid ning muid asju, et eri tehinguvormide puhul aidata."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Kas määrata <xliff:g id="APP_NAME">%1$s</xliff:g> vaikimisi teie rahakotirakenduseks?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Lube ei ole vaja"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Praegune vaikeseade"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Ära enam küsi"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Määra vaikeseadeks"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Andmete jagamise värskendused"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Mõni rakendus on muutnud teie asukohaandmete jagamise viisi"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Seaded"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Juurde pääsetud <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Juurde pääsetud eile <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Juurde pääsetud <xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Teie ühekordne parool on 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Piiratud seade"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Teie turvalisuse huvides pole see seade praegu saadaval."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Loa <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> kasutamise taotlus lükati tagasi"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"See rakendus taotles luba <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>, mis on piiratud seade, kuna see võib teie turvalisuse ja privaatsuse ohtu seada. Selle loa piirang võib takistada selle rakenduse töötamist."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Lisateave"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Selge"</string>
 </resources>

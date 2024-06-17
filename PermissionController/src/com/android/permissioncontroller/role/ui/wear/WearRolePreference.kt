@@ -16,10 +16,8 @@
 
 package com.android.permissioncontroller.role.ui.wear
 
-import android.app.admin.DevicePolicyManager
 import android.content.Context
 import android.content.Intent
-import android.provider.Settings
 import androidx.preference.Preference
 import com.android.permissioncontroller.role.ui.RolePreference
 import com.android.permissioncontroller.role.ui.TwoTargetPreference.OnSecondTargetClickListener
@@ -30,30 +28,20 @@ class WearRolePreference(
     context: Context,
     val label: String,
     val onDefaultClicked: () -> Unit = {},
-    private var restriction: String? = null
+    private var restrictionIntent: Intent? = null
 ) : TwoTargetPreference(context), RolePreference {
 
     override fun setOnSecondTargetClickListener(listener: OnSecondTargetClickListener?) {
         // no-op
     }
 
-    override fun setUserRestriction(userRestriction: String?) {
-        restriction = userRestriction
-        setEnabled(restriction == null)
+    override fun setRestrictionIntent(restrictionIntent: Intent?) {
+        this.restrictionIntent = restrictionIntent
+        setEnabled(restrictionIntent == null)
     }
 
-    override fun asPreference(): Preference {
-        return this
-    }
+    override fun asPreference(): Preference = this
 
     fun getOnClicked(): () -> Unit =
-        restriction?.let {
-            return {
-                context.startActivity(
-                    Intent(Settings.ACTION_SHOW_ADMIN_SUPPORT_DETAILS)
-                        .putExtra(DevicePolicyManager.EXTRA_RESTRICTION, restriction)
-                )
-            }
-        }
-            ?: onDefaultClicked
+        restrictionIntent?.let { { context.startActivity(it) } } ?: onDefaultClicked
 }

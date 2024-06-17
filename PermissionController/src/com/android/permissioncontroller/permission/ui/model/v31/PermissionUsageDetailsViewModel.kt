@@ -32,6 +32,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.os.UserHandle
+import android.os.UserManager
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
@@ -85,6 +86,8 @@ class PermissionUsageDetailsViewModel(
 
     private val roleManager =
         Utils.getSystemServiceSafe(application.applicationContext, RoleManager::class.java)
+    private val userManager =
+        Utils.getSystemServiceSafe(application.applicationContext, UserManager::class.java)
 
     /** Updates whether system app permissions usage should be displayed in the UI. */
     fun updateShowSystemAppsToggle(showSystem: Boolean) {
@@ -191,6 +194,7 @@ class PermissionUsageDetailsViewModel(
     ): List<AppPermissionAccessUiInfo> {
         return allLightHistoricalPackageOpsLiveData
             .getLightHistoricalPackageOps()
+            ?.filter { Utils.shouldShowInSettings(it.userHandle, userManager) }
             ?.flatMap { it.clusterAccesses(startTime, showSystem) }
             ?.sortedBy { -1 * it.discreteAccesses.first().accessTimeMs }
             ?.map { it.buildAppPermissionAccessUiInfo() }
@@ -488,7 +492,8 @@ class PermissionUsageDetailsViewModel(
             ?.let {
                 getPackageLabel(
                     it.proxy!!.packageName!!,
-                    UserHandle.getUserHandleForUid(it.proxy.uid))
+                    UserHandle.getUserHandleForUid(it.proxy.uid)
+                )
             }
 
     /** Returns the attribution label for the permission access, if any. */

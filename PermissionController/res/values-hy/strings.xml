@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Բոլոր թույլտվությունները"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Էլ ինչ կարող է անել հավելվածը"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Թույլտվության հարցում"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Տեղադրման/հեռացման գործողությունները Android Wear-ում չեն աջակցվում:"</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Ընտրեք՝ ինչ թույլտվություններ եք ուզում տրամադրել &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; հավելվածին"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; հավելվածը թարմացվել է: Ընտրեք՝ ինչ թույլտվություններ եք ուզում տրամադրել այդ հավելվածին:"</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Չեղարկել"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Հեռացնել թույլտվությունները, եթե հավելվածը չի օգտագործվում"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Հեռացնել թույլտվությունները և տարածք ազատել"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Դադարեցնել աշխատանքը ոչ ակտիվ վիճակում"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Կառավարել հավելվածը, եթե չի օգտագործվում"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Հեռացնել թույլտվությունները, ջնջել ժամանակավոր ֆայլերը և դադարեցնել ծանուցումները"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Հեռացնել թույլտվությունները, ջնջել ժամանակավոր ֆայլերը, դադարեցնել ծանուցումները և արխիվացնել հավելվածը"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Եթե հավելվածը չի օգտագործվել մի քանի ամիս, դրա թույլտվությունները կհեռացվեն՝ ձեր տվյալները պաշտպանելու համար։"</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Եթե հավելվածը չի օգտագործվել մի քանի ամիս, ձեր տվյալները պաշտպանելու համար հետևյալ թույլտվությունները կհեռացվեն՝ <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Հավելվածներից, որոնք մի քանի ամիս չեք օգտագործել, թույլտվությունները հեռացվել են՝ ձեր տվյալները պաշտպանելու համար։"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Նշումների հավելված"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Հավելվածներ, որոնք թույլ են տալիս նշումներ ստեղծել ձեր սարքում"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"նշումներ"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Դրամապանակի կանխադրվ. հավելված"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Դրամապանակի հավելված"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Դրամապանակի հավելվածները կարող են պահել ձեր վարկային և մշտական հաճախորդի քարտերը, մեքենայի բանալիները և այլ բաներ, որոնք կհեշտացնեն ձեր գործարքները։"</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Նշե՞լ <xliff:g id="APP_NAME">%1$s</xliff:g> հավելվածը որպես դրամապանակի կանխադրված հավելված"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Թույլտվություններ հարկավոր չեն"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Օգտագործվում է ըստ կանխադրման"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Նորից չհարցնել"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Նշել կանխադրված"</string>
@@ -461,7 +466,7 @@
     <string name="permgrouprequest_contacts" msgid="8391550064551053695">"Թույլատրե՞լ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; հավելվածին օգտագործել ձեր կոնտակտները"</string>
     <string name="permgrouprequest_device_aware_contacts" msgid="2270563860206654757">"Թույլատրե՞լ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;-ին օգտագործել ձեր կոնտակտները &lt;b&gt;<xliff:g id="DEVICE">%2$s</xliff:g>ում&lt;/b&gt;։"</string>
     <string name="permgrouprequest_location" msgid="6990232580121067883">"Թույլ տա՞լ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; հավելվածին օգտագործել այս սարքի տեղադրության տվյալները"</string>
-    <string name="permgrouprequest_device_aware_location" msgid="6641436550953715107">"Թույլատրե՞լ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;-ին օգտագործել ձեր &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>ի&lt;/b&gt; տեղադրության տվյալները։"</string>
+    <string name="permgrouprequest_device_aware_location" msgid="6641436550953715107">"Թույլատրե՞լ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;-ին օգտագործել ձեր &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>-ի&lt;/b&gt; տեղադրության տվյալները"</string>
     <string name="permgrouprequestdetail_location" msgid="2635935335778429894">"Տեղադրության տվյալները հասանելի կլինեն հավելվածին, միայն երբ այն օգտագործելիս լինեք"</string>
     <string name="permgroupbackgroundrequest_location" msgid="1085680897265734809">"Թույլ տա՞լ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; հավելվածին օգտագործել այս սարքի տեղադրության տվյալները"</string>
     <string name="permgroupbackgroundrequest_device_aware_location" msgid="7660465507029650527">"Թույլատրե՞լ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;-ին օգտագործել ձեր &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>ի&lt;/b&gt; տեղադրության մասին տվյալները։"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Տվյալներով կիսվելու եղանակի փոփոխություն"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Որոշ հավելվածներ փոխել են ձեր տեղադրության տվյալներով կիսվելու եղանակը"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Կարգավորումներ"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Բացվել է <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Բացվել է երեկ, <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Բացվել է <xliff:g id="TIME_DATE_0">%1$s</xliff:g>, <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Մեկանգամյա օգտագործման ձեր գաղտնաբառը՝ 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Սահմանափակումներով կարգավորում"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Անվտանգության նկատառումներից ելնելով՝ այս կարգավորումը ներկայումս անհասանելի է։"</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Թույլտվությունը («<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>») մերժվել է"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Այս հավելվածը հայցել է «<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>» թույլտվությունը, որը սահմանափակումներով կարգավորում է, քանի որ կարող է վտանգել ձեր անվտանգությունն ու գաղտնիությունը։ Այս թույլտվության սահմանափակումը կարող է հանգեցնել այս հավելվածի աշխատանքի խափանման։"</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Իմանալ ավելին"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Պարզ է"</string>
 </resources>

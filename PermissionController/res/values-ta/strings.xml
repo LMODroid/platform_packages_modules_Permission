@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"அனைத்து அனுமதிகளும்"</string>
     <string name="other_permissions" msgid="2901186127193849594">"ஆப்ஸிற்கான பிற அனுமதிகள்"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"அனுமதி கோரிக்கை"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"நிறுவல்/நிறுவல் நீக்குதலை Wearரில் செய்ய இயலாது."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; எவற்றையெல்லாம் அணுகலாம் என்பதைத் தேர்வுசெய்யவும்"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; புதுப்பிக்கப்பட்டது. இந்த ஆப்ஸ் எவற்றையெல்லாம் அணுகலாம் என்பதைத் தேர்வுசெய்யவும்."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"வேண்டாம்"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"இந்த ஆப்ஸ் பயன்படுத்தப்படவில்லை என்றால் அனுமதிகளை அகற்றவும்"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"அனுமதிகளை அகற்றி இடத்தைக் காலியாக்கு"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"செயலில் இல்லாதபோது ஆப்ஸை இடைநிறுத்துதல்"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"ஆப்ஸைப் பயன்படுத்தாதபோது நிர்வகித்தல்"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"அனுமதிகளை அகற்றும், தற்காலிக ஃபைல்களை நீக்கும், அறிவிப்புகளை நிறுத்தும்"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"அனுமதிகளை அகற்றும், தற்காலிக ஃபைல்களை நீக்கும், அறிவிப்புகளை நிறுத்தும், ஆப்ஸைக் காப்பிடும்"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"இந்த ஆப்ஸைச் சில மாதங்கள் பயன்படுத்தவில்லை என்றால் உங்கள் தரவைப் பாதுகாப்பதற்காக இதற்கான அனுமதிகள் அகற்றப்படும்."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"இந்த ஆப்ஸைச் சில மாதங்கள் பயன்படுத்தவில்லை என்றால் உங்கள் தரவைப் பாதுகாப்பதற்காக பின்வரும் அனுமதிகள் அகற்றப்படும்: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"உங்கள் தரவைப் பாதுகாப்பதற்காக, கடந்த சில மாதங்களில் நீங்கள் பயன்படுத்தாத ஆப்ஸில் இருந்து அனுமதிகள் அகற்றப்பட்டன."</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"குறிப்பு எடுப்பதற்கான ஆப்ஸ்"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"உங்கள் சாதனத்தில் குறிப்புகள் எடுக்க அனுமதிக்கும் ஆப்ஸ்"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"குறிப்புகள்"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"இயல்புநிலை வாலட் ஆப்ஸ்"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"வாலட் ஆப்ஸ்"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"பல்வேறு வகையான பரிமாற்றங்கள் தொடர்பாக உங்களுக்கு உதவ கிரெடிட் கார்டுகள், லாயல்டி கார்டுகள், கார் சாவிகள் மற்றும் பிறவற்றை வாலட் ஆப்ஸில் சேமிக்கலாம்."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"<xliff:g id="APP_NAME">%1$s</xliff:g> ஆப்ஸை உங்கள் இயல்புநிலை வாலட் ஆப்ஸாக அமைக்கவா?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"அனுமதிகள் தேவையில்லை"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"தற்போதைய இயல்பான ஆப்ஸ்"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"மீண்டும் கேட்காதே"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"இயல்பு ஆப்ஸாக அமை"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"தரவுப் பகிர்வு குறித்த அறிவிப்புகள்"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"உங்கள் இருப்பிடத் தரவைப் பகிரும் விதத்தைச் சில ஆப்ஸ் மாற்றியுள்ளன"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"அமைப்புகள்"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"அணுகிய நேரம்: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"நேற்று அணுகிய நேரம்: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"அணுகிய நேரம்: <xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"ஒருமுறை பயன்படுத்தப்படும் கடவுச்சொல்: 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"கட்டுப்படுத்தப்பட்ட அமைப்பு"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"உங்கள் பாதுகாப்பிற்காக, இந்த அமைப்பு தற்போது இல்லை."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"<xliff:g id="PERMISSION_NAME">%1$s</xliff:g> ஐப் பயன்படுத்துவதற்கான அனுமதி மறுக்கப்பட்டது"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"இந்த ஆப்ஸ் <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>க்கான அனுமதியைக் கேட்டுள்ளது. இது தடைசெய்யப்பட்ட அமைப்பாகும். இதனால் உங்கள் பாதுகாப்புக்கும் தனியுரிமைக்கும் ஆபத்து நேரிடலாம். இந்த அனுமதிக்கான கட்டுப்பாடு இந்த ஆப்ஸ் செயல்படுவதைத் தடுக்கலாம்."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"மேலும் அறிக"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"சரி"</string>
 </resources>

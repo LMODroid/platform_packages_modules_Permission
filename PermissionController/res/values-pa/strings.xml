@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"ਸਾਰੀਆਂ ਇਜਾਜ਼ਤਾਂ"</string>
     <string name="other_permissions" msgid="2901186127193849594">"ਐਪ ਦੀਆਂ ਹੋਰ ਸਮਰੱਥਤਾਵਾਂ"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"ਇਜਾਜ਼ਤ ਬੇਨਤੀ"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Wear \'ਤੇ ਸਥਾਪਤ/ਅਣਸਥਾਪਤ ਕਰਨ ਦੀਆਂ ਕਾਰਵਾਈਆਂ ਸਮਰਥਿਤ ਨਹੀਂ ਹਨ।"</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"ਇਹ ਚੁਣੋ ਕਿ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ਨੂੰ ਕਿਸ ਤੱਕ ਪਹੁੰਚ ਕਰਨ ਦੇਣੀ ਹੈ"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ਨੂੰ ਅੱਪਡੇਟ ਕਰ ਦਿੱਤਾ ਗਿਆ ਹੈ। ਇਹ ਚੁਣੋ ਕਿ ਇਸ ਐਪ ਨੂੰ ਕਿਸ ਤੱਕ ਪਹੁੰਚ ਕਰਨ ਦੇਣੀ ਹੈ।"</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"ਰੱਦ ਕਰੋ"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"ਐਪ ਨੂੰ ਨਾ ਵਰਤੇ ਜਾਣ \'ਤੇ ਇਸ ਲਈ ਦਿੱਤੀਆਂ ਇਜਾਜ਼ਤਾਂ ਨੂੰ ਹਟਾ ਦਿਓ"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"ਇਜਾਜ਼ਤਾਂ ਹਟਾਓ ਅਤੇ ਜਗ੍ਹਾ ਖਾਲੀ ਕਰੋ"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"ਵਰਤੋਂ ਵਿੱਚ ਨਾ ਹੋਣ \'ਤੇ, ਐਪ ਸਰਗਰਮੀ ਰੋਕੋ"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"ਵਰਤੋਂ ਵਿੱਚ ਨਾ ਹੋਣ \'ਤੇ, ਐਪ ਦਾ ਪ੍ਰਬੰਧਨ ਕਰੋ"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"ਇਜਾਜ਼ਤਾਂ ਹਟਾਓ, ਅਸਥਾਈ ਫ਼ਾਈਲਾਂ ਮਿਟਾਓ ਅਤੇ ਸੂਚਨਾਵਾਂ ਬੰਦ ਕਰੋ"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"ਇਜਾਜ਼ਤਾਂ ਹਟਾਓ, ਅਸਥਾਈ ਫ਼ਾਈਲਾਂ ਮਿਟਾਓ, ਸੂਚਨਾਵਾਂ ਬੰਦ ਕਰੋ ਅਤੇ ਐਪ ਨੂੰ ਪੁਰਾਲੇਖਬੱਧ ਕਰੋ"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"ਤੁਹਾਡੀ ਡਾਟਾ ਸੁਰੱਖਿਆ ਲਈ, ਜੇ ਇਹ ਐਪ ਕੁਝ ਮਹੀਨਿਆਂ ਲਈ ਵਰਤੀ ਨਹੀਂ ਗਈ, ਤਾਂ ਇਸ ਐਪ ਲਈ ਇਜਾਜ਼ਤਾਂ ਨੂੰ ਹਟਾ ਦਿੱਤਾ ਜਾਵੇਗਾ।"</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"ਤੁਹਾਡੀ ਡਾਟਾ ਸੁਰੱਖਿਆ ਲਈ, ਜੇ ਇਹ ਐਪ ਕੁਝ ਮਹੀਨਿਆਂ ਲਈ ਵਰਤੀ ਨਹੀਂ ਗਈ, ਤਾਂ ਅੱਗੇ ਦਿੱਤੀਆਂ ਇਜਾਜ਼ਤਾਂ ਨੂੰ ਹਟਾ ਦਿੱਤਾ ਜਾਵੇਗਾ: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"ਤੁਹਾਡੀ ਡਾਟਾ ਸੁਰੱਖਿਆ ਲਈ, ਜੋ ਐਪਾਂ ਤੁਸੀਂ ਕੁਝ ਮਹੀਨਿਆਂ ਤੋਂ ਨਹੀਂ ਵਰਤੀਆਂ ਉਹਨਾਂ ਐਪਾਂ ਤੋਂ ਇਜਾਜ਼ਤਾਂ ਨੂੰ ਹਟਾ ਦਿੱਤਾ ਗਿਆ ਹੈ।"</string>
@@ -351,7 +351,7 @@
     <string name="accessibility_service_dialog_bottom_text_multiple" msgid="7009848932395519852">"ਇਹ ਐਪਾਂ ਤੁਹਾਡੀ ਸਕ੍ਰੀਨ, ਕਾਰਵਾਈਆਂ ਅਤੇ ਇਨਪੁੱਟਾਂ ਨੂੰ ਦੇਖ ਸਕਦੀਆਂ ਹਨ, ਕਾਰਵਾਈਆਂ ਕਰ ਸਕਦੀਆਂ ਹਨ ਅਤੇ ਡਿਸਪਲੇ ਕੰਟਰੋਲ ਕਰ ਸਕਦੀਆਂ ਹਨ।"</string>
     <string name="role_assistant_label" msgid="4727586018198208128">"ਪੂਰਵ-ਨਿਰਧਾਰਿਤ ਡਿਜੀਟਲ ਸਹਾਇਕ ਐਪ"</string>
     <string name="role_assistant_short_label" msgid="3369003713187703399">"ਡਿਜੀਟਲ ਸਹਾਇਕ ਐਪ"</string>
-    <string name="role_assistant_description" msgid="6622458130459922952">"ਸਹਾਇਕ ਐਪਾਂ ਤੁਹਾਡੇ ਵੱਲੋਂ ਦੇਖੀ ਜਾਂਦੀ ਸਕ੍ਰੀਨ ਤੋਂ ਪ੍ਰਾਪਤ ਜਾਣਕਾਰੀ ਦੇ ਆਧਾਰ \'ਤੇ ਤੁਹਾਡੀ ਮਦਦ ਕਰ ਸਕਦੀਆਂ ਹਨ। ਕੁਝ ਐਪਾਂ ਤੁਹਾਨੂੰ ਏਕੀਕ੍ਰਿਤ ਸਹਾਇਤਾ ਦੇਣ ਲਈ ਲਾਂਚਰ ਅਤੇ ਵੌਇਸ ਇਨਪੁੱਟ ਸੇਵਾਵਾਂ ਦੋਵਾਂ ਦਾ ਸਮਰਥਨ ਕਰਦੇ ਹਨ।"</string>
+    <string name="role_assistant_description" msgid="6622458130459922952">"ਸਹਾਇਕ ਐਪਾਂ ਤੁਹਾਡੇ ਵੱਲੋਂ ਦੇਖੀ ਜਾਂਦੀ ਸਕ੍ਰੀਨ ਤੋਂ ਪ੍ਰਾਪਤ ਜਾਣਕਾਰੀ ਦੇ ਆਧਾਰ \'ਤੇ ਤੁਹਾਡੀ ਮਦਦ ਕਰ ਸਕਦੀਆਂ ਹਨ। ਕੁਝ ਐਪਾਂ ਤੁਹਾਨੂੰ ਏਕੀਕ੍ਰਿਤ ਸਹਾਇਤਾ ਦੇਣ ਲਈ ਲਾਂਚਰ ਅਤੇ ਵੌਇਸ ਇਨਪੁੱਟ ਸੇਵਾਵਾਂ ਦੋਵਾਂ ਦਾ ਸਮਰਥਨ ਕਰਦੀਆਂ ਹਨ।"</string>
     <string name="role_browser_label" msgid="2877796144554070207">"ਪੂਰਵ-ਨਿਰਧਾਰਿਤ ਬ੍ਰਾਊਜ਼ਰ ਐਪ"</string>
     <string name="role_browser_short_label" msgid="6745009127123292296">"ਬ੍ਰਾਊਜ਼ਰ ਐਪ"</string>
     <string name="role_browser_description" msgid="3465253637499842671">"ਐਪਾਂ ਜੋ ਤੁਹਾਨੂੰ ਇੰਟਰਨੈੱਟ ਤੱਕ ਪਹੁੰਚ ਕਰਨ ਦਿੰਦੀਆਂ ਹਨ ਅਤੇ ਤੁਹਾਡੇ ਵੱਲੋਂ ਟੈਪ ਕੀਤੇ ਲਿੰਕ ਦਿਖਾਉਂਦੀਆਂ ਹਨ"</string>
@@ -371,7 +371,7 @@
     <string name="role_sms_search_keywords" msgid="8022048144395047352">"ਲਿਖਤ ਸੁਨੇਹਾ, ਲਿਖਤ ਭੇਜਣਾ, ਸੁਨੇਹੇ, ਸੁਨੇਹਾ ਭੇਜਣਾ"</string>
     <string name="role_emergency_label" msgid="7028825857206842366">"ਪੂਰਵ-ਨਿਰਧਾਰਤ ਸੰਕਟਕਾਲੀਨ ਐਪ"</string>
     <string name="role_emergency_short_label" msgid="2388431453335350348">"ਸੰਕਟਕਾਲੀਨ ਐਪ"</string>
-    <string name="role_emergency_description" msgid="5051840234887686630">"ਐਪਾਂ ਜੋ ਤੁਹਾਨੂੰ ਤੁਹਾਡੀ ਡਾਕਟਰੀ ਜਾਣਕਾਰੀ ਰਿਕਾਰਡ ਕਰਨ ਅਤੇ ਇਸਨੂੰ ਸੰਕਟਕਾਲੀਨ ਮਦਦਗਾਰਾਂ ਤੱਕ ਪਹੁੰਚਯੋਗ ਬਣਾਉਣ ਦਿੰਦੀਆਂ ਹਨ; ਗੰਭੀਰ ਮੌਸਮੀ ਘਟਨਾਵਾਂ ਅਤੇ ਆਫ਼ਤਾਂ ਬਾਰੇ ਸੁਚੇਤਨਾਵਾਂ ਪ੍ਰਾਪਤ ਕਰਨ ਦਿੰਦੀਆਂ ਹਨ; ਤੁਹਾਨੂੰ ਮਦਦ ਦੀ ਲੋੜ ਪੈਣ \'ਤੇ ਹੋਰਾਂ ਨੂੰ ਸੂਚਿਤ ਕਰਨ ਦਿੰਦੀਆਂ ਹਨ"</string>
+    <string name="role_emergency_description" msgid="5051840234887686630">"ਐਪਾਂ ਜੋ ਤੁਹਾਨੂੰ ਤੁਹਾਡੀ ਡਾਕਟਰੀ ਜਾਣਕਾਰੀ ਰਿਕਾਰਡ ਕਰਨ ਅਤੇ ਇਸਨੂੰ ਐਮਰਜੈਂਸੀ ਮਦਦਗਾਰਾਂ ਤੱਕ ਪਹੁੰਚਯੋਗ ਬਣਾਉਣ ਦਿੰਦੀਆਂ ਹਨ; ਬਹੁਤ ਜ਼ਿਆਦਾ ਖਰਾਬ ਮੌਸਮੀ ਘਟਨਾਵਾਂ ਅਤੇ ਆਫ਼ਤਾਂ ਬਾਰੇ ਅਲਰਟ ਪ੍ਰਾਪਤ ਕਰਨ ਦਿੰਦੀਆਂ ਹਨ; ਤੁਹਾਨੂੰ ਮਦਦ ਦੀ ਲੋੜ ਪੈਣ \'ਤੇ ਹੋਰਾਂ ਨੂੰ ਸੂਚਿਤ ਕਰਨ ਦਿੰਦੀਆਂ ਹਨ"</string>
     <string name="role_emergency_request_title" msgid="8469579020654348567">"ਕੀ <xliff:g id="APP_NAME">%1$s</xliff:g> ਨੂੰ ਤੁਹਾਡੀ ਪੂਰਵ-ਨਿਰਧਾਰਤ ਸੰਕਟਕਾਲੀਨ ਐਪ ਵਜੋਂ ਸੈੱਟ ਕਰਨਾ ਹੈ?"</string>
     <string name="role_emergency_request_description" msgid="131645948770262850">"ਕਿਸੇ ਇਜਾਜ਼ਤ ਦੀ ਲੋੜ ਨਹੀਂ ਹੈ"</string>
     <string name="role_emergency_search_keywords" msgid="1920007722599213358">"ice"</string>
@@ -400,9 +400,14 @@
     <string name="role_app_streaming_description" msgid="7341638576226183992">"<xliff:g id="APP_NAME">%1$s</xliff:g> ਨੂੰ ਤੁਹਾਡੀਆਂ ਸੂਚਨਾਵਾਂ ਨਾਲ ਅੰਤਰਕਿਰਿਆ ਕਰਨ ਅਤੇ ਤੁਹਾਡੀਆਂ ਐਪਾਂ ਨੂੰ ਕਨੈਕਟ ਕੀਤੇ ਡੀਵਾਈਸ \'ਤੇ ਸਟ੍ਰੀਮ ਕਰਨ ਦੀ ਆਗਿਆ ਹੋਵੇਗੀ।"</string>
     <string name="role_companion_device_computer_description" msgid="416099879217066377">"ਇਹ ਸੇਵਾ ਤੁਹਾਡੀਆਂ ਫ਼ੋਟੋਆਂ, ਮੀਡੀਆ ਅਤੇ ਸੂਚਨਾਵਾਂ ਨੂੰ ਤੁਹਾਡੇ ਫ਼ੋਨ ਤੋਂ ਹੋਰ ਡੀਵਾਈਸਾਂ ਨਾਲ ਸਾਂਝਾ ਕਰਦੀ ਹੈ।"</string>
     <string name="role_notes_label" msgid="7451627001058089536">"ਨੋਟ-ਕਥਨਾਂ ਲਈ ਪੂਰਵ-ਨਿਰਧਾਰਿਤ ਐਪ"</string>
-    <string name="role_notes_short_label" msgid="8796604147546125285">"ਨੋਟ-ਕਥਨਾਂ ਲਈ ਐਪ"</string>
-    <string name="role_notes_description" msgid="8496852798616883551">"ਐਪਾਂ ਜੋ ਤੁਹਾਨੂੰ ਆਪਣੇ ਡੀਵਾਈਸ \'ਤੇ ਨੋਟ-ਕਥਨ ਲੈਣ ਦੀ ਆਗਿਆ ਦਿੰਦੀਆਂ ਹਨ"</string>
+    <string name="role_notes_short_label" msgid="8796604147546125285">"ਨੋਟ ਲਈ ਐਪ"</string>
+    <string name="role_notes_description" msgid="8496852798616883551">"ਐਪਾਂ ਜੋ ਤੁਹਾਨੂੰ ਆਪਣੇ ਡੀਵਾਈਸ \'ਤੇ ਨੋਟ ਲਿਖਣ ਦੀ ਸੁਵਿਧਾ ਦਿੰਦੀਆਂ ਹਨ"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"ਨੋਟ-ਕਥਨ"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"ਪੂਰਵ-ਨਿਰਧਾਰਿਤ ਵਾਲੇਟ ਐਪ"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Wallet ਐਪ"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"ਲੈਣ-ਦੇਣ ਦੀਆਂ ਵੱਖ-ਵੱਖ ਕਿਸਮਾਂ ਸੰਬੰਧੀ ਮਦਦ ਕਰਨ ਲਈ, ਵਾਲੇਟ ਐਪਾਂ ਤੁਹਾਡੇ ਕ੍ਰੈਡਿਟ ਅਤੇ ਵਫ਼ਾਦਾਰੀ ਕਾਰਡਾਂ, ਕਾਰ ਦੀਆਂ ਕੁੰਜੀਆਂ ਅਤੇ ਹੋਰ ਚੀਜ਼ਾਂ ਨੂੰ ਸਟੋਰ ਕਰ ਸਕਦੀਆਂ ਹਨ।"</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"ਕੀ <xliff:g id="APP_NAME">%1$s</xliff:g> ਨੂੰ ਤੁਹਾਡੀ ਪੂਰਵ-ਨਿਰਧਾਰਿਤ ਵਾਲੇਟ ਐਪ ਵਜੋਂ ਸੈੱਟ ਕਰਨਾ ਹੈ?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"ਕਿਸੇ ਇਜਾਜ਼ਤ ਦੀ ਲੋੜ ਨਹੀਂ ਹੈ"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"ਮੌਜੂਦਾ ਪੂਰਵ-ਨਿਰਧਾਰਤ"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"ਦੁਬਾਰਾ ਨਾ ਪੁੱਛੋ"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"ਪੂਰਵ-ਨਿਰਧਾਰਤ ਵਜੋਂ ਸੈੱਟ ਕਰੋ"</string>
@@ -503,7 +508,7 @@
     <string name="permgroupupgraderequestdetail_microphone" msgid="2870497719571464239">"ਇਹ ਐਪ ਹਰ ਵੇਲੇ ਆਡੀਓ ਰਿਕਾਰਡ ਕਰਨ ਦੀ ਇਜਾਜ਼ਤ ਮੰਗਦੀ ਹੈ, ਉਦੋਂ ਵੀ ਜਦੋਂ ਤੁਸੀਂ ਐਪ ਦੀ ਵਰਤੋਂ ਨਾ ਕਰ ਰਹੇ ਹੋਵੋ। "<annotation id="link">"ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਇਜਾਜ਼ਤ ਦਿਓ।"</annotation></string>
     <string name="permgrouprequest_activityRecognition" msgid="5415121592794230330">"ਕੀ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ਨੂੰ ਆਪਣੀ ਸਰੀਰਕ ਸਰਗਰਮੀ ਤੱਕ ਪਹੁੰਚ ਕਰਨ ਦੇਣੀ ਹੈ?"</string>
     <string name="permgrouprequest_device_aware_activityRecognition" msgid="3408326850847755759">"ਕੀ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ਨੂੰ &lt;b&gt;<xliff:g id="DEVICE">%2$s</xliff:g>&lt;/b&gt; \'ਤੇ ਆਪਣੀ ਸਰੀਰਕ ਸਰਗਰਮੀ ਤੱਕ ਪਹੁੰਚ ਕਰਨ ਦੇਣੀ ਹੈ?"</string>
-    <string name="permgrouprequest_camera" msgid="5123097035410002594">"ਕੀ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ਨੂੰ ਤਸਵੀਰਾਂ ਖਿੱਚਣ ਅਤੇ ਵੀਡੀਓ ਰਿਕਾਰਡ ਕਰਨ ਦੇਣਾ ਹੈ?"</string>
+    <string name="permgrouprequest_camera" msgid="5123097035410002594">"ਕੀ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ਨੂੰ ਤਸਵੀਰਾਂ ਖਿੱਚਣ ਅਤੇ ਵੀਡੀਓ ਰਿਕਾਰਡ ਕਰਨ ਦੀ ਆਗਿਆ ਦੇਣੀ ਹੈ?"</string>
     <string name="permgrouprequest_device_aware_camera" msgid="3525106924487608868">"ਕੀ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ਨੂੰ ਆਪਣੇ &lt;b&gt;<xliff:g id="DEVICE">%2$s</xliff:g>&lt;/b&gt; \'ਤੇ ਤਸਵੀਰਾਂ ਖਿੱਚਣ ਅਤੇ ਵੀਡੀਓ ਰਿਕਾਰਡ ਕਰਨ ਦੇਣੀ ਹੈ?"</string>
     <string name="permgrouprequestdetail_camera" msgid="9085323239764667883">"ਤੁਹਾਡੇ ਵੱਲੋਂ ਐਪ ਦੀ ਵਰਤੋਂ ਕਰਨ ਵੇਲੇ ਹੀ ਐਪ ਤਸਵੀਰਾਂ ਖਿੱਚ ਸਕੇਗੀ ਅਤੇ ਵੀਡੀਓ ਰਿਕਾਰਡ ਕਰ ਸਕੇਗੀ"</string>
     <string name="permgroupbackgroundrequest_camera" msgid="1274286575704213875">"ਕੀ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ਨੂੰ ਤਸਵੀਰਾਂ ਖਿੱਚਣ ਅਤੇ ਵੀਡੀਓ ਰਿਕਾਰਡ ਕਰਨ ਦੀ ਇਜਾਜ਼ਤ ਦੇਣੀ ਹੈ?"</string>
@@ -552,7 +557,7 @@
     <string name="safety_center_dashboard_page_title" msgid="2810774008694315854">"ਸੁਰੱਖਿਆ ਅਤੇ ਪਰਦੇਦਾਰੀ"</string>
     <string name="safety_center_rescan_button" msgid="4517514567809409596">"ਡੀਵਾਈਸ ਨੂੰ ਸਕੈਨ ਕਰੋ"</string>
     <string name="safety_center_issue_card_dismiss_button" msgid="5113965506144222402">"ਖਾਰਜ ਕਰੋ"</string>
-    <string name="safety_center_issue_card_dismiss_confirmation_title" msgid="2734809473425036382">"ਕੀ ਇਸ ਸੁਚੇਤਨਾ ਨੂੰ ਖਾਰਜ ਕਰਨਾ ਹੈ?"</string>
+    <string name="safety_center_issue_card_dismiss_confirmation_title" msgid="2734809473425036382">"ਕੀ ਇਸ ਅਲਰਟ ਨੂੰ ਖਾਰਜ ਕਰਨਾ ਹੈ?"</string>
     <string name="safety_center_issue_card_dismiss_confirmation_message" msgid="3775418736671093563">"ਹੋਰ ਸੁਰੱਖਿਆ ਸ਼ਾਮਲ ਕਰਨ ਲਈ ਕਿਸੇ ਵੀ ਸਮੇਂ ਆਪਣੀਆਂ ਸੁਰੱਖਿਆ ਅਤੇ ਪਰਦੇਦਾਰੀ ਸੈਟਿੰਗਾਂ ਦੀ ਸਮੀਖਿਆ ਕਰੋ"</string>
     <string name="safety_center_issue_card_confirm_dismiss_button" msgid="5884137843083634556">"ਖਾਰਜ ਕਰੋ"</string>
     <string name="safety_center_issue_card_cancel_dismiss_button" msgid="2874578798877712346">"ਰੱਦ ਕਰੋ"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"ਡਾਟਾ ਸਾਂਝਾਕਰਨ ਅੱਪਡੇਟ"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"ਕੁਝ ਐਪਾਂ ਨੇ ਤੁਹਾਡੇ ਟਿਕਾਣੇ ਦੇ ਡਾਟੇ ਨੂੰ ਸਾਂਝਾ ਕਰਨ ਦਾ ਤਰੀਕਾ ਬਦਲ ਦਿੱਤਾ ਹੈ"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"ਸੈਟਿੰਗਾਂ"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"<xliff:g id="TIME_DATE">%1$s</xliff:g> ਵਜੇ ਪਹੁੰਚ ਕੀਤੀ ਗਈ"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"<xliff:g id="TIME_DATE">%1$s</xliff:g> ਵਜੇ ਕੱਲ੍ਹ ਪਹੁੰਚ ਕੀਤੀ ਗਈ"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"<xliff:g id="TIME_DATE_0">%1$s</xliff:g> ਨੂੰ <xliff:g id="TIME_DATE_1">%2$s</xliff:g> ਵਜੇ ਪਹੁੰਚ ਕੀਤੀ ਗਈ"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"ਤੁਹਾਡਾ ਇਕਹਰੀ-ਵਰਤੋਂ ਪਾਸਵਰਡ 132435 ਹੈ"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"ਪ੍ਰਤਿਬੰਧਿਤ ਸੈਟਿੰਗਾਂ"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"ਤੁਹਾਡੀ ਸੁਰੱਖਿਆ ਲਈ, ਫ਼ਿਲਹਾਲ ਇਹ ਸੈਟਿੰਗ ਉਪਲਬਧ ਨਹੀਂ ਹੈ।"</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"<xliff:g id="PERMISSION_NAME">%1$s</xliff:g> ਨੂੰ ਵਰਤਣ ਦੀ ਇਜਾਜ਼ਤ ਨੂੰ ਅਸਵੀਕਾਰ ਕਰ ਦਿੱਤਾ ਗਿਆ ਹੈ"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"ਇਸ ਐਪ ਨੇ <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> ਦੀ ਇਜਾਜ਼ਤ ਮੰਗੀ ਹੈ, ਜੋ ਕਿ ਇੱਕ ਪ੍ਰਤਿਬੰਧਿਤ ਸੈਟਿੰਗ ਹੈ ਕਿਉਂਕਿ ਇਹ ਤੁਹਾਡੀ ਸੁਰੱਖਿਆ ਅਤੇ ਪਰਦੇਦਾਰੀ ਨੂੰ ਜੋਖਮ ਵਿੱਚ ਪਾ ਸਕਦੀ ਹੈ। ਇਸ ਇਜਾਜ਼ਤ \'ਤੇ ਲੱਗੀ ਪਾਬੰਦੀ, ਇਸ ਐਪ ਨੂੰ ਕੰਮ ਕਰਨ ਤੋਂ ਰੋਕ ਸਕਦੀ ਹੈ।"</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"ਹੋਰ ਜਾਣੋ"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"ਸਮਝ ਲਿਆ"</string>
 </resources>

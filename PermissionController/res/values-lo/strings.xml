@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"ທຸກການອະນຸຍາດ"</string>
     <string name="other_permissions" msgid="2901186127193849594">"ຄວາມສາມາດອື່ນຂອງແອັບ"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"ການຮ້ອງຂໍການອະນຸຍາດ"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"ຕິດຕັ້ງ/ຖອນການຕິດຕັ້ງ ຄຳສັ່ງທີ່ບໍ່ຮອງຮັບຢູ່ Wear."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"ເລືອກວ່າຈະອະນຸຍາດໃຫ້ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ເຂົ້າເຖິງຫຍັງໄດ້ແດ່"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"ອັບເດດ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ແລ້ວ. ກະລຸນາເລືອກວ່າຈະໃຫ້ແອັບນີ້ເຂົ້າເຖິງຫຍັງໄດ້ແດ່."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"ຍົກເລີກ"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"ລຶບສິດອະນຸຍາດຫາກບໍ່ໄດ້ໃຊ້ແອັບ"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"ລຶບການອະນຸຍາດອອກ ແລະ ສ້າງພື້ນທີ່ຫວ່າງ"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"ຢຸດການເຄື່ອນໄຫວແອັບຊົ່ວຄາວຫາກບໍ່ໄດ້ໃຊ້"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"ຈັດການແອັບຫາກບໍ່ໄດ້ໃຊ້"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"ລຶບການອະນຸຍາດອອກ, ລຶບໄຟລ໌ຊົ່ວຄາວ ແລະ ຢຸດການແຈ້ງເຕືອນ"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"ລຶບການອະນຸຍາດອອກ, ລຶບໄຟລ໌ຊົ່ວຄາວ, ຢຸດການແຈ້ງເຕືອນ ແລະ ເກັບແອັບໄວ້ໃນແຟ້ມ"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"ເພື່ອປົກປ້ອງຂໍ້ມູນຂອງທ່ານ, ສິດອະນຸຍາດສຳລັບແອັບນີ້ຈະຖືກລຶບອອກຫາກບໍ່ໄດ້ໃຊ້ແອັບສອງສາມເດືອນ."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"ເພື່ອປົກປ້ອງຂໍ້ມູນຂອງທ່ານ, ຫາກບໍ່ໄດ້ໃຊ້ແອັບສອງສາມເດືອນ, ສິດອະນຸຍາດຕໍ່ໄປນີ້ຈະຖືກລຶບອອກ: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"ເພື່ອປົກປ້ອງຂໍ້ມູນຂອງທ່ານ, ລະບົບໄດ້ລຶບສິດອະນຸຍາດອອກຈາກແອັບຕ່າງໆທີ່ທ່ານບໍ່ໄດ້ໃຊ້ສອງສາມເດືອນແລ້ວ."</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"ແອັບຂຽນບັນທຶກ"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"ແອັບທີ່ອະນຸຍາດໃຫ້ທ່ານຈົດບັນທຶກຢູ່ອຸປະກອນຂອງທ່ານ"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"ບັນທຶກ"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"ແອັບ Wallet ເລີ່ມຕົ້ນ"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"ແອັບ Wallet"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"ແອັບ Wallet ສາມາດຈັດເກັບບັດເຄຣດິດ ແລະ ບັດສະມາຊິກ, ກະແຈລົດ ແລະ ສິ່ງອື່ນໆຂອງທ່ານເພື່ອຊ່ວຍໃນການເຮັດທຸລະກຳຮູບແບບຕ່າງໆ."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"ຕັ້ງ <xliff:g id="APP_NAME">%1$s</xliff:g> ເປັນແອັບ Wallet ເລີ່ມຕົ້ນຂອງທ່ານບໍ?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"ບໍ່ຈຳເປັນຕ້ອງມີການອະນຸຍາດ"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"ຄ່າເລີ່ມຕົ້ນປັດຈຸບັນ"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"ບໍ່ຕ້ອງຖາມອີກ"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"ຕັ້ງເປັນຄ່າເລີ່ມຕົ້ນ"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"ການອັບເດດການແບ່ງປັນຂໍ້ມູນ"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"ບາງແອັບໄດ້ປ່ຽນແປງວິທີທີ່ແອັບອາດແບ່ງປັນຂໍ້ມູນສະຖານທີ່ຂອງທ່ານແລ້ວ"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"ການຕັ້ງຄ່າ"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"ເຂົ້າເຖິງເມື່ອ <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"ເຂົ້າເຖິງມື້ວານນີ້ເມື່ອ <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"ເຂົ້າເຖິງເມື່ອ <xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"ລະຫັດຜ່ານແບບໃຊ້ໄດ້ເທື່ອດຽວຂອງທ່ານແມ່ນ 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"ການຕັ້ງຄ່າທີ່ຈຳກັດ"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"ເພື່ອຄວາມປອດໄພຂອງທ່ານ, ຕອນນີ້ຈຶ່ງບໍ່ສາມາດໃຊ້ການຕັ້ງຄ່ານີ້ໄດ້."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"ການອະນຸຍາດເພື່ອໃຊ້ <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> ຖືກປະຕິເສດແລ້ວ"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"ແອັບນີ້ຕ້ອງການການອະນຸຍາດ <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>, ເຊິ່ງເປັນການຕັ້ງຄ່າທີ່ຈຳກັດຍ້ອນມັນສາມາດເຮັດໃຫ້ຄວາມປອດໄພ ແລະ ຄວາມເປັນສ່ວນຕົວຂອງທ່ານມີຄວາມສ່ຽງ. ການຈຳກັດການອະນຸຍາດນີ້ອາດເຮັດໃຫ້ແອັບນີ້ບໍ່ເຮັດວຽກ."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"ສຶກສາເພີ່ມເຕີມ"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"ເຂົ້າໃຈແລ້ວ"</string>
 </resources>

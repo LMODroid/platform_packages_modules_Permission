@@ -46,6 +46,7 @@ import com.android.permissioncontroller.permission.ui.wear.model.AppPermissionGr
 import com.android.permissioncontroller.permission.ui.wear.model.AppPermissionGroupsRevokeDialogViewModelFactory
 import com.android.permissioncontroller.permission.ui.wear.model.WearAppPermissionUsagesViewModel
 import com.android.permissioncontroller.permission.ui.wear.model.WearAppPermissionUsagesViewModelFactory
+import com.android.permissioncontroller.permission.ui.wear.theme.WearPermissionTheme
 import com.android.permissioncontroller.permission.utils.KotlinUtils.is7DayToggleEnabled
 import java.time.Instant
 import java.util.concurrent.TimeUnit
@@ -142,7 +143,9 @@ class WearAppPermissionGroupsFragment : Fragment(), PermissionsUsagesChangeCallb
                 revokeDialogViewModel = revokeDialogViewModel
             )
 
-        return ComposeView(activity).apply { setContent { WearAppPermissionGroupsScreen(helper) } }
+        return ComposeView(activity).apply {
+            setContent { WearPermissionTheme { WearAppPermissionGroupsScreen(helper) } }
+        }
     }
 
     override fun onPause() {

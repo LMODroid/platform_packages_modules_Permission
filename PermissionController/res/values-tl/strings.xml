@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Lahat ng pahintulot"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Iba pang kakayahan ng app"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Kahilingan sa pagpapahintulot"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Ang mga pagkilos na I-install/I-uninstall ay hindi sinusuportahan sa Wear."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Piliin kung ano ang papayagang i-access ng &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"Na-update na ang &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;. Piliin kung ano ang papayagang i-access ng app na ito."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Kanselahin"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Alisin ang mga pahintulot kung hindi ginagamit ang app"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Alisin ang pahintulot, magbakante ng espasyo"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"I-pause ang aktibidad sa app kung hindi ginagamit"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Pamahalaan ang app kung hindi ginagamit"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Alisin ang mga pahintulot, i-delete ang mga pansamantalang file, at ihinto ang mga notification"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Alisin ang mga pahintulot, i-delete ang mga pansamantalang file, ihinto ang mga notification, at i-archive ang app"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Para maprotektahan ang iyong data, aalisin ang mga pahintulot para sa app na ito kapag ilang buwan nang hindi ginagamit ang app."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Para maprotektahan ang iyong data, kapag ilang buwan nang hindi ginagamit ang app, aalisin ang mga sumusunod na pahintulot: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Para protektahan ang iyong data, inalis na ang mga pahintulot sa mga app na ilang buwan mo nang hindi ginagamit."</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Notes app"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Mga app na nagbibigay-daan sa iyong magtala sa device mo"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"mga tala"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Default na wallet app"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Wallet app"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Puwedeng i-store ng mga wallet app ang iyong mga credit at loyalty card, susi ng kotse, at iba pang bagay para makatulong sa iba\'t ibang uri ng transaksyon."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Itakda ang <xliff:g id="APP_NAME">%1$s</xliff:g> bilang default mong wallet app?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Walang kailangang pahintulot"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Kasalukuyang default"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Huwag nang itanong muli"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Itakdang default"</string>
@@ -461,7 +466,7 @@
     <string name="permgrouprequest_contacts" msgid="8391550064551053695">"Payagan ang &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; na i-access ang iyong mga contact?"</string>
     <string name="permgrouprequest_device_aware_contacts" msgid="2270563860206654757">"Payagan ang &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; na i-access ang iyong mga contact sa &lt;b&gt;<xliff:g id="DEVICE">%2$s</xliff:g>&lt;/b&gt; mo?"</string>
     <string name="permgrouprequest_location" msgid="6990232580121067883">"Payagan ang &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; na i-access ang lokasyon ng device na ito?"</string>
-    <string name="permgrouprequest_device_aware_location" msgid="6641436550953715107">"Payagan ang &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; na i-access ang lokasyon ng &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>’s&lt;/b&gt; mo?"</string>
+    <string name="permgrouprequest_device_aware_location" msgid="6641436550953715107">"Payagan ang &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; na i-access ang lokasyon ng &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>&lt;/b&gt; mo?"</string>
     <string name="permgrouprequestdetail_location" msgid="2635935335778429894">"Magkakaroon lang ang app ng access sa lokasyon habang ginagamit mo ang app"</string>
     <string name="permgroupbackgroundrequest_location" msgid="1085680897265734809">"Payagan ang &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; na i-access ang lokasyon ng device na ito?"</string>
     <string name="permgroupbackgroundrequest_device_aware_location" msgid="7660465507029650527">"Payagan ang &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; na i-access ang lokasyon ng &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g> mo?"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Update sa pagbabahagi ng data"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Binago ng ilang app kung paano posibleng ibahagi ng mga ito ang iyong data ng lokasyon"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Mga Setting"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Na-access noong <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Na-access kahapon nang <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Na-access noong <xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Ang iyong pang-isang beses na password ay 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Pinaghihigpitang setting"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Para sa iyong seguridad, hindi available ang setting na ito sa ngayon."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Tinanggihan ang pahintulot na gamitin ang <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Hiningi ng app na ito ang pahintulot na <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>, na isang pinaghihigpitang setting dahil puwede nitong mailagay sa panganib ang iyong seguridad at privacy. Kapag pinaghigpitan ang pahintulot na ito, baka mapigilan ang paggana ng app na ito."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Matuto pa"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"OK"</string>
 </resources>

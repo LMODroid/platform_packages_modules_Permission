@@ -164,6 +164,9 @@ public class SpecialAppAccessChildFragment<PF extends PreferenceFragmentCompat
 
             preference.setChecked(isHolderPackage);
             UserHandle user = UserHandle.getUserHandleForUid(qualifyingApplicationInfo.uid);
+            roleApplicationPreference.setRestrictionIntent(
+                    mRole.getApplicationRestrictionIntentAsUser(qualifyingApplicationInfo, user,
+                            context));
             RoleUiBehaviorUtils.prepareApplicationPreferenceAsUser(mRole, roleApplicationPreference,
                     qualifyingApplicationInfo, user, context);
             preferenceScreen.addPreference(preference);

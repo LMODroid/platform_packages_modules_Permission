@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Todos os permisos"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Outras funcionalidades da aplicación"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Solicitude de permiso"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"As accións de instalar e desinstalar non son compatibles con Wear."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Seleccionar os permisos de acceso que queres dar á aplicación &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"Actualizouse a aplicación &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;. Selecciona os permisos de acceso que lle queres dar."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Cancelar"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Quitar permisos se non se usa a aplicación"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Quitar permisos e liberar espazo"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Pór en pausa actividade de apps sen uso"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Xestionar aplicación se non se usa"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Quita permisos, elimina ficheiros temporais e detén as notificacións"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Quita permisos, elimina os ficheiros temporais, detén as notificacións e arquiva a aplicación"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Para protexer os teus datos, quitaranse os permisos desta aplicación se pasas varios meses sen utilizala."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Para protexer os teus datos, se a aplicación leva varios meses sen usarse, quitaranse os seguintes permisos: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Para protexer os teus datos, quitáronse os permisos das aplicacións que levas varios meses sen usar."</string>
@@ -386,7 +386,7 @@
     <string name="role_call_redirection_description" msgid="6091669882014664420">"Aplicacións que che permiten reenviar chamadas saíntes a outro número de teléfono."</string>
     <string name="role_call_redirection_request_title" msgid="2816244455003562925">"Queres definir <xliff:g id="APP_NAME">%1$s</xliff:g> como a túa aplicación predeterminada de desvío de chamadas?"</string>
     <string name="role_call_redirection_request_description" msgid="3118895714178527164">"Non se necesita ningún permiso"</string>
-    <string name="role_call_screening_label" msgid="883935222060878724">"App de filtro de chamadas e spam predefinida"</string>
+    <string name="role_call_screening_label" msgid="883935222060878724">"Identificación de chamadas e spam"</string>
     <string name="role_call_screening_short_label" msgid="2048465565063130834">"App ident. de chamadas e spam"</string>
     <string name="role_call_screening_description" msgid="2349431420497468981">"Aplicacións que che permiten identificar as chamadas e bloquear o spam, as chamadas automatizadas ou os números non desexados."</string>
     <string name="role_call_screening_request_title" msgid="7358309224566977290">"Queres definir <xliff:g id="APP_NAME">%1$s</xliff:g> como a túa aplicación predeterminada de identificación de chamadas e spam?"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Aplicación de notas"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Aplicacións que che permiten tomar notas no dispositivo"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"notas"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"App de carteira predeterminada"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Aplicación de carteira"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"As aplicacións de carteira poden almacenar as túas tarxetas de crédito e de fidelidade, as chaves do coche e outros obxectos para axudar en distintos tipos de transaccións."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Queres establecer <xliff:g id="APP_NAME">%1$s</xliff:g> como aplicación de carteira predeterminada?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Non se necesita ningún permiso"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"App predeterminada actual"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Non preguntar de novo"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"App predeterminada"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Actualizacións de uso compartido de datos"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Algunhas aplicacións cambiaron a forma en que poden compartir os teus datos de localización"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Configuración"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Último acceso: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Último acceso: onte, <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Último acceso: <xliff:g id="TIME_DATE_0">%1$s</xliff:g>, <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"O teu contrasinal dun só uso é 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Opción de configuración restrinxida"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Pola túa seguranza, esta opción de configuración non está dispoñible nestes momentos."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Denegouse o permiso para usar o seguinte: <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Esta aplicación solicitou permiso de acceso a <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>, pero é unha opción restrinxida porque pode pór en perigo a túa seguranza e privacidade. A restrición do permiso pode impedir que funcione a aplicación."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Máis información"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Entendido"</string>
 </resources>

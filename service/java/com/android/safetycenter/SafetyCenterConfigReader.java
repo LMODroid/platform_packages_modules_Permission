@@ -16,6 +16,11 @@
 
 package com.android.safetycenter;
 
+import static com.android.safetycenter.UserProfileGroup.PROFILE_TYPE_MANAGED;
+import static com.android.safetycenter.UserProfileGroup.PROFILE_TYPE_PRIMARY;
+import static com.android.safetycenter.UserProfileGroup.PROFILE_TYPE_PRIVATE;
+
+import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
 
@@ -28,6 +33,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.android.safetycenter.UserProfileGroup.ProfileType;
 import com.android.safetycenter.config.ParseException;
 import com.android.safetycenter.config.SafetyCenterConfigParser;
 import com.android.safetycenter.resources.SafetyCenterResourcesApk;
@@ -410,11 +416,24 @@ public final class SafetyCenterConfigReader {
                         broadcast.mSourceIdsForProfileParentOnPageOpen.add(safetySource.getId());
                     }
                     boolean needsManagedProfilesBroadcast =
-                            SafetySources.supportsManagedProfiles(safetySource);
+                            SafetySources.supportsProfileType(safetySource, PROFILE_TYPE_MANAGED);
                     if (needsManagedProfilesBroadcast) {
                         broadcast.mSourceIdsForManagedProfiles.add(safetySource.getId());
                         if (safetySource.isRefreshOnPageOpenAllowed()) {
                             broadcast.mSourceIdsForManagedProfilesOnPageOpen.add(
+                                    safetySource.getId());
+                        }
+                    }
+
+                    // TODO(b/317378205): think about generalising these fields in Broadcast so that
+                    // we are not duplicating the code - it can be a source of confusion and errors
+                    // in future.
+                    boolean needsPrivateProfileBroadcast =
+                            SafetySources.supportsProfileType(safetySource, PROFILE_TYPE_PRIVATE);
+                    if (needsPrivateProfileBroadcast) {
+                        broadcast.mSourceIdsForPrivateProfile.add(safetySource.getId());
+                        if (safetySource.isRefreshOnPageOpenAllowed()) {
+                            broadcast.mSourceIdsForPrivateProfileOnPageOpen.add(
                                     safetySource.getId());
                         }
                     }
@@ -486,6 +505,8 @@ public final class SafetyCenterConfigReader {
         private final List<String> mSourceIdsForProfileParentOnPageOpen = new ArrayList<>();
         private final List<String> mSourceIdsForManagedProfiles = new ArrayList<>();
         private final List<String> mSourceIdsForManagedProfilesOnPageOpen = new ArrayList<>();
+        private final List<String> mSourceIdsForPrivateProfile = new ArrayList<>();
+        private final List<String> mSourceIdsForPrivateProfileOnPageOpen = new ArrayList<>();
 
         private Broadcast(String packageName) {
             mPackageName = packageName;
@@ -497,41 +518,42 @@ public final class SafetyCenterConfigReader {
         }
 
         /**
-         * Returns the safety source ids associated with this broadcast in the profile owner.
+         * Returns the safety source ids associated with this broadcast in the given profile type.
          *
-         * <p>If this list is empty, there are no sources to dispatch to in the profile owner.
+         * <p>If this list is empty, there are no sources to dispatch to in the given profile type.
          */
-        List<String> getSourceIdsForProfileParent() {
-            return unmodifiableList(mSourceIdsForProfileParent);
+        List<String> getSourceIdsForProfileType(@ProfileType int profileType) {
+            switch (profileType) {
+                case PROFILE_TYPE_PRIMARY:
+                    return unmodifiableList(mSourceIdsForProfileParent);
+                case PROFILE_TYPE_MANAGED:
+                    return unmodifiableList(mSourceIdsForManagedProfiles);
+                case PROFILE_TYPE_PRIVATE:
+                    return unmodifiableList(mSourceIdsForPrivateProfile);
+                default:
+                    Log.w(TAG, "source ids asked for unexpected profile " + profileType);
+                    return emptyList();
+            }
         }
 
         /**
-         * Returns the safety source ids associated with this broadcast in the profile owner that
-         * have refreshOnPageOpenAllowed set to true in the XML config.
-         *
-         * <p>If this list is empty, there are no sources to dispatch to in the profile owner.
-         */
-        List<String> getSourceIdsForProfileParentOnPageOpen() {
-            return unmodifiableList(mSourceIdsForProfileParentOnPageOpen);
-        }
-
-        /**
-         * Returns the safety source ids associated with this broadcast in the managed profile(s).
-         *
-         * <p>If this list is empty, there are no sources to dispatch to in the managed profile(s).
-         */
-        List<String> getSourceIdsForManagedProfiles() {
-            return unmodifiableList(mSourceIdsForManagedProfiles);
-        }
-
-        /**
-         * Returns the safety source ids associated with this broadcast in the managed profile(s)
+         * Returns the safety source ids associated with this broadcast in the given profile type
          * that have refreshOnPageOpenAllowed set to true in the XML config.
          *
-         * <p>If this list is empty, there are no sources to dispatch to in the managed profile(s).
+         * <p>If this list is empty, there are no sources to dispatch to in the given profile type.
          */
-        List<String> getSourceIdsForManagedProfilesOnPageOpen() {
-            return unmodifiableList(mSourceIdsForManagedProfilesOnPageOpen);
+        List<String> getSourceIdsOnPageOpenForProfileType(@ProfileType int profileType) {
+            switch (profileType) {
+                case PROFILE_TYPE_PRIMARY:
+                    return unmodifiableList(mSourceIdsForProfileParentOnPageOpen);
+                case PROFILE_TYPE_MANAGED:
+                    return unmodifiableList(mSourceIdsForManagedProfilesOnPageOpen);
+                case PROFILE_TYPE_PRIVATE:
+                    return unmodifiableList(mSourceIdsForPrivateProfileOnPageOpen);
+                default:
+                    Log.w(TAG, "source ids asked for unexpected profile " + profileType);
+                    return emptyList();
+            }
         }
 
         @Override
@@ -545,7 +567,10 @@ public final class SafetyCenterConfigReader {
                             that.mSourceIdsForProfileParentOnPageOpen)
                     && mSourceIdsForManagedProfiles.equals(that.mSourceIdsForManagedProfiles)
                     && mSourceIdsForManagedProfilesOnPageOpen.equals(
-                            that.mSourceIdsForManagedProfilesOnPageOpen);
+                            that.mSourceIdsForManagedProfilesOnPageOpen)
+                    && mSourceIdsForPrivateProfile.equals(that.mSourceIdsForPrivateProfile)
+                    && mSourceIdsForPrivateProfileOnPageOpen.equals(
+                            that.mSourceIdsForPrivateProfileOnPageOpen);
         }
 
         @Override
@@ -555,7 +580,9 @@ public final class SafetyCenterConfigReader {
                     mSourceIdsForProfileParent,
                     mSourceIdsForProfileParentOnPageOpen,
                     mSourceIdsForManagedProfiles,
-                    mSourceIdsForManagedProfilesOnPageOpen);
+                    mSourceIdsForManagedProfilesOnPageOpen,
+                    mSourceIdsForPrivateProfile,
+                    mSourceIdsForPrivateProfileOnPageOpen);
         }
 
         @Override
@@ -571,6 +598,10 @@ public final class SafetyCenterConfigReader {
                     + mSourceIdsForManagedProfiles
                     + ", mSourceIdsForManagedProfilesOnPageOpen="
                     + mSourceIdsForManagedProfilesOnPageOpen
+                    + ", mSourceIdsForPrivateProfile="
+                    + mSourceIdsForPrivateProfile
+                    + ", mSourceIdsForPrivateProfileOnPageOpen="
+                    + mSourceIdsForPrivateProfileOnPageOpen
                     + '}';
         }
     }

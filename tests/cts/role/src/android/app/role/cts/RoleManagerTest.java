@@ -27,9 +27,11 @@ import static com.google.common.truth.Truth.assertThat;
 
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeFalse;
 import static org.junit.Assume.assumeTrue;
 
 import android.app.Activity;
+import android.app.AppOpsManager;
 import android.app.Instrumentation;
 import android.app.role.OnRoleHoldersChangedListener;
 import android.app.role.RoleManager;
@@ -41,8 +43,13 @@ import android.content.pm.PermissionInfo;
 import android.os.Build;
 import android.os.Process;
 import android.os.UserHandle;
+import android.permission.flags.Flags;
+import android.platform.test.annotations.RequiresFlagsEnabled;
+import android.platform.test.flag.junit.CheckFlagsRule;
+import android.platform.test.flag.junit.DeviceFlagsValueProvider;
 import android.provider.Settings;
 import android.provider.Telephony;
+import android.telephony.TelephonyManager;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -56,6 +63,7 @@ import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.BySelector;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.Until;
 
 import com.android.compatibility.common.util.DisableAnimationRule;
 import com.android.compatibility.common.util.FreezeRotationRule;
@@ -126,9 +134,26 @@ public class RoleManagerTest {
     private static final Context sContext = InstrumentationRegistry.getTargetContext();
     private static final PackageManager sPackageManager = sContext.getPackageManager();
     private static final RoleManager sRoleManager = sContext.getSystemService(RoleManager.class);
+    private static final boolean sIsAutomotive = sPackageManager.hasSystemFeature(
+            PackageManager.FEATURE_AUTOMOTIVE);
+    private static final boolean sIsTelevision = sPackageManager.hasSystemFeature(
+            PackageManager.FEATURE_TELEVISION);
     private static final boolean sIsWatch = sPackageManager.hasSystemFeature(
             PackageManager.FEATURE_WATCH);
 
+    // TODO(b/327528959): consider using resource selectors for Wear too, once the underlying
+    // issue is handled.
+    private static final BySelector NEGATIVE_BUTTON_SELECTOR =
+            sIsWatch ? By.text("Cancel") : By.res("android:id/button2");
+    private static final BySelector POSITIVE_BUTTON_SELECTOR =
+            sIsWatch ? By.text("Set as default") : By.res("android:id/button1");
+    private static final BySelector DONT_ASK_AGAIN_TOGGLE_SELECTOR =
+            sIsWatch
+                    ? By.text("Don\u2019t ask again")
+                    : By.res("com.android.permissioncontroller:id/dont_ask_again");
+
+    @Rule
+    public CheckFlagsRule mCheckFlagsRule = DeviceFlagsValueProvider.createCheckFlagsRule();
     @Rule
     public DisableAnimationRule mDisableAnimationRule = new DisableAnimationRule();
 
@@ -220,6 +245,25 @@ public class RoleManagerTest {
         assertIsRoleHolder(ROLE_NAME, APP_PACKAGE_NAME, true);
     }
 
+    @SdkSuppress(minSdkVersion = Build.VERSION_CODES.VANILLA_ICE_CREAM, codeName =
+            "VanillaIceCream")
+    @Test
+    @RequiresFlagsEnabled(Flags.FLAG_ENHANCED_CONFIRMATION_MODE_APIS_ENABLED)
+    @FlakyTest(bugId = 288468003, detail = "CtsRoleTestCases is breaching 20min SLO")
+    public void requestRoleAndSelectRestrictedAppThenRestrictedSettingDialog() throws Exception {
+        assumeFalse(sIsWatch || sIsAutomotive || sIsTelevision);
+        runWithShellPermissionIdentity(
+                () -> setEnhancedConfirmationRestrictedAppOpMode(sContext, APP_PACKAGE_NAME,
+                        AppOpsManager.MODE_ERRORED));
+
+        requestRole(ROLE_NAME);
+        waitFindObject(By.text(APP_LABEL).enabled(false))
+                .clickAndWait(Until.newWindow(), TIMEOUT_MILLIS);
+        waitFindObject(By.textContains("Restricted setting"), TIMEOUT_MILLIS);
+        pressBack();
+        respondToRoleRequest(false);
+    }
+
     @Test
     @FlakyTest(bugId = 288468003, detail = "CtsRoleTestCases is breaching 20min SLO")
     public void requestRoleFirstTimeNoDontAskAgain() throws Exception {
@@ -295,7 +339,7 @@ public class RoleManagerTest {
 
         TestUtils.waitUntil("Find and respond to request role UI", () -> {
             requestRole(ROLE_NAME);
-            UiObject2 cancelButton = waitFindObjectOrNull(By.res("android:id/button2"));
+            UiObject2 cancelButton = waitFindObjectOrNull(NEGATIVE_BUTTON_SELECTOR);
             if (cancelButton == null) {
                 // Dialog not found, try again later.
                 return false;
@@ -331,7 +375,7 @@ public class RoleManagerTest {
 
         TestUtils.waitUntil("Find and respond to request role UI", () -> {
             requestRole(ROLE_NAME);
-            UiObject2 cancelButton = waitFindObjectOrNull(By.res("android:id/button2"));
+            UiObject2 cancelButton = waitFindObjectOrNull(NEGATIVE_BUTTON_SELECTOR);
             if (cancelButton == null) {
                 // Dialog not found, try again later.
                 return false;
@@ -401,10 +445,9 @@ public class RoleManagerTest {
 
     @Nullable
     private UiObject2 findDontAskAgainCheck(boolean expected) throws UiObjectNotFoundException {
-        BySelector selector = By.res("com.android.permissioncontroller:id/dont_ask_again");
         return expected
-                ? waitFindObject(selector)
-                : waitFindObjectOrNull(selector, UNEXPECTED_TIMEOUT_MILLIS);
+                ? waitFindObject(DONT_ASK_AGAIN_TOGGLE_SELECTOR)
+                : waitFindObjectOrNull(DONT_ASK_AGAIN_TOGGLE_SELECTOR, UNEXPECTED_TIMEOUT_MILLIS);
     }
 
     @Nullable
@@ -415,7 +458,7 @@ public class RoleManagerTest {
     @NonNull
     private Pair<Integer, Intent> clickButtonAndWaitForResult(boolean positive)
             throws InterruptedException, UiObjectNotFoundException {
-        waitFindObject(By.res(positive ? "android:id/button1" : "android:id/button2")).click();
+        waitFindObject(positive ? POSITIVE_BUTTON_SELECTOR : NEGATIVE_BUTTON_SELECTOR).click();
         return waitForResult();
     }
 
@@ -478,7 +521,7 @@ public class RoleManagerTest {
                 .putExtra(Intent.EXTRA_PACKAGE_NAME, APP_28_PACKAGE_NAME)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         waitFindObject(By.text(APP_28_LABEL)).click();
-        waitFindObject(By.res("android:id/button1")).click();
+        waitFindObject(POSITIVE_BUTTON_SELECTOR).click();
 
         // TODO(b/149037075): Use TelecomManager.getDefaultDialerPackage() once the bug is fixed.
         //TelecomManager telecomManager = sContext.getSystemService(TelecomManager.class);
@@ -499,7 +542,7 @@ public class RoleManagerTest {
                 .putExtra(Intent.EXTRA_PACKAGE_NAME, APP_28_PACKAGE_NAME)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         waitFindObject(By.text(APP_28_LABEL)).click();
-        waitFindObject(By.res("android:id/button1")).click();
+        waitFindObject(POSITIVE_BUTTON_SELECTOR).click();
 
         TestUtils.waitUntil("App is not set as default sms app", () -> Objects.equals(
                 Telephony.Sms.getDefaultSmsPackage(sContext), APP_28_PACKAGE_NAME));
@@ -551,7 +594,7 @@ public class RoleManagerTest {
                 .putExtra(Intent.EXTRA_PACKAGE_NAME, APP_PACKAGE_NAME)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         waitFindObject(By.text(APP_LABEL)).click();
-        waitFindObject(By.res("android:id/button1")).click();
+        waitFindObject(POSITIVE_BUTTON_SELECTOR).click();
 
         // TODO(b/149037075): Use TelecomManager.getDefaultDialerPackage() once the bug is fixed.
         //TelecomManager telecomManager = sContext.getSystemService(TelecomManager.class);
@@ -597,7 +640,7 @@ public class RoleManagerTest {
                 .putExtra(Intent.EXTRA_PACKAGE_NAME, APP_PACKAGE_NAME)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         waitFindObject(By.text(APP_LABEL)).click();
-        waitFindObject(By.res("android:id/button1")).click();
+        waitFindObject(POSITIVE_BUTTON_SELECTOR).click();
 
         TestUtils.waitUntil("App is not set as default sms app", () -> Objects.equals(
                 Telephony.Sms.getDefaultSmsPackage(sContext), APP_PACKAGE_NAME));
@@ -619,6 +662,34 @@ public class RoleManagerTest {
             waitFindObject(By.clickable(true).hasDescendant(By.checkable(true).checked(false))
                     .hasDescendant(By.text(APP_LABEL)));
         }
+
+        pressBack();
+    }
+
+    @SdkSuppress(minSdkVersion = Build.VERSION_CODES.VANILLA_ICE_CREAM, codeName =
+            "VanillaIceCream")
+    @Test
+    @RequiresFlagsEnabled(Flags.FLAG_ENHANCED_CONFIRMATION_MODE_APIS_ENABLED)
+    @FlakyTest(bugId = 288468003, detail = "CtsRoleTestCases is breaching 20min SLO")
+    public void openDefaultAppDetailsOnHandHeldThenRestrictedAppIsNotSelectableAsDefaultApp()
+            throws Exception {
+        assumeFalse(sIsWatch || sIsAutomotive || sIsTelevision);
+        runWithShellPermissionIdentity(
+                () -> setEnhancedConfirmationRestrictedAppOpMode(sContext, APP_PACKAGE_NAME,
+                        AppOpsManager.MODE_ERRORED));
+
+        runWithShellPermissionIdentity(() -> sContext.startActivity(new Intent(
+                Intent.ACTION_MANAGE_DEFAULT_APP)
+                .addCategory(Intent.CATEGORY_DEFAULT)
+                .putExtra(Intent.EXTRA_ROLE_NAME, ROLE_NAME)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_CLEAR_TASK)));
+
+        waitFindObject(By.text(APP_LABEL).enabled(false)).clickAndWait(Until.newWindow(),
+                TIMEOUT_MILLIS);
+
+        waitFindObject(By.textContains("Restricted setting"), TIMEOUT_MILLIS);
+        pressBack();
 
         pressBack();
     }
@@ -677,8 +748,8 @@ public class RoleManagerTest {
         if (sIsWatch) {
             waitFindObject(By.clickable(true).checked(false)).click();
         } else {
-            waitFindObject(
-                    By.clickable(true).hasDescendant(By.checkable(true).checked(false))).click();
+            waitFindObject(By.clickable(true).hasDescendant(By.checkable(true).enabled(true)
+                    .checked(false))).click();
         }
 
         if (sIsWatch) {
@@ -769,6 +840,15 @@ public class RoleManagerTest {
         waitFindObject(By.text(APP_LABEL));
 
         pressBack();
+    }
+
+    private void setEnhancedConfirmationRestrictedAppOpMode(@NonNull Context context,
+            @NonNull String packageName, int mode)
+            throws PackageManager.NameNotFoundException {
+        AppOpsManager appOpsManager = context.getSystemService(AppOpsManager.class);
+        appOpsManager.setMode(AppOpsManager.OPSTR_ACCESS_RESTRICTED_SETTINGS,
+                context.getPackageManager().getApplicationInfo(packageName, 0).uid,
+                packageName, mode);
     }
 
     private static void waitForIdle() {
@@ -1054,6 +1134,28 @@ public class RoleManagerTest {
         addRoleHolder(RoleManager.ROLE_SMS, APP_PACKAGE_NAME);
 
         assertThat(Telephony.Sms.getDefaultSmsPackage(sContext)).isEqualTo(APP_PACKAGE_NAME);
+    }
+
+    @SdkSuppress(minSdkVersion = Build.VERSION_CODES.VANILLA_ICE_CREAM,
+            codeName = "VanillaIceCream")
+    @Test
+    @RequiresFlagsEnabled(Flags.FLAG_GET_EMERGENCY_ROLE_HOLDER_API_ENABLED)
+    public void telephonyManagerGetEmergencyAssistancePackageNameBackedByRole() throws Exception {
+        TelephonyManager telephonyManager = sContext.getSystemService(TelephonyManager.class);
+        List<String> emergencyRoleHolders = getRoleHolders(RoleManager.ROLE_EMERGENCY);
+
+        if (telephonyManager.isVoiceCapable()
+                && callWithShellPermissionIdentity(() ->
+                telephonyManager.isEmergencyAssistanceEnabled())) {
+            String emergencyAssistancePackageName = callWithShellPermissionIdentity(() ->
+                    telephonyManager.getEmergencyAssistancePackageName());
+            assertThat(emergencyRoleHolders).hasSize(1);
+            assertThat(emergencyAssistancePackageName).isEqualTo(emergencyRoleHolders.get(0));
+        } else {
+            assertThrows(IllegalStateException.class, () ->
+                    callWithShellPermissionIdentity(() ->
+                            telephonyManager.getEmergencyAssistancePackageName()));
+        }
     }
 
     @SdkSuppress(minSdkVersion = Build.VERSION_CODES.S, codeName = "S")

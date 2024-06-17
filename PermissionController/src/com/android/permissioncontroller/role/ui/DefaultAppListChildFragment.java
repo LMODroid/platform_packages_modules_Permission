@@ -182,6 +182,7 @@ public class DefaultAppListChildFragment<PF extends PreferenceFragmentCompat
                 preference = rolePreference.asPreference();
             }
 
+            rolePreference.setRestrictionIntent(role.getRestrictionIntentAsUser(user, context));
             List<ApplicationInfo> holderApplicationInfos = roleItem.getHolderApplicationInfos();
             if (holderApplicationInfos.isEmpty()) {
                 preference.setIcon(null);
@@ -191,7 +192,8 @@ public class DefaultAppListChildFragment<PF extends PreferenceFragmentCompat
                 preference.setIcon(Utils.getBadgedIcon(context, holderApplicationInfo));
                 preference.setSummary(Utils.getAppLabel(holderApplicationInfo, context));
             }
-            RoleUiBehaviorUtils.preparePreferenceAsUser(role, rolePreference, user, context);
+            RoleUiBehaviorUtils.preparePreferenceAsUser(role, holderApplicationInfos,
+                    rolePreference, user, context);
             preferenceGroup.addPreference(preference);
         }
     }

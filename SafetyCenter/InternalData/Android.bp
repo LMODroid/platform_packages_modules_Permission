@@ -16,6 +16,7 @@
 
 // Library for internal data used by Safety Center system service and UI.
 package {
+    default_team: "trendy_team_android_permissions",
     default_applicable_licenses: ["Android-Apache-2.0"],
 }
 

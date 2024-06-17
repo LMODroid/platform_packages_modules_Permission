@@ -26,9 +26,10 @@ import android.safetycenter.SafetySourceStatus;
 
 import androidx.annotation.Nullable;
 
-import com.android.permission.util.UserUtils;
 import com.android.safetycenter.SafetySourceIssueInfo;
 import com.android.safetycenter.SafetySourceKey;
+import com.android.safetycenter.UserProfileGroup;
+import com.android.safetycenter.UserProfileGroup.ProfileType;
 import com.android.safetycenter.internaldata.SafetyCenterIssueKey;
 import com.android.safetycenter.logging.SafetyCenterStatsdLogger;
 
@@ -63,13 +64,13 @@ final class SafetySourceStateCollectedLogger {
     /**
      * Writes a SafetySourceStateCollected atom for the given source in response to a stats pull.
      */
-    void writeAutomaticAtom(SafetySourceKey sourceKey, boolean isManagedProfile) {
+    void writeAutomaticAtom(SafetySourceKey sourceKey, @ProfileType int profileType) {
         logSafetySourceStateCollected(
                 sourceKey,
                 mSourceDataRepository.getSafetySourceData(sourceKey),
                 /* refreshReason= */ null,
                 /* sourceDataDiffers= */ false,
-                isManagedProfile,
+                profileType,
                 /* safetyEvent= */ null,
                 mSourceDataRepository.getSafetySourceLastUpdated(sourceKey));
     }
@@ -90,7 +91,7 @@ final class SafetySourceStateCollectedLogger {
                 safetySourceData,
                 refreshReason,
                 sourceDataDiffers,
-                UserUtils.isManagedProfile(userId, mContext),
+                UserProfileGroup.getProfileTypeOfUser(userId, mContext),
                 safetyEvent,
                 /* lastUpdatedElapsedTimeMillis= */ null);
     }
@@ -100,7 +101,7 @@ final class SafetySourceStateCollectedLogger {
             @Nullable SafetySourceData sourceData,
             @Nullable @SafetyCenterManager.RefreshReason Integer refreshReason,
             boolean sourceDataDiffers,
-            boolean isManagedProfile,
+            @ProfileType int profileType,
             @Nullable SafetyEvent safetyEvent,
             @Nullable @ElapsedRealtimeLong Long lastUpdatedElapsedTimeMillis) {
         SafetySourceStatus sourceStatus = sourceData == null ? null : sourceData.getStatus();
@@ -131,7 +132,7 @@ final class SafetySourceStateCollectedLogger {
         Integer severityLevel = maxSeverityLevel > Integer.MIN_VALUE ? maxSeverityLevel : null;
         SafetyCenterStatsdLogger.writeSafetySourceStateCollected(
                 sourceKey.getSourceId(),
-                isManagedProfile,
+                profileType,
                 severityLevel,
                 openIssuesCount,
                 dismissedIssuesCount,

@@ -214,6 +214,8 @@ public class DefaultAppChildFragment<PF extends PreferenceFragmentCompat
 
         preference.setChecked(checked);
         if (applicationInfo != null) {
+            roleApplicationPreference.setRestrictionIntent(
+                    mRole.getApplicationRestrictionIntentAsUser(applicationInfo, mUser, context));
             RoleUiBehaviorUtils.prepareApplicationPreferenceAsUser(mRole, roleApplicationPreference,
                     applicationInfo, mUser, context);
         }

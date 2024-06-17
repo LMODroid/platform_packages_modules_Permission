@@ -20,6 +20,8 @@ import android.Manifest.permission.ACCESS_MEDIA_LOCATION
 import android.Manifest.permission.READ_MEDIA_IMAGES
 import android.Manifest.permission.READ_MEDIA_VIDEO
 import android.Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
+import android.app.UiAutomation.ROTATION_FREEZE_270
+import android.app.UiAutomation.ROTATION_UNFREEZE
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.FLAG_PERMISSION_ONE_TIME
 import android.content.pm.PackageManager.FLAG_PERMISSION_REVOKED_COMPAT
@@ -466,13 +468,31 @@ class PhotoPickerPermissionTest : BaseUsePermissionTest() {
     }
 
     @Test
+    fun testDismissAfterActivityRecreatedWithPickerOpen() {
+        installPackage(APP_APK_PATH_LATEST)
+        requestAppPermissionsAndAssertResult(
+            READ_MEDIA_IMAGES to false,
+            READ_MEDIA_VISUAL_USER_SELECTED to true,
+            waitForWindowTransition = false
+        ) {
+            doAndWaitForWindowTransition { click(By.res(SELECT_BUTTON)) }
+            clickImageOrVideo()
+            try {
+                doAndWaitForWindowTransition { uiAutomation.setRotation(ROTATION_FREEZE_270) }
+                clickImageOrVideo()
+                doAndWaitForWindowTransition { clickAllow() }
+            } finally {
+                uiAutomation.setRotation(ROTATION_UNFREEZE)
+            }
+        }
+    }
+
+    @Test
     fun testCanSelectPhotosInSettings() {
         installPackage(APP_APK_PATH_LATEST)
         navigateToIndividualPermissionSetting(READ_MEDIA_IMAGES)
         click(By.res(SELECT_RADIO_BUTTON))
-        doAndWaitForWindowTransition {
-            click(By.res(EDIT_PHOTOS_BUTTON))
-        }
+        doAndWaitForWindowTransition { click(By.res(EDIT_PHOTOS_BUTTON)) }
         clickImageOrVideo()
         clickAllow()
     }

@@ -68,6 +68,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.PermissionGroupInfo;
 import android.content.pm.PermissionInfo;
 import android.content.pm.ResolveInfo;
+import android.content.pm.UserProperties;
 import android.content.res.Resources;
 import android.content.res.Resources.Theme;
 import android.graphics.Bitmap;
@@ -392,6 +393,8 @@ public final class Utils {
         /* do nothing - hide constructor */
     }
 
+    private static Object sLock = new Object();
+
     private static ArrayMap<UserHandle, Context> sUserContexts = new ArrayMap<>();
 
     /**
@@ -406,11 +409,13 @@ public final class Utils {
      * @throws RuntimeException If the app has no package name attached, which should never happen
      */
     public static @NonNull Context getUserContext(Context context, UserHandle user) {
-        if (!sUserContexts.containsKey(user)) {
-            sUserContexts.put(user, context.getApplicationContext()
-                    .createContextAsUser(user, 0));
+        synchronized (sLock) {
+            if (!sUserContexts.containsKey(user)) {
+                sUserContexts.put(user, context.getApplicationContext()
+                        .createContextAsUser(user, 0));
+            }
+            return Preconditions.checkNotNull(sUserContexts.get(user));
         }
-        return Preconditions.checkNotNull(sUserContexts.get(user));
     }
 
     /**
@@ -1586,5 +1591,31 @@ public final class Utils {
     public static String getApplicationLabel(@NonNull Context context,
             @NonNull ApplicationInfo applicationInfo) {
         return context.getPackageManager().getApplicationLabel(applicationInfo).toString();
+    }
+
+    /**
+     * Returns whether the given user should be shown in the Settings UI in SdkLevel V+. This method
+     * will always return true for SdkLevels below V.
+     *
+     * @param userHandle The user for which to check whether it should be shown or not.
+     * @return true if it should be shown, false otherwise.
+     */
+    public static boolean shouldShowInSettings(UserHandle userHandle, UserManager userManager) {
+        return !SdkLevel.isAtLeastV() || shouldShowInSettingsInternal(userHandle, userManager);
+    }
+
+    /**
+     * Returns whether the given user should be shown in the Settings UI.
+     *
+     * @param userHandle The user for which to check whether it should be shown or not.
+     * @return true if it should be shown, false otherwise.
+     */
+    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
+    @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.VANILLA_ICE_CREAM)
+    private static boolean shouldShowInSettingsInternal(
+            UserHandle userHandle, UserManager userManager) {
+        var userProperties = userManager.getUserProperties(userHandle);
+        return !userManager.isQuietModeEnabled(userHandle)
+                || userProperties.getShowInQuietMode() != UserProperties.SHOW_IN_QUIET_MODE_HIDDEN;
     }
 }

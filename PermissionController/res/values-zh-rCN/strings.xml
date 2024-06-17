@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"所有权限"</string>
     <string name="other_permissions" msgid="2901186127193849594">"其他应用功能"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"权限请求"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Wear 不支持安装/卸载操作。"</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"请选择要向&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;授予哪些权限"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;已更新。请选择要向此应用授予哪些权限。"</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"取消"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"如果未使用此应用，则移除相关权限"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"撤消权限并释放空间"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"暂停闲置应用的活动"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"管理闲置应用"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"移除权限、删除临时文件并停止发送通知"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"撤消权限、删除临时文件、停止发送通知并归档应用"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"为了保护您的数据，如果您连续几个月未使用此应用，系统会移除它的权限。"</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"为了保护您的数据，如果您连续几个月未使用此应用，系统会移除其以下权限：<xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"为了保护您的数据，对于您连续几个月未使用过的应用，系统已将其权限移除。"</string>
@@ -221,7 +221,7 @@
     <string name="auto_revoked_app_summary_two" msgid="1910545340763709389">"已移除<xliff:g id="PERMISSION_NAME_0">%1$s</xliff:g>以及<xliff:g id="PERMISSION_NAME_1">%2$s</xliff:g>权限"</string>
     <string name="auto_revoked_app_summary_many" msgid="5930976230827378798">"已移除<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>权限及另外 <xliff:g id="NUMBER">%2$s</xliff:g> 项权限"</string>
     <string name="unused_apps_page_title" msgid="6986983535677572559">"闲置应用"</string>
-    <string name="unused_apps_page_summary" msgid="1867593913217272155">"如果您连续几个月未使用某个应用，系统将对该应用采取以下措施：\n\n• 移除权限以保护您的数据\n• 停止通知功能以节省电量\n• 移除临时文件以释放空间\n\n如需重新授予权限以继续接收通知，请打开该应用。"</string>
+    <string name="unused_apps_page_summary" msgid="1867593913217272155">"如果您连续几个月未使用某个应用，系统将对该应用采取以下措施：\n\n• 移除权限以保护您的数据\n• 停止通知功能以节省电量\n• 移除临时文件以释放空间\n\n如需重新授予权限和接收通知，请打开该应用。"</string>
     <string name="unused_apps_page_tv_summary" msgid="2624911608663778308">"如果您连续 1 个月未使用某个应用，系统将对该应用采取以下措施：\n\n• 撤消权限以保护您的数据\n• 移除临时文件以释放空间\n\n如需重新授予权限，请打开该应用。"</string>
     <string name="last_opened_category_title" msgid="8796557894614236128">"{count,plural, =1{距上次打开已超过 # 个月}other{距上次打开已超过 # 个月}}"</string>
     <string name="last_opened_summary" msgid="5248984030024968808">"应用上次打开时间是 <xliff:g id="DATE">%s</xliff:g>"</string>
@@ -234,7 +234,7 @@
     <string name="permission_description_summary_call_log" msgid="7321437186317577624">"具有此权限的应用可以读取和写入手机通话记录"</string>
     <string name="permission_description_summary_camera" msgid="108004375101882069">"具有此权限的应用可以拍摄照片和录制视频"</string>
     <string name="permission_description_summary_contacts" msgid="2337798886460408996">"具有此权限的应用可以访问您的通讯录"</string>
-    <string name="permission_description_summary_location" msgid="2817531799933480694">"具有此权限的应用可以使用此设备的位置信息"</string>
+    <string name="permission_description_summary_location" msgid="2817531799933480694">"具有此权限的应用可以访问此设备的位置信息"</string>
     <string name="permission_description_summary_nearby_devices" msgid="8269183818275073741">"具有这项权限的应用可以查找、连接附近设备，以及确定附近设备的相对位置"</string>
     <string name="permission_description_summary_microphone" msgid="630834800308329907">"具有此权限的应用可以录制音频"</string>
     <string name="permission_description_summary_phone" msgid="4515277217435233619">"具有此权限的应用可以拨打电话及管理通话"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"记事应用"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"允许您在设备上记事的应用"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"记事"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"默认钱包应用"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"钱包应用"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"钱包应用可以存储信用卡和会员卡、车钥匙和其他内容，帮助您完成各种形式的交易。"</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"要将“<xliff:g id="APP_NAME">%1$s</xliff:g>”设为默认钱包应用？"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"无需任何权限"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"当前默认应用"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"不再询问"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"设为默认应用"</string>
@@ -636,8 +641,8 @@
     <string name="app_permission_rationale_message" msgid="8511466916077100713">"数据安全"</string>
     <string name="app_location_permission_rationale_title" msgid="925420340572401350">"可能会分享位置数据"</string>
     <string name="app_location_permission_rationale_subtitle" msgid="6986985722752868692">"此应用已声明它可能会与第三方分享您的位置数据"</string>
-    <string name="data_sharing_updates_title" msgid="7996933386875213859">"位置数据分享方面的更新"</string>
-    <string name="data_sharing_updates_summary" msgid="764113985772233889">"查看改变了位置数据分享方式的应用"</string>
+    <string name="data_sharing_updates_title" msgid="7996933386875213859">"位置数据共享方面的更新"</string>
+    <string name="data_sharing_updates_summary" msgid="764113985772233889">"查看改变了位置数据共享方式的应用"</string>
     <string name="data_sharing_updates_subtitle" msgid="6311537708950632329">"这些应用改变了它们在分享您位置数据上的做法。它们之前可能未分享过位置数据，也可能现在是为了广告或营销目的而分享此类数据。"</string>
     <string name="data_sharing_updates_footer_message" msgid="1582711655172892107">"这些应用的开发者已将其数据分享做法相关信息提供给应用商店。此类信息可能会随时间更新。\n\n数据分享做法可能会因应用版本、使用情况、地区和年龄而异。"</string>
     <string name="learn_about_data_sharing" msgid="4200480587079488045">"了解数据分享"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"数据分享方式变更"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"部分应用更改了位置数据分享方式"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"设置"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"<xliff:g id="TIME_DATE">%1$s</xliff:g>访问过"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"昨天<xliff:g id="TIME_DATE">%1$s</xliff:g>访问过"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"<xliff:g id="TIME_DATE_0">%1$s</xliff:g><xliff:g id="TIME_DATE_1">%2$s</xliff:g>访问过"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"您的动态密码为 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"受限制的设置"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"出于安全考虑，此设置目前不可用。"</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"使用<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>的权限已被拒绝"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"此应用已请求<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>权限，这是一项受限制的设置，因为它会给您的安全性和隐私权设置带来风险。限制此权限可能会使此应用无法运行。"</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"了解详情"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"知道了"</string>
 </resources>

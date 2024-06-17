@@ -16,10 +16,8 @@
 
 package com.android.permissioncontroller.role.ui.wear
 
-import android.app.admin.DevicePolicyManager
 import android.content.Context
 import android.content.Intent
-import android.provider.Settings
 import androidx.preference.TwoStatePreference
 import com.android.permissioncontroller.role.ui.RoleApplicationPreference
 
@@ -32,25 +30,15 @@ class WearRoleApplicationPreference(
     val label: String,
     val checked: Boolean,
     val onDefaultCheckChanged: (Boolean) -> Unit = {},
-    private var restriction: String? = null
+    private var restrictionIntent: Intent? = null
 ) : TwoStatePreference(context), RoleApplicationPreference {
     fun getOnCheckChanged(): (Boolean) -> Unit =
-        restriction?.let {
-            return { _ ->
-                context.startActivity(
-                    Intent(Settings.ACTION_SHOW_ADMIN_SUPPORT_DETAILS)
-                        .putExtra(DevicePolicyManager.EXTRA_RESTRICTION, restriction)
-                )
-            }
-        }
-            ?: onDefaultCheckChanged
+        restrictionIntent?.let { { _ -> context.startActivity(it) } } ?: onDefaultCheckChanged
 
-    override fun setUserRestriction(userRestriction: String?) {
-        restriction = userRestriction
-        setEnabled(restriction == null)
+    override fun setRestrictionIntent(restrictionIntent: Intent?) {
+        this.restrictionIntent = restrictionIntent
+        setEnabled(restrictionIntent == null)
     }
 
-    override fun asTwoStatePreference(): TwoStatePreference {
-        return this
-    }
+    override fun asTwoStatePreference(): TwoStatePreference = this
 }

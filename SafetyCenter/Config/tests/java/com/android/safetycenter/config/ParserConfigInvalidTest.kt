@@ -19,6 +19,7 @@ package com.android.safetycenter.config
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.android.modules.utils.build.SdkLevel
+import com.android.permission.flags.Flags
 import com.android.safetycenter.config.tests.R
 import com.google.common.truth.Truth.assertThat
 import org.junit.Assert.assertThrows
@@ -63,16 +64,37 @@ class ParserConfigInvalidTest {
         fun parameters() =
             arrayOf(
                     Params(
+                        "ConfigDynamicSafetySourceAllDisabledNoPrivate",
+                        R.raw.config_dynamic_safety_source_all_disabled_no_private,
+                        "Element dynamic-safety-source invalid",
+                        "Required attribute titleForPrivateProfile missing",
+                        SdkLevel.isAtLeastV() && Flags.privateProfileTitleApi()
+                    ),
+                    Params(
                         "ConfigDynamicSafetySourceAllDisabledNoWork",
                         R.raw.config_dynamic_safety_source_all_disabled_no_work,
                         "Element dynamic-safety-source invalid",
                         "Required attribute titleForWork missing"
                     ),
                     Params(
+                        "ConfigDynamicSafetySourceAllHiddenWithSearchNoPrivate",
+                        R.raw.config_dynamic_safety_source_all_hidden_with_search_no_private,
+                        "Element dynamic-safety-source invalid",
+                        "Required attribute titleForPrivateProfile missing",
+                        SdkLevel.isAtLeastV() && Flags.privateProfileTitleApi()
+                    ),
+                    Params(
                         "ConfigDynamicSafetySourceAllHiddenWithSearchNoWork",
                         R.raw.config_dynamic_safety_source_all_hidden_with_search_no_work,
                         "Element dynamic-safety-source invalid",
                         "Required attribute titleForWork missing"
+                    ),
+                    Params(
+                        "ConfigDynamicSafetySourceAllNoPrivate",
+                        R.raw.config_dynamic_safety_source_all_no_private,
+                        "Element dynamic-safety-source invalid",
+                        "Required attribute titleForPrivateProfile missing",
+                        SdkLevel.isAtLeastV() && Flags.privateProfileTitleApi()
                     ),
                     Params(
                         "ConfigDynamicSafetySourceAllNoWork",
@@ -160,10 +182,24 @@ class ParserConfigInvalidTest {
                         "Required attribute title missing"
                     ),
                     Params(
+                        "ConfigDynamicSafetySourcePrimaryHiddenWithPrivate",
+                        R.raw.config_dynamic_safety_source_primary_hidden_with_private,
+                        "Element dynamic-safety-source invalid",
+                        "Prohibited attribute titleForPrivateProfile present",
+                        SdkLevel.isAtLeastV() && Flags.privateProfileTitleApi()
+                    ),
+                    Params(
                         "ConfigDynamicSafetySourcePrimaryHiddenWithWork",
                         R.raw.config_dynamic_safety_source_primary_hidden_with_work,
                         "Element dynamic-safety-source invalid",
                         "Prohibited attribute titleForWork present"
+                    ),
+                    Params(
+                        "ConfigDynamicSafetySourcePrimaryWithPrivate",
+                        R.raw.config_dynamic_safety_source_primary_with_private,
+                        "Element dynamic-safety-source invalid",
+                        "Prohibited attribute titleForPrivateProfile present",
+                        SdkLevel.isAtLeastV() && Flags.privateProfileTitleApi()
                     ),
                     Params(
                         "ConfigDynamicSafetySourcePrimaryWithWork",
@@ -224,6 +260,13 @@ class ParserConfigInvalidTest {
                         R.raw.config_issue_only_safety_source_with_intent,
                         "Element issue-only-safety-source invalid",
                         "Prohibited attribute intentAction present"
+                    ),
+                    Params(
+                        "ConfigIssueOnlySafetySourceWithPrivate",
+                        R.raw.config_issue_only_safety_source_with_private,
+                        "Element issue-only-safety-source invalid",
+                        "Prohibited attribute titleForPrivateProfile present",
+                        SdkLevel.isAtLeastV() && Flags.privateProfileTitleApi()
                     ),
                     Params(
                         "ConfigIssueOnlySafetySourceWithSearch",
@@ -425,10 +468,24 @@ class ParserConfigInvalidTest {
                         SdkLevel.isAtLeastU()
                     ),
                     Params(
+                        "ConfigStaticSafetySourceWithPrimaryAndPrivate",
+                        R.raw.config_static_safety_source_with_primary_and_private,
+                        "Element static-safety-source invalid",
+                        "Prohibited attribute titleForPrivateProfile present",
+                        SdkLevel.isAtLeastV() && Flags.privateProfileTitleApi()
+                    ),
+                    Params(
                         "ConfigStaticSafetySourceWithPrimaryAndWork",
                         R.raw.config_static_safety_source_with_primary_and_work,
                         "Element static-safety-source invalid",
                         "Prohibited attribute titleForWork present"
+                    ),
+                    Params(
+                        "ConfigStaticSafetySourceWithPrivatePreV",
+                        R.raw.config_static_safety_source_with_private_profile,
+                        "Unexpected attribute static-safety-source.titleForPrivateProfile",
+                        null,
+                        !SdkLevel.isAtLeastV()
                     ),
                     Params(
                         "ConfigStaticSafetySourceWithRefresh",

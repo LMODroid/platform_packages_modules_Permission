@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Все разрешения"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Что ещё может приложение"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Запрос разрешений"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Wear OS"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Установка и удаление не поддерживаются в Wear OS."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Выберите разрешения для приложения &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"Приложение &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; обновлено. Выберите разрешения для него."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Отмена"</string>
@@ -195,7 +193,7 @@
     <string name="app_permission_button_deny" msgid="6016454069832050300">"Запретить"</string>
     <string name="precise_image_description" msgid="6349638632303619872">"Точное местоположение"</string>
     <string name="approximate_image_description" msgid="938803699637069884">"Приблизительное местоположение"</string>
-    <string name="app_permission_location_accuracy" msgid="7166912915040018669">"Использовать точное местоположение"</string>
+    <string name="app_permission_location_accuracy" msgid="7166912915040018669">"Точное местоположение"</string>
     <string name="app_permission_location_accuracy_subtitle" msgid="2654077606404987210">"Если определение точного местоположения отключено, приложения могут использовать данные о примерном местоположении устройства"</string>
     <string name="app_permission_title" msgid="2090897901051370711">"Разрешение \"<xliff:g id="PERM">%1$s</xliff:g>\""</string>
     <string name="app_permission_header" msgid="2951363137032603806">"<xliff:g id="PERM">%1$s</xliff:g>: доступ для этого приложения"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Отзывать разрешения, если приложение не используется"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Удалять разрешения и освобождать место"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Приостановить работу в неактивный период"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Приостановить работу в неактивный период"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Удалить разрешения и временные файлы, прекратить отправку уведомлений"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Удалить разрешения и временные файлы, прекратить отправку уведомлений и перенести приложение в архив"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Для защиты ваших данных мы отзовем разрешения, предоставленные этому приложению, если вы не будете пользоваться им несколько месяцев."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Если вы не будете пользоваться приложением несколько месяцев, в целях защиты ваших данных мы отзовем следующие разрешения: <xliff:g id="PERMS">%1$s</xliff:g>."</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"В целях защиты ваших данных мы отозвали разрешения для приложений, которыми вы не пользовались несколько месяцев."</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Приложение для заметок"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Приложения для написания заметок на вашем устройстве"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"заметки"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Кошелек по умолчанию"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Приложение-кошелек"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"В приложении-кошельке можно хранить кредитные карты, карты постоянного клиента, автомобильные ключи и другие цифровые продукты. С его помощью удобнее проводить различные типы транзакций."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Использовать приложение \"<xliff:g id="APP_NAME">%1$s</xliff:g>\" как кошелек по умолчанию?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Разрешения не требуются."</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Используется по умолчанию"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Больше не спрашивать"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"По умолчанию"</string>
@@ -549,7 +554,7 @@
     <string name="blocked_sensor_summary" msgid="4443707628305027375">"Для приложений и сервисов"</string>
     <string name="blocked_mic_summary" msgid="8960466941528458347">"Данные микрофона могут передаваться при звонке на номер экстренной службы"</string>
     <string name="blocked_sensor_button_label" msgid="6742092634984289658">"Изменить"</string>
-    <string name="safety_center_dashboard_page_title" msgid="2810774008694315854">"Защита и конфиденциальность"</string>
+    <string name="safety_center_dashboard_page_title" msgid="2810774008694315854">"Безопасность и кон­фи­ден­циаль­ность"</string>
     <string name="safety_center_rescan_button" msgid="4517514567809409596">"Сканировать устройство"</string>
     <string name="safety_center_issue_card_dismiss_button" msgid="5113965506144222402">"Закрыть"</string>
     <string name="safety_center_issue_card_dismiss_confirmation_title" msgid="2734809473425036382">"Закрыть оповещение?"</string>
@@ -560,7 +565,7 @@
     <string name="safety_status_preference_title_and_summary_content_description" msgid="3511373256505058464">"Статус безопасности и конфиденциальности. <xliff:g id="OVERALL_SAFETY_STATUS">%1$s</xliff:g>. <xliff:g id="SUMMARY_OF_DEVICE_STATUS">%2$s</xliff:g>"</string>
     <string name="security_settings" msgid="3808106921175271317">"Настройки безопасности"</string>
     <string name="sensor_permissions_qs" msgid="1022267900031317472">"Разрешения"</string>
-    <string name="safety_privacy_qs_tile_title" msgid="727301867710374052">"Защита и конфиденциальность"</string>
+    <string name="safety_privacy_qs_tile_title" msgid="727301867710374052">"Безопасность и кон­фи­ден­циаль­ность"</string>
     <string name="safety_privacy_qs_tile_subtitle" msgid="3621544532041936749">"Проверьте статус."</string>
     <string name="privacy_controls_qs" msgid="5780144882040591169">"Ваши настройки конфиденциальности"</string>
     <string name="security_settings_button_label_qs" msgid="8280343822465962330">"Другие настройки"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Обновление сведений о передаче данных"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Некоторые приложения изменили подход к передаче данных о вашем местоположении."</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Настройки"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Последний доступ: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Последний доступ вчера: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Последний доступ: <xliff:g id="TIME_DATE_0">%1$s</xliff:g>, <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Ваш одноразовый код: 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Настройки с ограниченным доступом"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"В целях безопасности эти настройки пока недоступны."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Разрешение \"<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>\" не предоставлено"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Приложение запросило разрешение \"<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>\", доступ к которому ограничен, так как его использование может представлять угрозу для вашей безопасности и конфиденциальности. Без этого разрешения приложение может не работать."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Подробнее"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"ОК"</string>
 </resources>

@@ -50,12 +50,12 @@
     <string name="permission_revoked_all" msgid="3397649017727222283">"semua dinonaktifkan"</string>
     <string name="permission_revoked_none" msgid="9213345075484381180">"tidak ada yang dinonaktifkan"</string>
     <string name="grant_dialog_button_allow" msgid="5314677880021102550">"Izinkan"</string>
-    <string name="grant_dialog_button_allow_always" msgid="4485552579273565981">"Izinkan sepanjang waktu"</string>
+    <string name="grant_dialog_button_allow_always" msgid="4485552579273565981">"Selalu izinkan"</string>
     <string name="grant_dialog_button_allow_foreground" msgid="501896824973636533">"Saat aplikasi digunakan"</string>
     <string name="grant_dialog_button_change_to_precise_location" msgid="3273115879467236033">"Ubah ke lokasi presisi"</string>
     <string name="grant_dialog_button_keey_approximate_location" msgid="438025182769080011">"Tetap gunakan perkiraan"</string>
     <string name="grant_dialog_button_allow_one_time" msgid="2618088516449706391">"Hanya kali ini"</string>
-    <string name="grant_dialog_button_allow_background" msgid="8236044729434367833">"Izinkan sepanjang waktu"</string>
+    <string name="grant_dialog_button_allow_background" msgid="8236044729434367833">"Selalu izinkan"</string>
     <string name="grant_dialog_button_allow_all_files" msgid="4955436994954829894">"Izinkan pengelolaan semua file"</string>
     <string name="grant_dialog_button_allow_media_only" msgid="4832877658422573832">"Izinkan akses ke file media"</string>
     <string name="app_permissions_breadcrumb" msgid="5136969550489411650">"Aplikasi"</string>
@@ -109,15 +109,13 @@
     <!-- no translation found for background_access_chooser_dialog_choices:0 (1351721623256561996) -->
     <!-- no translation found for background_access_chooser_dialog_choices:1 (9127301153688725448) -->
     <!-- no translation found for background_access_chooser_dialog_choices:2 (4305536986042401191) -->
-    <string name="permission_access_always" msgid="1474641821883823446">"Izinkan sepanjang waktu"</string>
+    <string name="permission_access_always" msgid="1474641821883823446">"Selalu izinkan"</string>
     <string name="permission_access_only_foreground" msgid="7801170728159326195">"Izinkan saat aplikasi digunakan"</string>
     <string name="permission_access_never" msgid="4647014230217936900">"Jangan izinkan"</string>
     <string name="loading" msgid="4789365003890741082">"Memuat…"</string>
     <string name="all_permissions" msgid="6911125611996872522">"Semua izin"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Kemampuan aplikasi lainnya"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Permintaan izin"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Instal/Uninstal tidak didukung di Wear."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Pilih item yang boleh diakses oleh &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; telah diperbarui. Pilih item yang boleh diakses oleh aplikasi ini."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Batal"</string>
@@ -129,7 +127,7 @@
     <string name="permission_usage_title" msgid="1568233336351734538">"Dasbor privasi"</string>
     <string name="auto_permission_usage_summary" msgid="7335667266743337075">"Lihat aplikasi yang baru saja menggunakan izin"</string>
     <string name="permission_group_usage_title" msgid="2595013198075285173">"Penggunaan <xliff:g id="PERMGROUP">%1$s</xliff:g>"</string>
-    <string name="perm_usage_adv_info_title" msgid="3357831829538873708">"Lihat izin lainnya"</string>
+    <string name="perm_usage_adv_info_title" msgid="3357831829538873708">"Lihat izin lain"</string>
     <string name="perm_usage_adv_info_summary_2_items" msgid="3702175198750127822">"<xliff:g id="PERMGROUP_0">%1$s</xliff:g>, <xliff:g id="PERMGROUP_1">%2$s</xliff:g>"</string>
     <string name="perm_usage_adv_info_summary_more_items" msgid="949055326299562218">"<xliff:g id="PERMGROUP_0">%1$s</xliff:g>, <xliff:g id="PERMGROUP_1">%2$s</xliff:g>, dan <xliff:g id="NUM">%3$s</xliff:g> lainnya"</string>
     <string name="permission_group_usage_subtitle_24h" msgid="5120155996322114181">"Linimasa penggunaan <xliff:g id="PERMGROUP">%1$s</xliff:g> Anda oleh aplikasi dalam 24 jam terakhir"</string>
@@ -188,8 +186,8 @@
     <string name="app_permission_button_allow" msgid="5808039516494774647">"Izinkan"</string>
     <string name="app_permission_button_allow_all_files" msgid="1792232272599018825">"Izinkan pengelolaan semua file"</string>
     <string name="app_permission_button_allow_media_only" msgid="2834282724426046154">"Izinkan akses hanya ke media"</string>
-    <string name="app_permission_button_allow_always" msgid="4573292371734011171">"Izinkan sepanjang waktu"</string>
-    <string name="app_permission_button_allow_foreground" msgid="1991570451498943207">"Izinkan hanya saat aplikasi digunakan"</string>
+    <string name="app_permission_button_allow_always" msgid="4573292371734011171">"Selalu izinkan"</string>
+    <string name="app_permission_button_allow_foreground" msgid="1991570451498943207">"Izinkan saat aplikasi digunakan"</string>
     <string name="app_permission_button_always_allow_all" msgid="4905699259378428855">"Selalu izinkan semua"</string>
     <string name="app_permission_button_ask" msgid="3342950658789427">"Selalu tanya"</string>
     <string name="app_permission_button_deny" msgid="6016454069832050300">"Jangan izinkan"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Hapus izin jika aplikasi tidak digunakan"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Hapus izin &amp; kosongkan ruang penyimpanan"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Jeda aktivitas aplikasi jika tak dipakai"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Kelola aplikasi jika tidak digunakan"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Hapus izin dan file sementara, serta hentikan notifikasi"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Hapus izin dan file sementara, hentikan notifikasi, dan arsipkan aplikasi"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Untuk melindungi data Anda, izin aplikasi ini akan dihapus jika aplikasi tidak digunakan dalam beberapa bulan."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Untuk melindungi data Anda, izin berikut akan dihapus jika aplikasi tidak digunakan dalam beberapa bulan: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Untuk melindungi data Anda, izin dari aplikasi yang tidak digunakan dalam beberapa bulan telah dihapus."</string>
@@ -359,7 +359,7 @@
     <string name="role_browser_request_description" msgid="5888803407905985941">"Tidak ada izin yang diperlukan"</string>
     <string name="role_dialer_label" msgid="1100224146343237968">"Aplikasi telepon default"</string>
     <string name="role_dialer_short_label" msgid="7186888549465352489">"Aplikasi telepon"</string>
-    <string name="role_dialer_description" msgid="8768708633696539612">"Aplikasi yang memungkinkan Anda melakukan dan menerima panggilan telepon di perangkat"</string>
+    <string name="role_dialer_description" msgid="8768708633696539612">"Aplikasi yang memungkinkan Anda memulai dan menerima panggilan telepon di perangkat"</string>
     <string name="role_dialer_request_title" msgid="5959618560705912058">"Tetapkan <xliff:g id="APP_NAME">%1$s</xliff:g> sebagai aplikasi telepon default Anda?"</string>
     <string name="role_dialer_request_description" msgid="6288839625724909320">"Aplikasi ini akan diberi akses ke Kamera, Kontak, Mikrofon, Telepon, dan SMS Anda"</string>
     <string name="role_dialer_search_keywords" msgid="3324448983559188087">"telepon"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Aplikasi catatan"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Aplikasi untuk membuat catatan di perangkat"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"catatan"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Aplikasi dompet default"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Aplikasi dompet"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Aplikasi dompet dapat menyimpan kartu kredit dan kartu loyalitas, kunci mobil, serta hal lainnya untuk membantu berbagai bentuk transaksi."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Setel <xliff:g id="APP_NAME">%1$s</xliff:g> sebagai aplikasi dompet default?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Tidak ada izin yang diperlukan"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Default saat ini"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Jangan tanya lagi"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Jadikan default"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Pembaruan berbagi data"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Beberapa aplikasi mengubah caranya berbagi data lokasi Anda"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Setelan"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Diakses <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Diakses kemarin <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Diakses <xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Sandi sekali pakai Anda adalah 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Setelan terbatas"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Demi keamanan Anda, setelan ini tidak tersedia untuk saat ini."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Izin untuk menggunakan <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> telah ditolak"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Aplikasi ini meminta izin <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>, yang merupakan setelan terbatas karena dapat membahayakan keamanan &amp; privasi Anda. Pembatasan izin ini dapat mencegah aplikasi ini berfungsi."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Pelajari lebih lanjut"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Oke"</string>
 </resources>

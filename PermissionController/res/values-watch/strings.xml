@@ -35,4 +35,25 @@
 
     <!-- Generic text to indicate Cancel. [CHAR LIMIT=10] -->
     <string name="generic_cancel">Cancel</string>
+
+    <!-- [CHAR LIMIT=25] App can always (when app is in foreground or background) access the resource protected by the permission -->
+    <string name="permission_access_always">All the time</string>
+
+    <!-- App can only access the resource protected by the permission while app is in foreground [CHAR LIMIT=25]-->
+    <string name="permission_access_only_foreground">While using app</string>
+
+    <!-- Title for the dialog button to allow a permission grant when you can also only allow in the foreground. [CHAR LIMIT=25] -->
+    <string name="app_permission_button_allow_always">All the time</string>
+
+    <!-- Title for the dialog button to allow a permission grant only when the app is in the foreground. [CHAR LIMIT=25] -->
+    <string name="app_permission_button_allow_foreground">While using app</string>
+
+    <!-- Title for the dialog button to allow a permission grant when you can also only allow in the foreground. [CHAR LIMIT=25] -->
+    <string name="grant_dialog_button_allow_always">All the time</string>
+
+    <!-- Title for the dialog button to allow a permission grant only when the app is in the foreground. [CHAR LIMIT=25] -->
+    <string name="grant_dialog_button_allow_foreground">While using app</string>
+
+    <!-- Title for the dialog button to allow a change from foreground to background permission grant. [CHAR LIMIT=25]  -->
+    <string name="grant_dialog_button_allow_background">All the time</string>
 </resources>

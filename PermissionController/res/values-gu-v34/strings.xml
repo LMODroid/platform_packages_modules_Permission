@@ -23,5 +23,4 @@
     <string name="health_connect_summary" msgid="815473513776882296">"ઍપનો આરોગ્ય સંબંધિત ડેટાનો ઍક્સેસ મેનેજ કરો"</string>
     <string name="location_settings" msgid="8863940440881290182">"લોકેશન ઍક્સેસ"</string>
     <string name="mic_toggle_description" msgid="1504101620086616040">"ઍપ અને સેવાઓ માટે. આ સેટિંગ બંધ હોવા છતાં પણ, જ્યારે તમે ઇમર્જન્સી નંબર પર કૉલ કરો ત્યારે હજુ પણ માઇક્રોફોનનો ડેટા શેર કરવામાં આવી શકે"</string>
-    <string name="location_settings_subtitle" msgid="6846532794702613851">"ઍપ અને સેવાઓ માટે"</string>
 </resources>

@@ -122,14 +122,14 @@ class NotificationListenerPrivacySourceTest {
         whenever(
                 Utils.getApplicationLabel(
                     any(ContextWrapper::class.java),
-                    eq(packageInfo1.applicationInfo)
+                    eq(packageInfo1.applicationInfo!!)
                 )
             )
             .thenReturn(testComponent1.className)
         whenever(
                 Utils.getApplicationLabel(
                     any(ContextWrapper::class.java),
-                    eq(packageInfo2.applicationInfo)
+                    eq(packageInfo2.applicationInfo!!)
                 )
             )
             .thenReturn(testComponent2.className)

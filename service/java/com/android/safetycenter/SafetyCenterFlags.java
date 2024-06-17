@@ -123,6 +123,9 @@ public final class SafetyCenterFlags {
     private static final String RESURFACE_ISSUE_DELAYS_DEFAULT = "";
     private static final Duration RESURFACE_ISSUE_DELAYS_DEFAULT_DURATION = Duration.ofDays(180);
 
+    private static final ArraySet<String> sAllowedNotificationSourcesUPlus =
+            new ArraySet<>(new String[] {"GoogleBackupAndRestore"});
+
     private static volatile String sUntrackedSourcesDefault =
             "AndroidAccessibility,AndroidBackgroundLocation,"
                     + "AndroidNotificationListener,AndroidPermissionAutoRevoke";
@@ -175,7 +178,10 @@ public final class SafetyCenterFlags {
         fout.println("FLAGS");
         printFlag(fout, PROPERTY_SAFETY_CENTER_ENABLED, getSafetyCenterEnabled());
         printFlag(fout, PROPERTY_NOTIFICATIONS_ENABLED, getNotificationsEnabled());
-        printFlag(fout, PROPERTY_NOTIFICATIONS_ALLOWED_SOURCES, getNotificationsAllowedSourceIds());
+        printFlag(
+                fout,
+                PROPERTY_NOTIFICATIONS_ALLOWED_SOURCES,
+                getNotificationsAllowedSourceIdsFlag());
         printFlag(fout, PROPERTY_NOTIFICATIONS_MIN_DELAY, getNotificationsMinDelay());
         printFlag(
                 fout,
@@ -244,6 +250,20 @@ public final class SafetyCenterFlags {
      * and therefore this is the only way to enable notifications for sources on Android T.
      */
     public static ArraySet<String> getNotificationsAllowedSourceIds() {
+        ArraySet<String> sources = getNotificationsAllowedSourceIdsFlag();
+        if (SdkLevel.isAtLeastU()) {
+            // This is a hack to update the flag value via mainline update. Reasons why we can't do
+            // this via:
+            // remote flag update - these are generally avoided and considered risky
+            // XML config - it would break GTS tests for OEMs that have a separate config copy
+            // default flag value - it would also require a remote flag update
+            sources.addAll(sAllowedNotificationSourcesUPlus);
+        }
+
+        return sources;
+    }
+
+    private static ArraySet<String> getNotificationsAllowedSourceIdsFlag() {
         return getCommaSeparatedStrings(PROPERTY_NOTIFICATIONS_ALLOWED_SOURCES);
     }
 

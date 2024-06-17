@@ -43,6 +43,9 @@ class PermissionTapjackingTest : BaseUsePermissionTest() {
         // PermissionController for television uses a floating window.
         assumeFalse(isTv)
 
+        // Automotive split-screen multitasking uses multi-window mode
+        assumeFalse(isAutomotiveSplitscreen)
+
         assertAppHasPermission(ACCESS_FINE_LOCATION, false)
         requestAppPermissionsForNoResult(ACCESS_FINE_LOCATION) {}
 
@@ -62,6 +65,9 @@ class PermissionTapjackingTest : BaseUsePermissionTest() {
     fun testTapjackGrantDialog_partialOverlay() {
         // PermissionController for television uses a floating window.
         assumeFalse(isTv)
+
+        // Automotive split-screen multitasking uses multi-window mode
+        assumeFalse(isAutomotiveSplitscreen)
 
         assertAppHasPermission(ACCESS_FINE_LOCATION, false)
         requestAppPermissionsForNoResult(ACCESS_FINE_LOCATION) {}

@@ -33,6 +33,7 @@ import androidx.wear.compose.foundation.lazy.ScalingLazyListState
 import androidx.wear.compose.material.CircularProgressIndicator
 import com.android.permissioncontroller.permission.ui.wear.elements.AlertDialog
 import com.android.permissioncontroller.permission.ui.wear.elements.SingleButtonAlertDialog
+import com.android.permissioncontroller.permission.ui.wear.theme.WearPermissionTheme
 
 @Composable
 fun WearConfirmationScreen(viewModel: WearConfirmationActivityViewModel) {
@@ -77,5 +78,7 @@ fun WearConfirmationScreen(viewModel: WearConfirmationActivityViewModel) {
 }
 
 fun createView(activity: Activity, viewModel: WearConfirmationActivityViewModel): View {
-    return ComposeView(activity).apply { setContent { WearConfirmationScreen(viewModel) } }
+    return ComposeView(activity).apply {
+        setContent { WearPermissionTheme { WearConfirmationScreen(viewModel) } }
+    }
 }

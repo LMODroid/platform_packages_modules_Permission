@@ -38,6 +38,8 @@ import com.android.permissioncontroller.role.ui.TwoTargetPreference;
 import com.android.permissioncontroller.role.utils.UserUtils;
 import com.android.role.controller.model.Role;
 
+import java.util.List;
+
 /***
  * Class for UI behavior of Home role
  */
@@ -47,7 +49,8 @@ public class HomeRoleUiBehavior implements RoleUiBehavior {
 
     @Override
     public void preparePreferenceAsUser(@NonNull Role role, @NonNull TwoTargetPreference preference,
-            @NonNull UserHandle user, @NonNull Context context) {
+            @NonNull List<ApplicationInfo> applicationInfos, @NonNull UserHandle user,
+            @NonNull Context context) {
         TwoTargetPreference.OnSecondTargetClickListener listener = null;
         RoleManager roleManager = context.getSystemService(RoleManager.class);
         String packageName = CollectionUtils.firstOrNull(roleManager.getRoleHoldersAsUser(

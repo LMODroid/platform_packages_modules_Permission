@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Све дозволе"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Остале могућности апликације"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Захтев за дозволу"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Радње Инсталирај/Деинсталирај нису подржане у Wear-у."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Изаберите чему &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; може да приступа"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"Апликација &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; је ажурирана. Изаберите чему ова апликација може да приступа."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Откажи"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Уклони дозволе ако се апликација не користи"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Уклони дозволе и ослободи простор"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Паузирај активности ако се не користи"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Управљајте апликацијом ако се не користи"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Уклоните дозволе, избришите привремене фајлове и зауставите обавештења"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Уклоните дозволе, избришите привремене фајлове, зауставите обавештења и архивирајте апликацију"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Ради заштите података, дозволе за ову апликацију се уклањају ако се апликација не користи пар месеци."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Ради заштите података, следеће дозволе се уклањају ако се апликација не користи пар месеци: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Ради заштите података, дозволе су уклоњене из апликација које нисте користили пар месеци."</string>
@@ -375,7 +375,7 @@
     <string name="role_emergency_request_title" msgid="8469579020654348567">"Желите ли да подесите <xliff:g id="APP_NAME">%1$s</xliff:g> као подразумевану апликацију за хитне случајеве?"</string>
     <string name="role_emergency_request_description" msgid="131645948770262850">"Није потребна ниједна дозвола"</string>
     <string name="role_emergency_search_keywords" msgid="1920007722599213358">"у хитном случају"</string>
-    <string name="role_home_label" msgid="3871847846649769412">"Подраз. апл. почетне странице"</string>
+    <string name="role_home_label" msgid="3871847846649769412">"Подразумевана апл. почетне странице"</string>
     <string name="role_home_short_label" msgid="8544733747952272337">"Апликација почетне странице"</string>
     <string name="role_home_description" msgid="7997371519626556675">"Апликације које се често зову покретачи и замењују почетне екране на Android уређају и пружају приступ садржају и функцијама на уређају"</string>
     <string name="role_home_request_title" msgid="738136983453341081">"Желите ли да подесите <xliff:g id="APP_NAME">%1$s</xliff:g> као подразумевану апликацију почетне странице?"</string>
@@ -387,7 +387,7 @@
     <string name="role_call_redirection_request_title" msgid="2816244455003562925">"Желите ли да подесите <xliff:g id="APP_NAME">%1$s</xliff:g> као подразумевану апликацију за преусмеравање позива?"</string>
     <string name="role_call_redirection_request_description" msgid="3118895714178527164">"Није потребна ниједна дозвола"</string>
     <string name="role_call_screening_label" msgid="883935222060878724">"Апликација за ИД позиваоца и непожељне поруке"</string>
-    <string name="role_call_screening_short_label" msgid="2048465565063130834">"Апл. за ИД поз. и непож. поз."</string>
+    <string name="role_call_screening_short_label" msgid="2048465565063130834">"ИД позиваоца и непожељни позиви"</string>
     <string name="role_call_screening_description" msgid="2349431420497468981">"Апликације које вам омогућавају да идентификујете позиве, блокирате непожељне и аутоматизоване позиве и нежељене бројеве"</string>
     <string name="role_call_screening_request_title" msgid="7358309224566977290">"Желите ли да подесите <xliff:g id="APP_NAME">%1$s</xliff:g> као подразумевану апликацију за ИД позиваоца и непожељне поруке?"</string>
     <string name="role_call_screening_request_description" msgid="7338511921032446006">"Није потребна ниједна дозвола"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Апликација за белешке"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Апликације које вам омогућавају да правите белешке на уређају"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"белешке"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Подразумевана апликација Новчаник"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Апликација Новчаник"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Апликације Новчаник могу да чувају ваше кредитне картице и картице лојалности, кључеве од аутомобила и друге ствари како би вам помогли при различитим трансакцијама."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Желите да подесите <xliff:g id="APP_NAME">%1$s</xliff:g> као подразумевану апликацију Новчаник?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Није потребна ниједна дозвола"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Тренутно подразумевана"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Не питај поново"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Подеси као подразум."</string>
@@ -438,7 +443,7 @@
     <string name="no_special_app_access" msgid="6950277571805106247">"Нема посебног приступа апл."</string>
     <string name="special_app_access_no_apps" msgid="4102911722787886970">"Нема апликација"</string>
     <string name="home_missing_work_profile_support" msgid="1756855847669387977">"Не подржава пословни профил"</string>
-    <string name="encryption_unaware_confirmation_message" msgid="8274491794636402484">"Напомена: Ако рестартујете уређај и подесили сте закључавање екрана, ова апликација не може да се покрене док не откључате уређај."</string>
+    <string name="encryption_unaware_confirmation_message" msgid="8274491794636402484">"Напомена: Ако рестартујете уређај и подесили сте откључавање екрана, ова апликација не може да се покрене док не откључате уређај."</string>
     <string name="assistant_confirmation_message" msgid="7476540402884416212">"Помоћник ће моћи да чита информације о апликацијама које се користе у систему, укључујући информације видљиве на екрану или којима може да се приступа у оквиру апликација."</string>
     <string name="incident_report_channel_name" msgid="3144954065936288440">"Дељење података о отклањању грешака"</string>
     <string name="incident_report_notification_title" msgid="4635984625656519773">"Делите детаљне податке за отклањање грешака?"</string>
@@ -503,7 +508,7 @@
     <string name="permgroupupgraderequestdetail_microphone" msgid="2870497719571464239">"Ова апликација жели да снима звук све време, чак и када не користите апликацију. "<annotation id="link">"Дозволите у подешавањима."</annotation></string>
     <string name="permgrouprequest_activityRecognition" msgid="5415121592794230330">"Желите ли да дозволите да &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; приступа физичким активностима?"</string>
     <string name="permgrouprequest_device_aware_activityRecognition" msgid="3408326850847755759">"Дозвољавате да &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; приступа подацима о физичким активностима на уређају &lt;b&gt;<xliff:g id="DEVICE">%2$s</xliff:g>&lt;/b&gt;?"</string>
-    <string name="permgrouprequest_camera" msgid="5123097035410002594">"Желите да дозволите да &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; снима слике и видео снимке?"</string>
+    <string name="permgrouprequest_camera" msgid="5123097035410002594">"Желите да дозволите да &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; снима слике и видео?"</string>
     <string name="permgrouprequest_device_aware_camera" msgid="3525106924487608868">"Дозволићете да апликација &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; снима слике и видео снимке на уређају &lt;b&gt;<xliff:g id="DEVICE">%2$s</xliff:g>&lt;/b&gt;?"</string>
     <string name="permgrouprequestdetail_camera" msgid="9085323239764667883">"Апликација ће моћи да снима слике и видео снимке само док користите апликацију"</string>
     <string name="permgroupbackgroundrequest_camera" msgid="1274286575704213875">"Желите да дозволите да &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; снима слике и видео снимке?"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Ажурирања за дељење података"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Неке апликације су промениле начин на који могу да деле податке о локацији"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Подешавања"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Приступано: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Приступано јуче: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Приступано: <xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Једнократна лозинка је 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Ограничено подешавање"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Ово подешавање је тренутно недоступно ради ваше безбедности."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Одбијена је дозвола „<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>“"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Ова апликација је затражила дозволу „<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>“, што је ограничено подешавање јер може да вам угрози безбедност и приватност. Ограничавање ове дозволе може да спречи рад апликације."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Сазнајте више"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Важи"</string>
 </resources>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023 The Android Open Source Project
+ * Copyright (C) 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,31 @@
 
 package com.android.permissioncontroller.role.ui;
 
-import androidx.annotation.Nullable;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 /**
- * Preference that is aware of user restrictions that can block them.
+ * Item view for qualifying applications in role requests.
  */
-public interface UserRestrictionAwarePreference {
+public interface RequestRoleItemView {
 
     /**
-     * Specifies user restriction that blocks this preference.
+     * Get the {@link ImageView} for item icon.
      */
-    void setUserRestriction(@Nullable String userRestriction);
+    @NonNull
+    ImageView getIconImageView();
+
+    /**
+     * Get the {@link TextView} for item title.
+     */
+    @NonNull
+    TextView getTitleTextView();
+
+    /**
+     * Get the {@link TextView} for item subtitle.
+     */
+    @NonNull
+    TextView getSubtitleTextView();
 }

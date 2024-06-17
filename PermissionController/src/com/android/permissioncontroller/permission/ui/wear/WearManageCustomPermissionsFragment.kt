@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.android.permissioncontroller.Constants
 import com.android.permissioncontroller.permission.ui.handheld.PermissionAppsFragment
 import com.android.permissioncontroller.permission.ui.model.ManageCustomPermissionsViewModel
+import com.android.permissioncontroller.permission.ui.wear.theme.WearPermissionTheme
 
 class WearManageCustomPermissionsFragment : Fragment() {
     override fun onCreateView(
@@ -52,7 +53,11 @@ class WearManageCustomPermissionsFragment : Fragment() {
         }
 
         return ComposeView(activity).apply {
-            setContent { WearManageCustomPermissionScreen(viewModel, onPermGroupClick) }
+            setContent {
+                WearPermissionTheme {
+                    WearManageCustomPermissionScreen(viewModel, onPermGroupClick)
+                }
+            }
         }
     }
 }

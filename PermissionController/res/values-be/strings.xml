@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Усе дазволы"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Іншыя магчымасці праграмы"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Запыт дазволу"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Дзеянні па ўсталяванні або выдаленні не падтрымліваюцца на Wear."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Выберыце, да чаго дазволіць доступ праграме &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"Праграма &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; была абноўлена. Выберыце, да чаго ёй дазволіць доступ."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Скасаваць"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Выдаляць дазволы, калі праграма не выкарыстоўваецца"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Выдаліць дазволы і вызваліць месца"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Прыпыніць дзеянні ў неактыўнай праграме"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Кіраваць праграмай, якой не карыстаюцца"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Выдаліць дазволы, часовыя файлы і спыніць апавяшчэнні"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Выдаліць дазволы і часовыя файлы, спыніць адпраўку апавяшчэнняў і архіваваць праграму"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Калі праграма не выкарыстоўваецца на працягу некалькіх месяцаў, то ў мэтах абароны вашых даных з яе будуць выдалены дазволы."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Калі праграма не выкарыстоўваецца на працягу некалькіх месяцаў, у мэтах абароны вашых даных будуць выдалены наступныя дазволы: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"У мэтах абароны вашых даных выдалены дазволы для праграм, якія не выкарыстоўваліся некалькі месяцаў."</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Праграма для нататак"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Праграмы, якія дазваляюць рабіць нататкі на прыладзе"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"нататкі"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Стандартная праграма-кашалёк"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Праграма-кашалёк"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"У праграмах-кашальках можна захоўваць крэдытныя карткі, карткі лаяльнасці, ключы ад аўтамабіля і іншыя лічбавыя аб\'екты, што дае магчымасць ажыццяўляць розныя формы трансакцый."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Задаць у якасці стандартнай праграмы-кашалька праграму \"<xliff:g id="APP_NAME">%1$s</xliff:g>\"?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Дазволы не патрэбныя"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Цяперашняя стандартная"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Больш не пытацца"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Зрабіць стандартнай"</string>
@@ -461,7 +466,7 @@
     <string name="permgrouprequest_contacts" msgid="8391550064551053695">"Дазволіць праграме &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; доступ да вашых кантактаў?"</string>
     <string name="permgrouprequest_device_aware_contacts" msgid="2270563860206654757">"Дазволіць праграме &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; доступ да кантактаў на прыладзе &lt;b&gt;<xliff:g id="DEVICE">%2$s</xliff:g>&lt;/b&gt;?"</string>
     <string name="permgrouprequest_location" msgid="6990232580121067883">"Дазволіць праграме &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; доступ да звестак пра месцазнаходжанне гэтай прылады?"</string>
-    <string name="permgrouprequest_device_aware_location" msgid="6641436550953715107">"Дазволіць праграме &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; доступ да даных пра месцазнаходжанне прылады &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>’s&lt;/b&gt;?"</string>
+    <string name="permgrouprequest_device_aware_location" msgid="6641436550953715107">"Дазволіць праграме &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; доступ да даных пра месцазнаходжанне прылады &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>&lt;/b&gt;?"</string>
     <string name="permgrouprequestdetail_location" msgid="2635935335778429894">"Праграма будзе мець доступ да звестак пра месцазнаходжанне толькі падчас карыстання ёю"</string>
     <string name="permgroupbackgroundrequest_location" msgid="1085680897265734809">"Дазволіць праграме &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; доступ да звестак пра месцазнаходжанне гэтай прылады?"</string>
     <string name="permgroupbackgroundrequest_device_aware_location" msgid="7660465507029650527">"Дазволіць праграме &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; доступ да даных пра месцазнаходжанне прылады &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>&lt;/b&gt;?"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Змяненні ў абагульванні даных"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Для некаторых праграм спосаб абагульвання даных пра месцазнаходжанне змяніўся"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Налады"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Апошні раз доступ быў атрыманы ў <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Апошні раз доступ быў атрыманы ўчора ў <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Апошні раз доступ быў атрыманы ў <xliff:g id="TIME_DATE_1">%2$s</xliff:g> <xliff:g id="TIME_DATE_0">%1$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Ваш аднаразовы пароль: 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Налада з абмежаваным доступам"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"У мэтах бяспекі гэта налада цяпер недаступная."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Дазвол \"<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>\" не дадзены"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Гэта праграма запытала дазвол \"<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>\", доступ да якога абмежаваны, бо яго выкарыстанне можа паставіць вашу бяспеку і прыватнасць пад пагрозу. Без гэтага дазволу праграма можа не працаваць."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Даведацца больш"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"OK"</string>
 </resources>

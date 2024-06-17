@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Сите дозволи"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Други можности на апликацијата"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Барање за дозвола"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Дејствата „Инсталирај/деинсталирај“ не се поддржани на Wear."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Изберете до што може да пристапува &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; е ажурирана. Изберете до што може да пристапува апликацијава."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Откажи"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Отстрани ги дозволите ако апликацијата не се користи"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Отстранувај дозволи и ослободувај простор"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Паузирај некористени апликации"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Управување со апликацијата при некористење"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Отстранува дозволи, брише привремени датотеки и запира известувања"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Отстранува дозволи, брише привремени датотеки, сопира известувања и ја архивира апликацијата"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"За да се заштитат вашите податоци, дозволите за апликацијава ќе се отстранат ако апликацијата не се користи неколку месеци."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Ако апликацијата не се користи неколку месеци, заради заштита на податоците, ќе се отстранат следниве дозволи: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"За заштита на податоците, отстранети се дозволите од апликациите што не сте ги користеле неколку месеци."</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Апликација за белешки"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Апликации што ви овозможуваат да запишувате белешки на вашиот уред"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"белешки"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Стандардна аплик. за паричник"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Апликација за паричник"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Апликациите за паричник може да ги складираат кредитните и картичките за лојалност, клучевите за автомобилот, како и други работи за олеснување на различните форми на трансакции."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Да се постави <xliff:g id="APP_NAME">%1$s</xliff:g> како стандардна апликација за Wallet?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Не се потребни дозволи"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Стандардна апликација сега"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Не прашувај повторно"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Нека биде стандардна"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Промени во споделувањето податоци"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Некои апликации го сменија начинот на кој ја споделуваат вашата локација"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Поставки"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Пристапено: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Пристапено вчера: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Пристапено: <xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Вашата еднократна лозинка е 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Ограничена поставка"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"За ваша безбедност, поставкава е недостапна во моментов."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Дозволата за користење <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> е одбиена"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Апликацијава ја побара дозволата за <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>, што е ограничена поставка бидејќи може да ги загрози безбедноста и приватноста. Ограничувањето на дозволава може да го спречи функционирањето на апликацијава."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Дознајте повеќе"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Сфатив"</string>
 </resources>

@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Všechna oprávnění"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Ostatní oprávnění aplikace"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Žádost o oprávnění"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Akce instalace/odinstalace nejsou v zařízení Wear podporovány."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Určete, k čemu aplikaci &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; povolíte přístup"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"Aplikace &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; byla aktualizována. Určete, k čemu jí povolíte přístup."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Zrušit"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Odebrat oprávnění, pokud se aplikace nepoužívá"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Odebrat oprávnění a uvolnit místo"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Pozastavit aktivitu při nepoužívání"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Spravovat aplikaci, pokud se nepoužívá"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Odebrat oprávnění, smazat dočasné soubory a zastavit oznámení"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Odebrat oprávnění, smazat dočasné soubory, zastavit oznámení a archivovat aplikaci"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Pokud tuto aplikaci několik měsíců nepoužijete, kvůli ochraně vašich dat jí budou oprávnění odebrána."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Pokud tuto aplikaci několik měsíců nepoužijete, budou jí kvůli ochraně vašich dat odebrána následující oprávnění: <xliff:g id="PERMS">%1$s</xliff:g>."</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Za účelem ochrany vašich dat byla odebrána oprávnění aplikacím, které jste několik měsíců nepoužili."</string>
@@ -221,7 +221,7 @@
     <string name="auto_revoked_app_summary_two" msgid="1910545340763709389">"Byla odebrána oprávnění <xliff:g id="PERMISSION_NAME_0">%1$s</xliff:g> a <xliff:g id="PERMISSION_NAME_1">%2$s</xliff:g>"</string>
     <string name="auto_revoked_app_summary_many" msgid="5930976230827378798">"Bylo odebráno oprávnění <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> a další oprávnění (<xliff:g id="NUMBER">%2$s</xliff:g>)"</string>
     <string name="unused_apps_page_title" msgid="6986983535677572559">"Nepoužívané aplikace"</string>
-    <string name="unused_apps_page_summary" msgid="1867593913217272155">"Když aplikaci několik měsíců nepoužíváte:\n\n• Oprávnění jsou odstraněna kvůli ochraně dat\n• Oznámení se přestanou zobrazovat kvůli úspoře baterie\n• Dočasné soubory jsou odstraněny kvůli uvolnění místa\n\nPokud chcete oprávnění a oznámení znovu povolit, otevřete aplikaci."</string>
+    <string name="unused_apps_page_summary" msgid="1867593913217272155">"Když aplikaci několik měsíců nepoužíváte:\n\n• Oprávnění jsou odstraněna z důvodu ochrany dat.\n• Oznámení se přestanou zobrazovat kvůli úspoře baterie.\n• Dočasné soubory jsou odstraněny, aby se uvolnilo místo.\n\nPokud chcete oprávnění a oznámení znovu povolit, příslušnou aplikaci otevřete."</string>
     <string name="unused_apps_page_tv_summary" msgid="2624911608663778308">"Když nějakou aplikaci měsíc nepoužíváte:\n\n• Kvůli ochraně dat se odstraní oprávnění.\n• Kvůli uvolnění místa se odstraní dočasné soubory.\n\nPokud chcete oprávnění znovu povolit, otevřete aplikaci."</string>
     <string name="last_opened_category_title" msgid="8796557894614236128">"{count,plural, =1{Naposledy otevřeno před více než # měsícem}few{Naposledy otevřeno před více než # měsíci}many{Naposledy otevřeno před více než # měsíce}other{Naposledy otevřeno před více než # měsíci}}"</string>
     <string name="last_opened_summary" msgid="5248984030024968808">"Aplikace byla naposledy otevřena <xliff:g id="DATE">%s</xliff:g>"</string>
@@ -377,7 +377,7 @@
     <string name="role_emergency_search_keywords" msgid="1920007722599213358">"v případě nouze"</string>
     <string name="role_home_label" msgid="3871847846649769412">"Výchozí aplikace pro domácnost"</string>
     <string name="role_home_short_label" msgid="8544733747952272337">"Vstupní aplikace"</string>
-    <string name="role_home_description" msgid="7997371519626556675">"Aplikace (tzv. spouštěče), které nahrazují plochy na zařízení Android a dávají vám přístup k obsahu a funkcím zařízení."</string>
+    <string name="role_home_description" msgid="7997371519626556675">"Aplikace (tzv. spouštěče), které nahrazují plochu na zařízení Android a dávají vám přístup k obsahu a funkcím zařízení."</string>
     <string name="role_home_request_title" msgid="738136983453341081">"Nastavit <xliff:g id="APP_NAME">%1$s</xliff:g> jako výchozí aplikaci pro domácnost?"</string>
     <string name="role_home_request_description" msgid="2658833966716057673">"Není potřeba žádné oprávnění"</string>
     <string name="role_home_search_keywords" msgid="3830755001192666285">"spouštěč"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Aplikace pro poznámky"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Aplikace, které umožňují dělat si na zařízení poznámky."</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"poznámky"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Výchozí aplikace typu peněženka"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Aplikace typu peněženka"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Aplikace typu peněženka můžou uložit vaše platební a věrnostní karty, klíče od auta a další věci, a usnadnit vám tak různé transakce."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Nastavit aplikaci <xliff:g id="APP_NAME">%1$s</xliff:g> jako výchozí peněženku?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Nejsou potřeba žádná oprávnění"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Aktuálně výchozí"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Příště se neptat"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Změnit na výchozí"</string>
@@ -610,7 +615,7 @@
     <string name="mic_toggle_title" msgid="2649991093496110162">"Přístup k mikrofonu"</string>
     <string name="perm_toggle_description" msgid="7801326363741451379">"Aplikace a služby"</string>
     <string name="mic_toggle_description" msgid="9163104307990677157">"Týká se aplikací a služeb. Pokud je toto nastavení vypnuté a zavoláte na číslo tísňového volání, data z mikrofonu se mohou stále sdílet."</string>
-    <string name="location_settings_subtitle" msgid="2328360561197430695">"Podívejte se, které aplikace a služby mají přístup k poloze"</string>
+    <string name="location_settings_subtitle" msgid="2328360561197430695">"Seznam aplikací a služeb, které mají přístup k poloze"</string>
     <string name="show_clip_access_notification_title" msgid="5168467637351109096">"Zobrazovat použití schránky"</string>
     <string name="show_clip_access_notification_summary" msgid="3532020182782112687">"Zobrazovat zprávu, když aplikace použijí text, obrázky nebo jiný obsah, který jste zkopírovali"</string>
     <string name="show_password_title" msgid="2877269286984684659">"Zobrazovat hesla"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Aktualizace sdílení dat"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Některé aplikace změnily způsob, kterým mohou sdílet údaje o vaší poloze"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Nastavení"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Poslední přístup: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Poslední přístup: včera v <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Poslední přístup: <xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Vaše jednorázové heslo je 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Blokované nastavení"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Z důvodu vaší bezpečnosti toto nastavení momentálně není dostupné."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Oprávnění <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> nebylo uděleno"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Tato aplikace požádala o oprávnění <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>, což je omezené nastavení, protože může ohrozit vaše soukromí a zabezpečení. Omezení tohoto oprávnění může zabránit fungování aplikace."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Další informace"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Rozumím"</string>
 </resources>

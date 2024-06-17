@@ -195,6 +195,8 @@
         <item name="android:paddingEnd">16dp</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:background">@drawable/grant_dialog_permission_rationale_background</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
     </style>
 
     <style name="PermissionGrantPermissionRationaleIcon">
@@ -1036,6 +1038,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">16dp</item>
+        <item name="android:background">@null</item>
     </style>
 
     <!-- END REQUEST ROLE DIALOG ITEM -->

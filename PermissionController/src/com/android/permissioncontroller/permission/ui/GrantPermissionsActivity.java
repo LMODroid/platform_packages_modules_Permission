@@ -20,6 +20,7 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission_group.LOCATION;
 import static android.Manifest.permission_group.READ_MEDIA_VISUAL;
+import static android.content.Intent.getIntent;
 import static android.view.WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
 import static android.view.WindowManager.LayoutParams.SYSTEM_FLAG_HIDE_NON_SYSTEM_OVERLAY_WINDOWS;
 
@@ -34,12 +35,15 @@ import static com.android.permissioncontroller.permission.ui.GrantPermissionsVie
 import static com.android.permissioncontroller.permission.ui.GrantPermissionsViewHandler.LINKED_TO_PERMISSION_RATIONALE;
 import static com.android.permissioncontroller.permission.ui.GrantPermissionsViewHandler.LINKED_TO_SETTINGS;
 import static com.android.permissioncontroller.permission.ui.model.GrantPermissionsViewModel.APP_PERMISSION_REQUEST_CODE;
+import static com.android.permissioncontroller.permission.ui.model.GrantPermissionsViewModel.ECM_REQUEST_CODE;
 import static com.android.permissioncontroller.permission.ui.model.GrantPermissionsViewModel.PHOTO_PICKER_REQUEST_CODE;
 import static com.android.permissioncontroller.permission.utils.Utils.getRequestMessage;
 
 import android.Manifest;
 import android.app.Activity;
 import android.app.KeyguardManager;
+import android.app.ecm.EnhancedConfirmationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageItemInfo;
@@ -49,6 +53,7 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
+import android.permission.flags.Flags;
 import android.text.Annotation;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -56,7 +61,7 @@ import android.text.style.ClickableSpan;
 import android.util.ArraySet;
 import android.util.Log;
 import android.util.Pair;
-import android.view.MotionEvent;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnAttachStateChangeListener;
 import android.view.Window;
@@ -67,7 +72,6 @@ import androidx.annotation.GuardedBy;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.core.util.Consumer;
 import androidx.core.util.Preconditions;
 
 import com.android.modules.utils.build.SdkLevel;
@@ -105,6 +109,13 @@ public class GrantPermissionsActivity extends SettingsActivity
 
     private static final String KEY_SESSION_ID = GrantPermissionsActivity.class.getName()
             + "_REQUEST_ID";
+    public static final String KEY_RESTRICTED_REQUESTED_PERMISSIONS =
+            GrantPermissionsActivity.class.getName() + "_RESTRICTED_REQUESTED_PERMISSIONS";
+    public static final String KEY_UNRESTRICTED_REQUESTED_PERMISSIONS =
+            GrantPermissionsActivity.class.getName() + "_UNRESTRICTED_REQUESTED_PERMISSIONS";
+    public static final String KEY_ORIGINAL_REQUESTED_PERMISSIONS =
+            GrantPermissionsActivity.class.getName() + "_ORIGINAL_REQUESTED_PERMISSIONS";
+
     public static final String ANNOTATION_ID = "link";
 
     public static final int NEXT_BUTTON = 15;
@@ -158,6 +169,17 @@ public class GrantPermissionsActivity extends SettingsActivity
 
     /** The current list of permissions requested, across all current requests for this app */
     private List<String> mRequestedPermissions = new ArrayList<>();
+
+    /**
+     * If any requested permissions are considered restricted by ECM, they will be stored here.
+     */
+    private ArrayList<String> mRestrictedRequestedPermissionGroups = null;
+
+    /**
+     * If any requested permissions are considered restricted by ECM, the non-restricted
+     * permissions will be stored here.
+     */
+    private List<String> mUnrestrictedRequestedPermissions = null;
 
     /** A list of permissions requested on an app's behalf by the system. Usually Implicitly
      * requested, although this isn't necessarily always the case.
@@ -298,6 +320,56 @@ public class GrantPermissionsActivity extends SettingsActivity
 
         mOriginalRequestedPermissions = mRequestedPermissions.toArray(new String[0]);
 
+        if (SdkLevel.isAtLeastV() && Flags.enhancedConfirmationModeApisEnabled()) {
+            EnhancedConfirmationManager ecm = getEnhancedConfirmationManager();
+
+            // Retrieve ECM-related persisted permission lists
+            if (icicle != null) {
+                mOriginalRequestedPermissions = icicle.getStringArray(
+                        KEY_ORIGINAL_REQUESTED_PERMISSIONS);
+                mRestrictedRequestedPermissionGroups = icicle.getStringArrayList(
+                        KEY_RESTRICTED_REQUESTED_PERMISSIONS);
+                mUnrestrictedRequestedPermissions = icicle.getStringArrayList(
+                        KEY_UNRESTRICTED_REQUESTED_PERMISSIONS);
+            }
+            // If these lists aren't persisted yet, it means we haven't yet divided
+            // mRequestedPermissions into restricted-vs-unrestricted, so do so.
+            if (mRestrictedRequestedPermissionGroups == null) {
+                String packageName = getCallingPackage();
+                ArraySet<String> restrictedPermGroups = new ArraySet<>();
+                ArrayList<String> unrestrictedPermissions = new ArrayList<>();
+
+                for (String requestedPermission : mRequestedPermissions) {
+                    String requestedPermGroup =
+                            PermissionMapping.getGroupOfPlatformPermission(requestedPermission);
+                    if (restrictedPermGroups.contains(requestedPermGroup)
+                            || isPermissionEcmRestricted(ecm, requestedPermission, packageName)) {
+                        restrictedPermGroups.add(requestedPermGroup);
+                    } else {
+                        unrestrictedPermissions.add(requestedPermission);
+                    }
+                }
+                mRestrictedRequestedPermissionGroups = new ArrayList<>(restrictedPermGroups);
+                mUnrestrictedRequestedPermissions = unrestrictedPermissions;
+            }
+            // If there are remaining restricted permission groups to process, show the ECM dialog
+            // for the next one, then recreate this activity.
+            if (!mRestrictedRequestedPermissionGroups.isEmpty()) {
+                String nextRestrictedPermissionGroup = mRestrictedRequestedPermissionGroups.remove(
+                        0);
+                try {
+                    Intent intent = ecm.createRestrictedSettingDialogIntent(getPackageName(),
+                            nextRestrictedPermissionGroup);
+                    startActivityForResult(intent, ECM_REQUEST_CODE);
+                    return;
+                } catch (PackageManager.NameNotFoundException e) {
+                    mRequestedPermissions = mUnrestrictedRequestedPermissions;
+                }
+            } else {
+                mRequestedPermissions = mUnrestrictedRequestedPermissions;
+            }
+        }
+
         synchronized (sCurrentGrantRequests) {
             mKey = new Pair<>(mTargetPackage, getTaskId());
             if (!sCurrentGrantRequests.containsKey(mKey)) {
@@ -388,6 +460,20 @@ public class GrantPermissionsActivity extends SettingsActivity
                 Utils.getGroupInfo(Manifest.permission_group.STORAGE, this.getApplicationContext());
         if (storageGroupInfo != null) {
             mStoragePermGroupIcon = storageGroupInfo.icon;
+        }
+    }
+
+    private EnhancedConfirmationManager getEnhancedConfirmationManager() {
+        Context userContext = Utils.getUserContext(this, Process.myUserHandle());
+        return Utils.getSystemServiceSafe(userContext, EnhancedConfirmationManager.class);
+    }
+
+    private boolean isPermissionEcmRestricted(EnhancedConfirmationManager ecm,
+            String requestedPermission, String packageName) {
+        try {
+            return ecm.isRestricted(packageName, requestedPermission);
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
         }
     }
 
@@ -488,7 +574,7 @@ public class GrantPermissionsActivity extends SettingsActivity
             mViewModel.sendDirectlyToSettings(top, info.getGroupName());
             return;
         } else if (info.getPrompt() == Prompt.NO_UI_PHOTO_PICKER_REDIRECT) {
-            mViewModel.openPhotoPicker(top, GRANTED_USER_SELECTED);
+            mViewModel.openPhotoPicker(top);
             return;
         } else if (info.getPrompt() == Prompt.NO_UI_FILTER_THIS_GROUP) {
             // Filtered permissions should be removed from the requested permissions list entirely,
@@ -686,29 +772,42 @@ public class GrantPermissionsActivity extends SettingsActivity
         return buttonArray;
     }
 
-    // LINT.IfChange(dispatchTouchEvent)
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        View rootView = getWindow().getDecorView();
-        if (rootView.getTop() != 0) {
-            // We are animating the top view, need to compensate for that in motion events.
-            ev.setLocation(ev.getX(), ev.getY() - rootView.getTop());
-        }
-        final int x = (int) ev.getX();
-        final int y = (int) ev.getY();
-        if ((x < 0) || (y < 0) || (x > (rootView.getWidth())) || (y > (rootView.getHeight()))) {
-            if (MotionEvent.ACTION_DOWN == ev.getAction()) {
-                mViewHandler.onCancelled();
-            }
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_ESCAPE
+                && event.getRepeatCount() == 0
+                && event.hasNoModifiers()) {
+            event.startTracking();
+            mViewHandler.onCancelled();
             finishAfterTransition();
+            return true;
         }
-        return super.dispatchTouchEvent(ev);
+        return super.onKeyDown(keyCode, event);
     }
-    // LINT.ThenChange(PermissionRationaleActivity.java:dispatchTouchEvent)
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_ESCAPE
+                && event.isTracking()
+                && !event.isCanceled()) {
+            // Mark it as handled since we did handle the down event
+            return true;
+        }
+        return super.onKeyUp(keyCode, event);
+    }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+
+        if (SdkLevel.isAtLeastV() && Flags.enhancedConfirmationModeApisEnabled()) {
+            outState.putStringArrayList(KEY_RESTRICTED_REQUESTED_PERMISSIONS, new ArrayList<>(
+                    mRestrictedRequestedPermissionGroups));
+            outState.putStringArrayList(KEY_UNRESTRICTED_REQUESTED_PERMISSIONS, new ArrayList<>(
+                    mUnrestrictedRequestedPermissions));
+            outState.putStringArray(KEY_ORIGINAL_REQUESTED_PERMISSIONS,
+                    mOriginalRequestedPermissions);
+        }
 
         if (mViewHandler == null || mViewModel == null) {
             return;
@@ -735,16 +834,20 @@ public class GrantPermissionsActivity extends SettingsActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Consumer<Intent> callback = mViewModel.getActivityResultCallback();
-        if (callback == null || (requestCode != APP_PERMISSION_REQUEST_CODE
-                && requestCode != PHOTO_PICKER_REQUEST_CODE)) {
+        if (SdkLevel.isAtLeastV() && Flags.enhancedConfirmationModeApisEnabled()) {
+            if (requestCode == ECM_REQUEST_CODE) {
+                recreate();
+                return;
+            }
+        }
+        if (requestCode != APP_PERMISSION_REQUEST_CODE
+                && requestCode != PHOTO_PICKER_REQUEST_CODE) {
             return;
         }
         if (requestCode == PHOTO_PICKER_REQUEST_CODE) {
             data = new Intent("").putExtra(INTENT_PHOTOS_SELECTED, resultCode == RESULT_OK);
         }
-        callback.accept(data);
-        mViewModel.setActivityResultCallback(null);
+        mViewModel.handleCallback(data, requestCode);
     }
 
     @Override
@@ -764,11 +867,10 @@ public class GrantPermissionsActivity extends SettingsActivity
             mPreMergeShownGroupName = null;
         }
 
-        if (Objects.equals(READ_MEDIA_VISUAL, name)
-                && result == GrantPermissionsViewHandler.GRANTED_USER_SELECTED) {
+        if (Objects.equals(READ_MEDIA_VISUAL, name) && result == GRANTED_USER_SELECTED) {
             // Only the top activity can receive activity results
             Activity top = mFollowerActivities.isEmpty() ? this : mFollowerActivities.get(0);
-            mViewModel.openPhotoPicker(top, result);
+            mViewModel.openPhotoPicker(top);
             logGrantPermissionActivityButtons(name, affectedForegroundPermissions, result);
             return;
         }

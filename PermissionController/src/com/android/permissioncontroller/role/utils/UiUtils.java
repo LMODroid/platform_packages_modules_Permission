@@ -18,16 +18,12 @@ package com.android.permissioncontroller.role.utils;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.Context;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 
-import androidx.annotation.Dimension;
 import androidx.annotation.NonNull;
-import androidx.annotation.Px;
 
 /**
  * Utility methods about UI.
@@ -35,6 +31,26 @@ import androidx.annotation.Px;
 public class UiUtils {
 
     private UiUtils() {}
+
+    /**
+     * Set enabled state on a view and its children recursively.
+     *
+     * @see androidx.preference.Preference#setEnabledStateOnViews
+     *
+     * @param view the view to be set to enabled or not
+     * @param enabled whether the view should be enabled
+     */
+    public static void setViewTreeEnabled(@NonNull View view, boolean enabled) {
+        view.setEnabled(enabled);
+        if (view instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            int childCount = viewGroup.getChildCount();
+            for (int i = 0; i < childCount; ++i) {
+                View childView = viewGroup.getChildAt(i);
+                setViewTreeEnabled(childView, enabled);
+            }
+        }
+    }
 
     /**
      * Set whether a view is shown.

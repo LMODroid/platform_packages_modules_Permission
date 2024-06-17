@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"সকলো অনুমতি"</string>
     <string name="other_permissions" msgid="2901186127193849594">"অন্য এপৰ কার্যক্ষমতা"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"অনুমতি বিচাৰি কৰা অনুৰোধ"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"ইনষ্টল/আনইনষ্টল কাৰ্য Wearত কৰিব নোৱাৰি।"</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;ক ক’ত এক্সেছ দিব লাগে বাছনি কৰক"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; আপডে’ট কৰা হৈছে। এই এপক ক’ত এক্সেছ দিব লাগে বাছনি কৰক।"</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"বাতিল কৰক"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"যদি এপ্‌টো ব্যৱহাৰ কৰা নাই অনুমতিসমূহ আঁতৰাওক"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"অনুমতি আঁতৰাওক আৰু ঠাই খালী কৰক"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"অব্যৱহৃত হৈ থাকিলে এপৰ কাৰ্যকলাপ পজ কৰক"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"যদি ব্যৱহাৰ হোৱা নাই এপ্‌টো পৰিচালনা কৰক"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"অনুমতি আঁতৰাওক, অস্থায়ী ফাইল মচক আৰু জাননী বন্ধ কৰক"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"অনুমতি আঁতৰাওক, অস্থায়ী ফাইল মচক, জাননী বন্ধ কৰক আৰু এপ্‌টো আৰ্কাইভ কৰক"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"আপোনাৰ ডেটা সুৰক্ষিত কৰিবলৈ এই এপ্‌টো কেইমাহমান ব্যৱহাৰ নকৰিলে এইটোৰ বাবে থকা অনুমতিসমূহ আঁতৰোৱা হ\'ব।"</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"আপোনাৰ ডেটা সুৰক্ষিত কৰিবলৈ এই এপ্‌টো কেইমাহমান ব্যৱহাৰ নকৰিলে তলত উল্লেখ কৰা অনুমতিসমূহ আঁতৰোৱা হ\'ব: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"আপোনাৰ ডেটা সুৰক্ষিত কৰিবলৈ আপুনি কেইমাহমান ব্যৱহাৰ নকৰা এপ্‌সমূহৰ পৰা অনুমতিসমূহ আঁতৰোৱা হ\'ব।"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"টোকা লোৱা এপ্‌"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"আপোনাক আপোনাৰ ডিভাইচত টোকা ল’বলৈ দিয়া এপ্‌সমূহ"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"টোকা"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"ডিফ’ল্ট Wallet এপ্‌"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Wallet এপ্‌"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Wallet এপে বিভিন্ন ধৰণৰ লেনদেনত সহায় কৰিবলৈ আপোনাৰ ক্ৰেডিট আৰু লয়েল্টী কাৰ্ড, গাড়ীৰ চাবি আৰু আন বস্তু ষ্ট’ৰ কৰিব পাৰে।"</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"<xliff:g id="APP_NAME">%1$s</xliff:g>ক আপোনাৰ ডিফ’ল্ট Wallet এপ্‌ হিচাপে ছেট কৰিবনে?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"কোনো অনুমতিৰ প্ৰয়োজন নাই"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"বৰ্তমানৰ ডিফ’ল্ট"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"পুনৰায় নুসুধিব"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"ডিফ’ল্ট ৰূপে ছেট কৰক"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"ডেটা শ্বেয়াৰ কৰা সম্পৰ্কীয় আপডে’ট"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"কিছুমান এপে আপোনাৰ অৱস্থানৰ ডেটা শ্বেয়াৰ কৰিব পৰাৰ ধৰণসমূহ সলনি কৰিছে"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"ছেটিং"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"<xliff:g id="TIME_DATE">%1$s</xliff:g>ত এক্সেছ কৰিছিল"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"কালি <xliff:g id="TIME_DATE">%1$s</xliff:g>ত এক্সেছ কৰিছিল"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"<xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>ত এক্সেছ কৰিছিল"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"আপোনাৰ এবাৰ ব্যৱহাৰযোগ্য পাছৱর্ড হৈছে ১৩২৪৩৫"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"প্ৰতিবন্ধিত ছেটিং"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"আপোনাৰ সুৰক্ষাৰ বাবে, এই ছেটিংটো বৰ্তমান উপলব্ধ নহয়।"</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"<xliff:g id="PERMISSION_NAME">%1$s</xliff:g> ব্যৱহাৰ কৰাৰ অনুৰোধটো অস্বীকাৰ কৰা হৈছে"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"এই এপ্‌টোৱে <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>ৰ অনুমতি বিচাৰিছে, যিটো হৈছে এটা প্ৰতিবন্ধিত ছেটিং কাৰণ এইটোৱে আপোনাৰ সুৰক্ষা আৰু গোপনীয়তা বিপদাপন্ন কৰিব পাৰে। এই অনুমতিৰ প্ৰতিবন্ধকতাই এই এপ্‌টোক কাম কৰাত বাধা দিব পাৰে।"</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"অধিক জানক"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"বুজি পালোঁ"</string>
 </resources>

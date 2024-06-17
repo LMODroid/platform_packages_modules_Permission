@@ -17,6 +17,7 @@
 package com.android.permissioncontroller.role.ui.auto;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 
 import androidx.annotation.AttrRes;
@@ -26,8 +27,8 @@ import androidx.annotation.StyleRes;
 import androidx.preference.PreferenceViewHolder;
 import androidx.preference.SwitchPreference;
 
+import com.android.permissioncontroller.role.ui.RestrictionAwarePreferenceMixin;
 import com.android.permissioncontroller.role.ui.RoleApplicationPreference;
-import com.android.permissioncontroller.role.ui.UserRestrictionAwarePreferenceMixin;
 
 /**
  * Role application preference represented as a switch.
@@ -35,8 +36,8 @@ import com.android.permissioncontroller.role.ui.UserRestrictionAwarePreferenceMi
 public class AutoSwitchPreference extends SwitchPreference
         implements RoleApplicationPreference {
 
-    private UserRestrictionAwarePreferenceMixin mUserRestrictionAwarePreferenceMixin =
-            new UserRestrictionAwarePreferenceMixin(this);
+    private RestrictionAwarePreferenceMixin mRestrictionAwarePreferenceMixin =
+            new RestrictionAwarePreferenceMixin(this);
 
     public AutoSwitchPreference(@NonNull Context context, @Nullable AttributeSet attrs,
             @AttrRes int defStyleAttr, @StyleRes int defStyleRes) {
@@ -57,15 +58,15 @@ public class AutoSwitchPreference extends SwitchPreference
     }
 
     @Override
-    public void setUserRestriction(@Nullable String userRestriction) {
-        mUserRestrictionAwarePreferenceMixin.setUserRestriction(userRestriction);
+    public void setRestrictionIntent(@Nullable Intent restrictionIntent) {
+        mRestrictionAwarePreferenceMixin.setRestrictionIntent(restrictionIntent);
     }
 
     @Override
-    public void onBindViewHolder(PreferenceViewHolder holder) {
+    public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
 
-        mUserRestrictionAwarePreferenceMixin.onAfterBindViewHolder(holder);
+        mRestrictionAwarePreferenceMixin.onAfterBindViewHolder(holder);
     }
 
     @NonNull

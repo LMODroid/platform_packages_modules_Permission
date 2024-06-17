@@ -16,9 +16,7 @@
 
 package com.android.permissioncontroller.role.ui;
 
-import android.app.admin.DevicePolicyManager;
 import android.content.Intent;
-import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,32 +24,35 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
 /**
- * Mixin for implementing {@link UserRestrictionAwarePreference}.
+ * Mixin for implementing {@link RestrictionAwarePreference}.
  */
-public class UserRestrictionAwarePreferenceMixin {
+public class RestrictionAwarePreferenceMixin {
+
+    private static final String LOG_TAG = RestrictionAwarePreferenceMixin.class.getSimpleName();
 
     @NonNull
     private final Preference mPreference;
-    @Nullable
-    private String mUserRestriction = null;
 
-    public UserRestrictionAwarePreferenceMixin(@NonNull Preference preference) {
+    @Nullable
+    private Intent mRestrictionIntent;
+
+    public RestrictionAwarePreferenceMixin(@NonNull Preference preference) {
         mPreference = preference;
     }
 
     /**
-     * Implementation for {@link UserRestrictionAwarePreference#setUserRestriction}.
+     * Implementation for {@link RestrictionAwarePreference#setRestrictionIntent}.
      */
-    public void setUserRestriction(@Nullable String userRestriction) {
-        mUserRestriction = userRestriction;
-        mPreference.setEnabled(mUserRestriction == null);
+    public void setRestrictionIntent(@Nullable Intent restrictionIntent) {
+        mRestrictionIntent = restrictionIntent;
+        mPreference.setEnabled(mRestrictionIntent == null);
     }
 
     /**
      * Call after {@link Preference#onBindViewHolder} to apply blocking effects.
      */
     public void onAfterBindViewHolder(@NonNull PreferenceViewHolder holder) {
-        if (mUserRestriction != null) {
+        if (mRestrictionIntent != null) {
             // We set the item view to enabled to make the preference row clickable.
             // Normal disabled preferences have the whole view hierarchy disabled, so by making only
             // the top-level itemView enabled, we don't change the fact that the whole preference
@@ -60,10 +61,8 @@ public class UserRestrictionAwarePreferenceMixin {
             // we don't need to unset the listener here (we wouldn't know the correct one anyway).
             // This approach is used already by com.android.settingslib.RestrictedPreferenceHelper.
             holder.itemView.setEnabled(true);
-            Intent intent = new Intent(Settings.ACTION_SHOW_ADMIN_SUPPORT_DETAILS)
-                    .putExtra(DevicePolicyManager.EXTRA_RESTRICTION, mUserRestriction);
             holder.itemView.setOnClickListener(
-                    (view) -> holder.itemView.getContext().startActivity(intent));
+                    view -> view.getContext().startActivity(mRestrictionIntent));
         }
     }
 }

@@ -92,15 +92,6 @@ class AccessibilityPrivacySourceTest {
         )
 
     @get:Rule
-    val deviceConfigA11ySourceEnabled =
-        DeviceConfigStateChangerRule(
-            context,
-            DeviceConfig.NAMESPACE_PRIVACY,
-            ACCESSIBILITY_SOURCE_ENABLED,
-            true.toString()
-        )
-
-    @get:Rule
     val deviceConfigA11yListenerDisabled =
         DeviceConfigStateChangerRule(
             context,
@@ -233,26 +224,6 @@ class AccessibilityPrivacySourceTest {
     }
 
     @Test
-    fun testJobWithAccessibilityFeatureDisabledDoesNotSendNotification() {
-        setDeviceConfigPrivacyProperty(ACCESSIBILITY_SOURCE_ENABLED, false.toString())
-        mAccessibilityServiceRule.enableService()
-        runJobAndWaitUntilCompleted()
-        assertEmptyNotification(permissionControllerPackage, ACCESSIBILITY_NOTIFICATION_ID)
-    }
-
-    @Test
-    fun testJobWithAccessibilityFeatureDisabledDoesNotSendIssueToSafetyCenter() {
-        setDeviceConfigPrivacyProperty(ACCESSIBILITY_SOURCE_ENABLED, false.toString())
-        mAccessibilityServiceRule.enableService()
-        runJobAndWaitUntilCompleted()
-        assertSafetyCenterIssueDoesNotExist(
-            SC_ACCESSIBILITY_SOURCE_ID,
-            safetyCenterIssueId,
-            SC_ACCESSIBILITY_ISSUE_TYPE_ID
-        )
-    }
-
-    @Test
     fun testJobWithSafetyCenterDisabledDoesNotSendNotification() {
         setDeviceConfigPrivacyProperty(SAFETY_CENTER_ENABLED, false.toString())
         mAccessibilityServiceRule.enableService()
@@ -332,7 +303,6 @@ class AccessibilityPrivacySourceTest {
 
     companion object {
         private const val SC_ACCESSIBILITY_SOURCE_ID = "AndroidAccessibility"
-        private const val ACCESSIBILITY_SOURCE_ENABLED = "sc_accessibility_source_enabled"
         private const val SAFETY_CENTER_ENABLED = "safety_center_is_enabled"
         private const val ACCESSIBILITY_LISTENER_ENABLED = "sc_accessibility_listener_enabled"
         private const val ACCESSIBILITY_JOB_INTERVAL_MILLIS = "sc_accessibility_job_interval_millis"

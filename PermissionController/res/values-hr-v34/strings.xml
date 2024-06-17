@@ -23,5 +23,4 @@
     <string name="health_connect_summary" msgid="815473513776882296">"Upravljajte kojim podacima o zdravlju pristupaju aplikacije"</string>
     <string name="location_settings" msgid="8863940440881290182">"Pristup lokaciji"</string>
     <string name="mic_toggle_description" msgid="1504101620086616040">"Za aplikacije i usluge. Ako je ta postavka isključena, podaci mikrofona i dalje se mogu dijeliti kad nazovete broj hitne službe"</string>
-    <string name="location_settings_subtitle" msgid="6846532794702613851">"Za aplikacije i usluge"</string>
 </resources>

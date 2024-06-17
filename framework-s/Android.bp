@@ -13,6 +13,7 @@
 // limitations under the License.
 
 package {
+    default_team: "trendy_team_android_permissions",
     default_applicable_licenses: ["Android-Apache-2.0"],
 }
 
@@ -44,6 +45,7 @@ java_library {
     name: "framework-permission-s-shared",
     srcs: [":framework-permission-s-shared-srcs"],
     libs: [
+        "error_prone_annotations",
         "framework-annotations-lib",
         "unsupportedappusage",
     ],
@@ -54,6 +56,9 @@ java_library {
     installable: false,
     min_sdk_version: "30",
     sdk_version: "module_current",
+    lint: {
+        baseline_filename: "lint-baseline.xml",
+    },
 }
 
 platform_compat_config {
@@ -76,6 +81,7 @@ java_sdk_library {
         "framework-permission-s-shared",
         "modules-utils-build",
         "android.permission.flags-aconfig-java",
+        "permissions-aconfig-flags-lib",
     ],
     apex_available: [
         "com.android.permission",
@@ -89,23 +95,12 @@ java_sdk_library {
     ],
     installable: true,
     jarjar_rules: "jarjar-rules.txt",
-    lint: {
-        strict_updatability_linting: true,
-    },
     min_sdk_version: "31",
     permitted_packages: [
         "android.permission",
         "android.app.role",
+        "android.app.ecm",
         "android.safetycenter",
         "android.safetylabel",
-    ],
-}
-
-java_api_contribution {
-    name: "framework-permission-s-public-stubs",
-    api_surface: "public",
-    api_file: "api/current.txt",
-    visibility: [
-        "//build/orchestrator/apis",
     ],
 }

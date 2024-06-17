@@ -64,6 +64,7 @@ import androidx.preference.PreferenceScreen;
 import androidx.preference.SwitchPreference;
 
 import com.android.modules.utils.build.SdkLevel;
+import com.android.permission.flags.Flags;
 import com.android.permissioncontroller.PermissionControllerStatsLog;
 import com.android.permissioncontroller.R;
 import com.android.permissioncontroller.permission.model.livedatatypes.HibernationSettingState;
@@ -431,8 +432,10 @@ public final class AppPermissionGroupsFragment extends SettingsWithLargeHeader i
         int switchTitleId;
         if (isHibernationEnabled()) {
             if (SdkLevel.isAtLeastT()) {
-                switchTitleId = R.string.unused_apps_label_v2;
-                autoRevokeSwitch.setSummary(R.string.unused_apps_summary);
+                switchTitleId = isArchivingEnabled() ? R.string.unused_apps_label_v3
+                        : R.string.unused_apps_label_v2;
+                autoRevokeSwitch.setSummary(isArchivingEnabled() ? R.string.unused_apps_summary_v2
+                        : R.string.unused_apps_summary);
             } else {
                 switchTitleId = R.string.unused_apps_label;
             }
@@ -454,6 +457,10 @@ public final class AppPermissionGroupsFragment extends SettingsWithLargeHeader i
                             : R.string.unused_apps);
         }
         autoRevokeCategory.addPreference(autoRevokeSummary);
+    }
+
+    private boolean isArchivingEnabled() {
+        return SdkLevel.isAtLeastV() && Flags.archivingReadOnly();
     }
 
     private void setAutoRevokeToggleState(HibernationSettingState state) {

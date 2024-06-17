@@ -3796,6 +3796,17 @@ class SafetyCenterManagerTest {
         assertThat(lastUpdated[key]).isNotNull()
     }
 
+    @Test
+    fun setSafetySourceData_dynamicHiddenWithIssueOnlyData_allowed() {
+        safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.hiddenSourceConfig)
+        val expectedData = SafetySourceTestData.issuesOnly(safetySourceTestData.informationIssue)
+
+        safetyCenterTestHelper.setData(DYNAMIC_HIDDEN_ID, expectedData)
+
+        val actualData = safetyCenterManager.getSafetySourceDataWithPermission(DYNAMIC_HIDDEN_ID)
+        assertThat(actualData).isEqualTo(expectedData)
+    }
+
     private fun dumpLastUpdated(): Map<String, String> {
         val dump = SystemUtil.runShellCommand("dumpsys safety_center data")
         return dump

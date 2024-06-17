@@ -21,6 +21,8 @@ import android.Manifest.permission.INTERACT_ACROSS_USERS_FULL
 import android.app.PendingIntent
 import android.content.Context
 import android.os.UserHandle
+import android.platform.test.annotations.RequiresFlagsDisabled
+import android.platform.test.annotations.RequiresFlagsEnabled
 import android.safetycenter.SafetyCenterData
 import android.safetycenter.SafetyCenterEntry
 import android.safetycenter.SafetyCenterEntry.ENTRY_SEVERITY_LEVEL_CRITICAL_WARNING
@@ -43,6 +45,7 @@ import com.android.bedstead.harrier.DeviceState
 import com.android.bedstead.harrier.annotations.EnsureHasAdditionalUser
 import com.android.bedstead.harrier.annotations.EnsureHasCloneProfile
 import com.android.bedstead.harrier.annotations.EnsureHasNoWorkProfile
+import com.android.bedstead.harrier.annotations.EnsureHasPrivateProfile
 import com.android.bedstead.harrier.annotations.EnsureHasWorkProfile
 import com.android.bedstead.harrier.annotations.enterprise.EnsureHasDeviceOwner
 import com.android.bedstead.harrier.annotations.enterprise.EnsureHasNoDeviceOwner
@@ -227,6 +230,13 @@ class SafetyCenterMultiUsersTest {
                 .setEnabled(false)
                 .build()
 
+    private val dynamicDisabledForPrivateUpdated: SafetyCenterEntry
+        get() =
+            safetyCenterEntryOkForPrivate(DYNAMIC_DISABLED_ID, deviceState.privateProfile().id())
+
+    private val dynamicHiddenForPrivateUpdated: SafetyCenterEntry
+        get() = safetyCenterEntryOkForPrivate(DYNAMIC_HIDDEN_ID, deviceState.privateProfile().id())
+
     private val staticGroupBuilder =
         SafetyCenterEntryGroup.Builder(STATIC_GROUP_ID, "OK")
             .setSeverityLevel(ENTRY_SEVERITY_LEVEL_UNSPECIFIED)
@@ -267,6 +277,24 @@ class SafetyCenterMultiUsersTest {
                 .setEnabled(false)
                 .build()
 
+    private val staticAllOptionalForPrivateBuilder
+        get() =
+            safetyCenterTestData
+                .safetyCenterEntryDefaultStaticBuilder(
+                    STATIC_ALL_OPTIONAL_ID,
+                    userId = deviceState.privateProfile().id(),
+                    title = "Unknown"
+                )
+                .setPendingIntent(
+                    createTestActivityRedirectPendingIntentForUser(
+                        deviceState.privateProfile().userHandle(),
+                        explicit = false
+                    )
+                )
+
+    private val staticAllOptionalForPrivate
+        get() = staticAllOptionalForPrivateBuilder.build()
+
     private fun createStaticEntry(explicit: Boolean = true): SafetyCenterStaticEntry =
         SafetyCenterStaticEntry.Builder("OK")
             .setSummary("OK")
@@ -292,8 +320,24 @@ class SafetyCenterMultiUsersTest {
                 )
             )
 
+    private fun staticEntryForPrivateBuilder(
+        title: CharSequence = "Unknown",
+        explicit: Boolean = true
+    ) =
+        SafetyCenterStaticEntry.Builder(title)
+            .setSummary("OK")
+            .setPendingIntent(
+                createTestActivityRedirectPendingIntentForUser(
+                    deviceState.privateProfile().userHandle(),
+                    explicit
+                )
+            )
+
     private fun createStaticEntryForWork(explicit: Boolean = true): SafetyCenterStaticEntry =
         staticEntryForWorkBuilder(explicit = explicit).build()
+
+    private fun createStaticEntryForPrivate(explicit: Boolean = true): SafetyCenterStaticEntry =
+        staticEntryForPrivateBuilder(explicit = explicit).build()
 
     private fun createStaticEntryForWorkPaused(): SafetyCenterStaticEntry =
         staticEntryForWorkBuilder(explicit = false)
@@ -309,6 +353,13 @@ class SafetyCenterMultiUsersTest {
     private val staticEntryForWorkUpdated: SafetyCenterStaticEntry
         get() =
             SafetyCenterStaticEntry.Builder("Unspecified title for Work")
+                .setSummary("Unspecified summary")
+                .setPendingIntent(safetySourceTestData.createTestActivityRedirectPendingIntent())
+                .build()
+
+    private val staticEntryForPrivateUpdated: SafetyCenterStaticEntry
+        get() =
+            SafetyCenterStaticEntry.Builder("Unspecified title for Private")
                 .setSummary("Unspecified summary")
                 .setPendingIntent(safetySourceTestData.createTestActivityRedirectPendingIntent())
                 .build()
@@ -657,7 +708,7 @@ class SafetyCenterMultiUsersTest {
 
     @Test
     @EnsureHasWorkProfile(installInstrumentedApp = TRUE)
-    fun getSafetyCenterData_withComplexConfigWithAllDataProvided_returnsAllDataProvided() {
+    fun getSafetyCenterData_withComplexConfigWithExtraWorkOnlyWithAllDataProvided_returnsAllDataProvided() {
         safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.complexAllProfileConfig)
         updatePrimaryProfileSources()
         updateWorkProfileSources()
@@ -757,6 +808,267 @@ class SafetyCenterMultiUsersTest {
                             staticEntryForWorkUpdated,
                             createStaticEntry(explicit = false),
                             createStaticEntryForWork(explicit = false)
+                        )
+                    )
+                )
+            )
+        assertThat(apiSafetyCenterData.withoutExtras()).isEqualTo(safetyCenterDataFromComplexConfig)
+    }
+
+    @Test
+    @RequiresFlagsDisabled(com.android.permission.flags.Flags.FLAG_PRIVATE_PROFILE_SUPPORTED)
+    @EnsureHasWorkProfile(installInstrumentedApp = TRUE)
+    @EnsureHasPrivateProfile(installInstrumentedApp = TRUE)
+    fun getSafetyCenterData_withComplexConfigWithPrivateProfileDisallowedWithAllDataProvided_returnsAllDataProvided() {
+        safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.complexAllProfileConfig)
+        updatePrimaryProfileSources()
+        updateWorkProfileSources()
+        updatePrivateProfileSources()
+
+        val apiSafetyCenterData = safetyCenterManager.getSafetyCenterDataWithPermission()
+
+        val managedUserId = deviceState.workProfile().id()
+        val safetyCenterDataFromComplexConfig =
+            SafetyCenterData(
+                safetyCenterTestData.safetyCenterStatusCritical(11),
+                listOf(
+                    safetyCenterTestData.safetyCenterIssueCritical(
+                        DYNAMIC_BAREBONE_ID,
+                        groupId = DYNAMIC_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueCritical(
+                        ISSUE_ONLY_BAREBONE_ID,
+                        attributionTitle = null,
+                        groupId = ISSUE_ONLY_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueRecommendation(
+                        DYNAMIC_DISABLED_ID,
+                        groupId = DYNAMIC_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueRecommendation(
+                        ISSUE_ONLY_ALL_OPTIONAL_ID,
+                        attributionTitle = null,
+                        groupId = ISSUE_ONLY_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        DYNAMIC_IN_STATELESS_ID,
+                        groupId = MIXED_STATELESS_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        ISSUE_ONLY_IN_STATELESS_ID,
+                        groupId = MIXED_STATELESS_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        DYNAMIC_DISABLED_ID,
+                        managedUserId,
+                        groupId = DYNAMIC_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        DYNAMIC_HIDDEN_ID,
+                        managedUserId,
+                        groupId = DYNAMIC_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        ISSUE_ONLY_ALL_OPTIONAL_ID,
+                        managedUserId,
+                        attributionTitle = null,
+                        groupId = ISSUE_ONLY_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        DYNAMIC_IN_STATELESS_ID,
+                        managedUserId,
+                        groupId = MIXED_STATELESS_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        ISSUE_ONLY_IN_STATELESS_ID,
+                        managedUserId,
+                        groupId = MIXED_STATELESS_GROUP_ID
+                    )
+                ),
+                listOf(
+                    SafetyCenterEntryOrGroup(
+                        SafetyCenterEntryGroup.Builder(DYNAMIC_GROUP_ID, "OK")
+                            .setSeverityLevel(ENTRY_SEVERITY_LEVEL_CRITICAL_WARNING)
+                            .setSummary("Critical summary")
+                            .setEntries(
+                                listOf(
+                                    dynamicBareboneUpdated,
+                                    dynamicDisabledUpdated,
+                                    dynamicDisabledForWorkUpdated,
+                                    dynamicHiddenUpdated,
+                                    dynamicHiddenForWorkUpdated
+                                )
+                            )
+                            .setSeverityUnspecifiedIconType(
+                                SEVERITY_UNSPECIFIED_ICON_TYPE_NO_RECOMMENDATION
+                            )
+                            .build()
+                    ),
+                    SafetyCenterEntryOrGroup(
+                        staticGroupBuilder
+                            .setEntries(
+                                listOf(staticBarebone, staticAllOptional, staticAllOptionalForWork)
+                            )
+                            .build()
+                    )
+                ),
+                listOf(
+                    SafetyCenterStaticEntryGroup(
+                        "OK",
+                        listOf(
+                            staticEntryUpdated,
+                            staticEntryForWorkUpdated,
+                            createStaticEntry(explicit = false),
+                            createStaticEntryForWork(explicit = false)
+                        )
+                    )
+                )
+            )
+        assertThat(apiSafetyCenterData.withoutExtras()).isEqualTo(safetyCenterDataFromComplexConfig)
+    }
+
+    // TODO(b/286539356) add the os feature flag requirement when available.
+    @Test
+    @RequiresFlagsEnabled(com.android.permission.flags.Flags.FLAG_PRIVATE_PROFILE_SUPPORTED)
+    @EnsureHasWorkProfile(installInstrumentedApp = TRUE)
+    @EnsureHasPrivateProfile(installInstrumentedApp = TRUE)
+    fun getSafetyCenterData_withComplexConfigWithAllDataProvided_returnsAllDataProvided() {
+        safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.complexAllProfileConfig)
+        updatePrimaryProfileSources()
+        updateWorkProfileSources()
+        updatePrivateProfileSources()
+
+        val apiSafetyCenterData = safetyCenterManager.getSafetyCenterDataWithPermission()
+
+        val managedUserId = deviceState.workProfile().id()
+        val privateProfileId = deviceState.privateProfile().id()
+        val safetyCenterDataFromComplexConfig =
+            SafetyCenterData(
+                safetyCenterTestData.safetyCenterStatusCritical(11),
+                listOf(
+                    safetyCenterTestData.safetyCenterIssueCritical(
+                        DYNAMIC_BAREBONE_ID,
+                        groupId = DYNAMIC_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueCritical(
+                        ISSUE_ONLY_BAREBONE_ID,
+                        attributionTitle = null,
+                        groupId = ISSUE_ONLY_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueRecommendation(
+                        DYNAMIC_DISABLED_ID,
+                        groupId = DYNAMIC_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueRecommendation(
+                        ISSUE_ONLY_ALL_OPTIONAL_ID,
+                        attributionTitle = null,
+                        groupId = ISSUE_ONLY_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        DYNAMIC_IN_STATELESS_ID,
+                        groupId = MIXED_STATELESS_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        ISSUE_ONLY_IN_STATELESS_ID,
+                        groupId = MIXED_STATELESS_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        DYNAMIC_DISABLED_ID,
+                        managedUserId,
+                        groupId = DYNAMIC_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        DYNAMIC_HIDDEN_ID,
+                        managedUserId,
+                        groupId = DYNAMIC_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        ISSUE_ONLY_ALL_OPTIONAL_ID,
+                        managedUserId,
+                        attributionTitle = null,
+                        groupId = ISSUE_ONLY_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        DYNAMIC_IN_STATELESS_ID,
+                        managedUserId,
+                        groupId = MIXED_STATELESS_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        ISSUE_ONLY_IN_STATELESS_ID,
+                        managedUserId,
+                        groupId = MIXED_STATELESS_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        DYNAMIC_DISABLED_ID,
+                        privateProfileId,
+                        groupId = DYNAMIC_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        DYNAMIC_HIDDEN_ID,
+                        privateProfileId,
+                        groupId = DYNAMIC_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        ISSUE_ONLY_ALL_OPTIONAL_ID,
+                        privateProfileId,
+                        attributionTitle = null,
+                        groupId = ISSUE_ONLY_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        DYNAMIC_IN_STATELESS_ID,
+                        privateProfileId,
+                        groupId = MIXED_STATELESS_GROUP_ID
+                    ),
+                    safetyCenterTestData.safetyCenterIssueInformation(
+                        ISSUE_ONLY_IN_STATELESS_ID,
+                        privateProfileId,
+                        groupId = MIXED_STATELESS_GROUP_ID
+                    )
+                ),
+                listOf(
+                    SafetyCenterEntryOrGroup(
+                        SafetyCenterEntryGroup.Builder(DYNAMIC_GROUP_ID, "OK")
+                            .setSeverityLevel(ENTRY_SEVERITY_LEVEL_CRITICAL_WARNING)
+                            .setSummary("Critical summary")
+                            .setEntries(
+                                listOf(
+                                    dynamicBareboneUpdated,
+                                    dynamicDisabledUpdated,
+                                    dynamicDisabledForWorkUpdated,
+                                    dynamicDisabledForPrivateUpdated,
+                                    dynamicHiddenUpdated,
+                                    dynamicHiddenForWorkUpdated,
+                                    dynamicHiddenForPrivateUpdated
+                                )
+                            )
+                            .setSeverityUnspecifiedIconType(
+                                SEVERITY_UNSPECIFIED_ICON_TYPE_NO_RECOMMENDATION
+                            )
+                            .build()
+                    ),
+                    SafetyCenterEntryOrGroup(
+                        staticGroupBuilder
+                            .setEntries(
+                                listOf(
+                                    staticBarebone,
+                                    staticAllOptional,
+                                    staticAllOptionalForWork,
+                                    staticAllOptionalForPrivate
+                                )
+                            )
+                            .build()
+                    )
+                ),
+                listOf(
+                    SafetyCenterStaticEntryGroup(
+                        "OK",
+                        listOf(
+                            staticEntryUpdated,
+                            staticEntryForWorkUpdated,
+                            staticEntryForPrivateUpdated,
+                            createStaticEntry(explicit = false),
+                            createStaticEntryForWork(explicit = false),
+                            createStaticEntryForPrivate(explicit = false)
                         )
                     )
                 )
@@ -915,6 +1227,79 @@ class SafetyCenterMultiUsersTest {
             .isEqualTo(safetyCenterDataForPrimaryUser)
         assertThat(
                 managedSafetyCenterManager.getSafetyCenterDataWithInteractAcrossUsersPermission()
+            )
+            .isEqualTo(SafetyCenterTestData.DEFAULT)
+    }
+
+    @Test
+    @RequiresFlagsEnabled(com.android.permission.flags.Flags.FLAG_PRIVATE_PROFILE_SUPPORTED)
+    @EnsureHasPrivateProfile(installInstrumentedApp = TRUE)
+    fun getSafetyCenterData_afterPrivateProfileRemoved_returnsDefaultData() {
+        safetyCenterTestHelper.setConfig(safetyCenterTestConfigs.singleSourceAllProfileConfig)
+        val privateSafetyCenterManager =
+            getSafetyCenterManagerForUser(deviceState.privateProfile().userHandle())
+        val safetyCenterDataWithPrivateProfile =
+            SafetyCenterData(
+                safetyCenterTestData.safetyCenterStatusUnknown,
+                emptyList(),
+                listOf(
+                    SafetyCenterEntryOrGroup(
+                        SafetyCenterEntryGroup.Builder(SINGLE_SOURCE_GROUP_ID, "OK")
+                            .setSeverityLevel(ENTRY_SEVERITY_LEVEL_UNKNOWN)
+                            .setSummary(
+                                safetyCenterResourcesApk.getStringByName("group_unknown_summary")
+                            )
+                            .setEntries(
+                                listOf(
+                                    safetyCenterTestData.safetyCenterEntryDefault(
+                                        SINGLE_SOURCE_ALL_PROFILE_ID
+                                    ),
+                                    safetyCenterTestData.safetyCenterEntryDefault(
+                                        SINGLE_SOURCE_ALL_PROFILE_ID,
+                                        deviceState.privateProfile().id(),
+                                        title = "Unknown",
+                                        pendingIntent =
+                                            createTestActivityRedirectPendingIntentForUser(
+                                                deviceState.privateProfile().userHandle()
+                                            )
+                                    )
+                                )
+                            )
+                            .setSeverityUnspecifiedIconType(
+                                SEVERITY_UNSPECIFIED_ICON_TYPE_NO_RECOMMENDATION
+                            )
+                            .build()
+                    )
+                ),
+                emptyList()
+            )
+
+        checkState(
+            safetyCenterManager.getSafetyCenterDataWithPermission() ==
+                safetyCenterDataWithPrivateProfile
+        )
+        checkState(
+            privateSafetyCenterManager.getSafetyCenterDataWithInteractAcrossUsersPermission() ==
+                safetyCenterDataWithPrivateProfile
+        )
+
+        deviceState.privateProfile().remove()
+
+        val safetyCenterDataForPrimaryUser =
+            SafetyCenterData(
+                safetyCenterTestData.safetyCenterStatusUnknown,
+                emptyList(),
+                listOf(
+                    SafetyCenterEntryOrGroup(
+                        safetyCenterTestData.safetyCenterEntryDefault(SINGLE_SOURCE_ALL_PROFILE_ID)
+                    )
+                ),
+                emptyList()
+            )
+        assertThat(safetyCenterManager.getSafetyCenterDataWithPermission())
+            .isEqualTo(safetyCenterDataForPrimaryUser)
+        assertThat(
+                privateSafetyCenterManager.getSafetyCenterDataWithInteractAcrossUsersPermission()
             )
             .isEqualTo(SafetyCenterTestData.DEFAULT)
     }
@@ -1290,6 +1675,11 @@ class SafetyCenterMultiUsersTest {
             .safetyCenterEntryOkBuilder(sourceId, managedUserId, title = "Ok title for Work")
             .build()
 
+    private fun safetyCenterEntryOkForPrivate(sourceId: String, managedUserId: Int) =
+        safetyCenterTestData
+            .safetyCenterEntryOkBuilder(sourceId, managedUserId, title = "Ok title for Private")
+            .build()
+
     private fun updatePrimaryProfileSources() {
         safetyCenterTestHelper.setData(
             DYNAMIC_BAREBONE_ID,
@@ -1338,6 +1728,31 @@ class SafetyCenterMultiUsersTest {
             safetySourceTestData.unspecifiedWithIssueForWork
         )
         managedSafetyCenterManager.setSafetySourceDataWithInteractAcrossUsersPermission(
+            ISSUE_ONLY_IN_STATELESS_ID,
+            SafetySourceTestData.issuesOnly(safetySourceTestData.informationIssue)
+        )
+    }
+
+    private fun updatePrivateProfileSources() {
+        val privateSafetyCenterManager =
+            getSafetyCenterManagerForUser(deviceState.privateProfile().userHandle())
+        privateSafetyCenterManager.setSafetySourceDataWithInteractAcrossUsersPermission(
+            DYNAMIC_DISABLED_ID,
+            safetySourceTestData.informationWithIssueForPrivate
+        )
+        privateSafetyCenterManager.setSafetySourceDataWithInteractAcrossUsersPermission(
+            DYNAMIC_HIDDEN_ID,
+            safetySourceTestData.informationWithIssueForPrivate
+        )
+        privateSafetyCenterManager.setSafetySourceDataWithInteractAcrossUsersPermission(
+            ISSUE_ONLY_ALL_OPTIONAL_ID,
+            SafetySourceTestData.issuesOnly(safetySourceTestData.informationIssue)
+        )
+        privateSafetyCenterManager.setSafetySourceDataWithInteractAcrossUsersPermission(
+            DYNAMIC_IN_STATELESS_ID,
+            safetySourceTestData.unspecifiedWithIssueForPrivate
+        )
+        privateSafetyCenterManager.setSafetySourceDataWithInteractAcrossUsersPermission(
             ISSUE_ONLY_IN_STATELESS_ID,
             SafetySourceTestData.issuesOnly(safetySourceTestData.informationIssue)
         )

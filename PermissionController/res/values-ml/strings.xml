@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"എല്ലാ അനുമതികളും"</string>
     <string name="other_permissions" msgid="2901186127193849594">"മറ്റ് ആപ്പ് ശേഷികൾ"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"അനുമതി അഭ്യർത്ഥന"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"ഇൻസ്‌റ്റാൾ/അൺഇൻസ്‌റ്റാൾ ചെയ്യുന്നതിന് Wear-ൽ പിന്തുണയില്ല."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"എന്തൊക്കെ ആക്‌സസ് ചെയ്യാനാണ് &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ആപ്പിനെ അനുവദിക്കേണ്ടതെന്ന് തിരഞ്ഞെടുക്കുക"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; അപ്‌ഡേറ്റ് ചെയ്‌തിരിക്കുന്നു. എന്തൊക്കെ ആക്‌സസ് ചെയ്യാൻ ഈ ആപ്പിനെ അനുവദിക്കണമെന്ന് തിരഞ്ഞെടുക്കുക."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"റദ്ദാക്കുക"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"ഉപയോഗിക്കാത്ത ആപ്പാണെങ്കിൽ അനുമതികൾ നീക്കം ചെയ്യുക"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"അനുമതികൾ നീക്കം ചെയ്‌ത് ഇടം സൃഷ്‌ടിക്കുക"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"ഉപയോഗിച്ചിട്ടില്ലെങ്കിൽ ആപ്പ് ആക്റ്റിവിറ്റി പോസ് ചെയ്യുക"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"ഉപയോഗിക്കാത്തപ്പോൾ ആപ്പ് മാനേജ് ചെയ്യൂ"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"അനുമതികൾ നീക്കം ചെയ്യുക, താൽക്കാലിക ഫയലുകൾ ഇല്ലാതാക്കുക, അറിയിപ്പുകൾ നിർത്തുക"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"അനുമതികൾ നീക്കം ചെയ്യുക, താൽക്കാലിക ഫയലുകൾ ഇല്ലാതാക്കുക, അറിയിപ്പുകൾ നിർത്തുക, ആപ്പ് ആർക്കൈവ് ചെയ്യുക"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"മാസങ്ങളായി ഈ ആപ്പ് ഉപയോഗിക്കുന്നില്ലെങ്കിൽ നിങ്ങളുടെ ഡാറ്റ സംരക്ഷിക്കുന്നതിന്, ഈ ആപ്പിനുള്ള അനുമതികൾ നീക്കം ചെയ്യുന്നതായിരിക്കും."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"കുറച്ച് മാസം ആപ്പ് ഉപയോഗിച്ചില്ലെങ്കിൽ, നിങ്ങളുടെ ഡാറ്റ സംരക്ഷിക്കുന്നതിന്, ഇനിപ്പറയുന്ന അനുമതികൾ നീക്കം ചെയ്യുന്നതായിരിക്കും: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"നിങ്ങളുടെ ഡാറ്റ സംരക്ഷിക്കുന്നതിന്, കുറച്ച് മാസങ്ങളായി ഉപയോഗിക്കാത്ത ആപ്പുകളിൽ നിന്ന് അനുമതികൾ നീക്കം ചെയ്തിരിക്കുന്നു."</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"കുറിപ്പ് ആപ്പ്"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"നിങ്ങളുടെ ഉപകരണത്തിൽ കുറിപ്പുകൾ രേഖപ്പെടുത്താൻ അനുവദിക്കുന്ന ആപ്പുകൾ"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"കുറിപ്പുകൾ"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"ഡിഫോൾട്ട് വാലറ്റ് ആപ്പ്"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Wallet ആപ്പ്"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"വ്യത്യസ്ത തരത്തിലുള്ള ഇടപാടുകളിൽ സഹായിക്കുന്നതിന് Wallet ആപ്പുകൾക്ക് നിങ്ങളുടെ ക്രെഡിറ്റ്, ലോയൽറ്റി കാർഡുകൾ, കാർ കീകൾ, മറ്റ് ഇനങ്ങൾ എന്നിവ സംഭരിക്കാൻ കഴിയും."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"<xliff:g id="APP_NAME">%1$s</xliff:g>, നിങ്ങളുടെ ഡിഫോൾട്ട് വാലറ്റ് ആപ്പ് ആക്കി സജ്ജീകരിക്കണോ?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"അനുമതികളൊന്നും ആവശ്യമില്ല"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"നിലവിലെ ഡിഫോൾട്ട്"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"വീണ്ടും ആവശ്യപ്പെടരുത്"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"ഡിഫോൾട്ടായി സജ്ജമാക്കൂ"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"ഡാറ്റ പങ്കിടുന്നത് സംബന്ധിച്ച അപ്‌ഡേറ്റുകൾ"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"നിങ്ങളുടെ ലൊക്കേഷൻ ഡാറ്റ പങ്കിടുന്ന രീതി ചില ആപ്പുകൾ മാറ്റി"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"ക്രമീകരണം"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"<xliff:g id="TIME_DATE">%1$s</xliff:g>-ന് ആക്‌സസ് ചെയ്തു"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"ഇന്നലെ <xliff:g id="TIME_DATE">%1$s</xliff:g>-ന് ആക്‌സസ് ചെയ്തു"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"<xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>-ന് ആക്‌സസ് ചെയ്തു"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"നിങ്ങളുടെ ഒറ്റത്തവണ പാസ്‌വേഡ് 132435 ആണ്"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"നിയന്ത്രിത ക്രമീകരണം"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"നിങ്ങളുടെ സുരക്ഷയ്ക്ക്, ഈ ക്രമീകരണം നിലവിൽ ലഭ്യമല്ല."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"<xliff:g id="PERMISSION_NAME">%1$s</xliff:g> ഉപയോഗിക്കാനുള്ള അനുമതി നിരസിച്ചു"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"നിങ്ങളുടെ സുരക്ഷയും സ്വകാര്യതയും അപകടത്തിലാക്കാൻ കഴിയുന്ന, ഒരു നിയന്ത്രിത ക്രമീകരണമായതിനാൽ, <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> അനുമതി ഈ ആപ്പ് അഭ്യർത്ഥിച്ചിട്ടുണ്ട്. ഈ അനുമതിക്കുള്ള നിയന്ത്രണം, ഈ ആപ്പിനെ പ്രവർത്തിക്കുന്നതിൽ നിന്ന് തടഞ്ഞേക്കാം."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"കൂടുതലറിയുക"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"മനസ്സിലായി"</string>
 </resources>

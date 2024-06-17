@@ -28,7 +28,8 @@ import android.os.VibratorManager;
 import android.platform.test.annotations.AppModeFull;
 import android.telephony.gsm.SmsManager;
 import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+
+import androidx.test.filters.SmallTest;
 
 import java.io.IOException;
 import java.io.InputStream;

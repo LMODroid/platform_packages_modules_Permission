@@ -22,6 +22,7 @@ import android.app.role.RoleManager
 import android.os.Build
 import android.os.Bundle
 import android.os.UserHandle
+import android.os.UserManager
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.AndroidViewModel
@@ -55,6 +56,8 @@ class PermissionUsageViewModel(
     private val state: SavedStateHandle,
     app: Application,
 ) : AndroidViewModel(app) {
+    private val userManager =
+        Utils.getSystemServiceSafe(app.applicationContext, UserManager::class.java)
     private val roleManager =
         Utils.getSystemServiceSafe(app.applicationContext, RoleManager::class.java)
     private val exemptedPackages: Set<String> = Utils.getExemptedPackages(roleManager)
@@ -114,7 +117,10 @@ class PermissionUsageViewModel(
         }
 
         val eligibleLightPackageOpsList: List<LightPackageOps> =
-            getAllLightPackageOps()?.filterOutExemptedApps() ?: listOf()
+            getAllLightPackageOps()?.filterOutExemptedApps()?.filter {
+                Utils.shouldShowInSettings(it.userHandle, userManager)
+            }
+                ?: listOf()
 
         for (lightPackageOps: LightPackageOps in eligibleLightPackageOpsList) {
             val permGroupsToLastAccess: List<Map.Entry<String, Long>> =

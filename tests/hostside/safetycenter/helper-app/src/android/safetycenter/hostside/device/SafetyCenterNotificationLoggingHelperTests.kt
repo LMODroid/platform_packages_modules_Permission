@@ -21,12 +21,16 @@ import android.safetycenter.SafetySourceData
 import android.safetycenter.SafetySourceIssue
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.android.safetycenter.pendingintents.PendingIntentSender
+import com.android.safetycenter.testing.SafetyCenterActivityLauncher
 import com.android.safetycenter.testing.SafetyCenterFlags
 import com.android.safetycenter.testing.SafetyCenterTestConfigs
 import com.android.safetycenter.testing.SafetyCenterTestConfigs.Companion.SINGLE_SOURCE_ID
 import com.android.safetycenter.testing.SafetyCenterTestHelper
 import com.android.safetycenter.testing.SafetyCenterTestRule
 import com.android.safetycenter.testing.SafetySourceTestData
+import com.android.safetycenter.testing.StatusBarNotificationWithChannel
+import com.android.safetycenter.testing.TestNotificationListener
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -49,7 +53,9 @@ class SafetyCenterNotificationLoggingHelperTests {
     private val safetySourceTestData = SafetySourceTestData(context)
     private val safetyCenterTestConfigs = SafetyCenterTestConfigs(context)
 
-    @get:Rule val safetyCenterTestRule = SafetyCenterTestRule(safetyCenterTestHelper)
+    @get:Rule
+    val safetyCenterTestRule =
+        SafetyCenterTestRule(safetyCenterTestHelper, withNotifications = true)
 
     @Before
     fun setUp() {
@@ -64,6 +70,13 @@ class SafetyCenterNotificationLoggingHelperTests {
         safetyCenterTestHelper.setData(SINGLE_SOURCE_ID, newTestDataWithNotifiableIssue())
     }
 
+    @Test
+    fun openSafetyCenterFromNotification() {
+        safetyCenterTestHelper.setData(SINGLE_SOURCE_ID, newTestDataWithNotifiableIssue())
+
+        sendContentPendingIntent(TestNotificationListener.waitForSingleNotification())
+    }
+
     private fun newTestDataWithNotifiableIssue(): SafetySourceData =
         safetySourceTestData
             .defaultCriticalDataBuilder()
@@ -74,4 +87,17 @@ class SafetyCenterNotificationLoggingHelperTests {
                     .build()
             )
             .build()
+
+    companion object {
+        private fun sendContentPendingIntent(
+            statusBarNotificationWithChannel: StatusBarNotificationWithChannel
+        ) {
+            val contentIntent =
+                statusBarNotificationWithChannel.statusBarNotification.notification.contentIntent
+            SafetyCenterActivityLauncher.executeBlockAndExit(
+                launchActivity = { PendingIntentSender.send(contentIntent) },
+                block = {} // No action required
+            )
+        }
+    }
 }

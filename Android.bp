@@ -13,6 +13,7 @@
 // limitations under the License.
 
 package {
+    default_team: "trendy_team_android_permissions",
     default_applicable_licenses: ["Android-Apache-2.0"],
     default_visibility: [":__subpackages__"],
 }
@@ -22,7 +23,7 @@ apex {
     defaults: ["com.android.permission-defaults"],
     manifest: "apex_manifest.json",
     compat_configs: [
-        "framework-permission-s-compat-config"
+        "framework-permission-s-compat-config",
     ],
 }
 
@@ -69,8 +70,8 @@ sdk {
 bootclasspath_fragment {
     name: "com.android.permission-bootclasspath-fragment",
     contents: [
-      "framework-permission",
-      "framework-permission-s",
+        "framework-permission",
+        "framework-permission-s",
     ],
     apex_available: ["com.android.permission"],
 
@@ -107,6 +108,7 @@ bootclasspath_fragment {
         // result in a build failure due to inconsistent flags.
         package_prefixes: [
             "android.app.role",
+            "android.app.ecm",
             "android.permission.jarjar",
             "android.safetycenter",
             "android.safetylabel",

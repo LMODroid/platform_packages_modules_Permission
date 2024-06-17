@@ -24,6 +24,7 @@ import android.content.pm.PermissionInfo;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.os.Build;
+import android.os.Process;
 import android.permission.flags.Flags;
 import android.util.ArrayMap;
 import android.util.Log;
@@ -92,6 +93,7 @@ public class RoleParser {
     private static final String ATTRIBUTE_LABEL = "label";
     private static final String ATTRIBUTE_MAX_SDK_VERSION = "maxSdkVersion";
     private static final String ATTRIBUTE_MIN_SDK_VERSION = "minSdkVersion";
+    private static final String ATTRIBUTE_ONLY_GRANT_WHEN_ADDED = "onlyGrantWhenAdded";
     private static final String ATTRIBUTE_OVERRIDE_USER_WHEN_GRANTING = "overrideUserWhenGranting";
     private static final String ATTRIBUTE_QUERY_FLAGS = "queryFlags";
     private static final String ATTRIBUTE_REQUEST_TITLE = "requestTitle";
@@ -106,6 +108,7 @@ public class RoleParser {
     private static final String ATTRIBUTE_VISIBLE = "visible";
     private static final String ATTRIBUTE_FLAGS = "flags";
     private static final String ATTRIBUTE_MIN_TARGET_SDK_VERSION = "minTargetSdkVersion";
+    private static final String ATTRIBUTE_OPTIONAL_MIN_SDK_VERSION = "optionalMinSdkVersion";
     private static final String ATTRIBUTE_PERMISSION = "permission";
     private static final String ATTRIBUTE_PROHIBITED = "prohibited";
     private static final String ATTRIBUTE_VALUE = "value";
@@ -272,6 +275,8 @@ public class RoleParser {
 
         int minSdkVersion = getAttributeIntValue(parser, ATTRIBUTE_MIN_SDK_VERSION,
                 Build.VERSION_CODES.BASE);
+        int optionalMinSdkVersion = getAttributeIntValue(parser, ATTRIBUTE_OPTIONAL_MIN_SDK_VERSION,
+                minSdkVersion);
 
         List<Permission> permissions = new ArrayList<>();
 
@@ -291,7 +296,10 @@ public class RoleParser {
                     continue;
                 }
                 int mergedMinSdkVersion = Math.max(permission.getMinSdkVersion(), minSdkVersion);
-                permission = permission.withMinSdkVersion(mergedMinSdkVersion);
+                int mergedOptionalMinSdkVersion = Math.max(permission.getOptionalMinSdkVersion(),
+                        optionalMinSdkVersion);
+                permission = permission.withSdkVersions(mergedMinSdkVersion,
+                        mergedOptionalMinSdkVersion);
                 validateNoDuplicateElement(permission, permissions, "permission");
                 permissions.add(permission);
             } else {
@@ -313,7 +321,9 @@ public class RoleParser {
         }
         int minSdkVersion = getAttributeIntValue(parser, ATTRIBUTE_MIN_SDK_VERSION,
                 Build.VERSION_CODES.BASE);
-        return new Permission(name, minSdkVersion);
+        int optionalMinSdkVersion = getAttributeIntValue(parser, ATTRIBUTE_OPTIONAL_MIN_SDK_VERSION,
+                minSdkVersion);
+        return new Permission(name, minSdkVersion, optionalMinSdkVersion);
     }
 
     @Nullable
@@ -395,6 +405,9 @@ public class RoleParser {
             skipCurrentTag(parser);
             return null;
         }
+
+        boolean onlyGrantWhenAdded = getAttributeBooleanValue(parser,
+                ATTRIBUTE_ONLY_GRANT_WHEN_ADDED, false);
 
         boolean overrideUserWhenGranting = getAttributeBooleanValue(parser,
                 ATTRIBUTE_OVERRIDE_USER_WHEN_GRANTING, false);
@@ -523,10 +536,11 @@ public class RoleParser {
         }
         return new Role(name, allowBypassingQualification, behavior, defaultHoldersResourceName,
                 descriptionResource, exclusive, fallBackToDefaultHolder, labelResource,
-                maxSdkVersion, minSdkVersion, overrideUserWhenGranting, requestDescriptionResource,
-                requestTitleResource, requestable, searchKeywordsResource, shortLabelResource,
-                showNone, statik, systemOnly, visible, requiredComponents, permissions,
-                appOpPermissions, appOps, preferredActivities, uiBehaviorName);
+                maxSdkVersion, minSdkVersion, onlyGrantWhenAdded, overrideUserWhenGranting,
+                requestDescriptionResource, requestTitleResource, requestable,
+                searchKeywordsResource, shortLabelResource, showNone, statik, systemOnly, visible,
+                requiredComponents, permissions, appOpPermissions, appOps, preferredActivities,
+                uiBehaviorName);
     }
 
     @NonNull
@@ -768,6 +782,8 @@ public class RoleParser {
                     }
                     int minSdkVersion = getAttributeIntValue(parser, ATTRIBUTE_MIN_SDK_VERSION,
                             Build.VERSION_CODES.BASE);
+                    int optionalMinSdkVersion = getAttributeIntValue(parser,
+                            ATTRIBUTE_OPTIONAL_MIN_SDK_VERSION, minSdkVersion);
                     List<Permission> permissionsInSet = permissionSet.getPermissions();
                     int permissionsInSetSize = permissionsInSet.size();
                     for (int permissionsInSetIndex = 0;
@@ -775,7 +791,10 @@ public class RoleParser {
                         Permission permission = permissionsInSet.get(permissionsInSetIndex);
                         int mergedMinSdkVersion =
                                 Math.max(permission.getMinSdkVersion(), minSdkVersion);
-                        permission = permission.withMinSdkVersion(mergedMinSdkVersion);
+                        int mergedOptionalMinSdkVersion = Math.max(
+                                permission.getOptionalMinSdkVersion(), optionalMinSdkVersion);
+                        permission = permission.withSdkVersions(mergedMinSdkVersion,
+                                mergedOptionalMinSdkVersion);
                         // We do allow intersection between permission sets.
                         permissions.add(permission);
                     }
@@ -1144,7 +1163,7 @@ public class RoleParser {
     }
 
     private void validatePermission(@NonNull Permission permission) {
-        if (!permission.isAvailable()) {
+        if (!permission.isAvailableAsUser(Process.myUserHandle(), mContext)) {
             return;
         }
         validatePermission(permission.getName(), true);
@@ -1180,7 +1199,7 @@ public class RoleParser {
     }
 
     private void validateAppOpPermission(@NonNull Permission appOpPermission) {
-        if (!appOpPermission.isAvailable()) {
+        if (!appOpPermission.isAvailableAsUser(Process.myUserHandle(), mContext)) {
             return;
         }
         validateAppOpPermission(appOpPermission.getName());

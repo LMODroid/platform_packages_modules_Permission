@@ -28,17 +28,19 @@ android_test {
     ],
 
     static_libs: [
+        "android.permission.flags-aconfig-java",
         "androidx.test.rules",
         "compatibility-device-util-axt",
         "ctstestrunner-axt",
-        "truth",
         "platform-test-annotations",
+        "truth",
     ],
 
     test_suites: [
         "cts",
         "general-tests",
         "mts-permission",
+        "mcts-permission",
     ],
 
     data: [

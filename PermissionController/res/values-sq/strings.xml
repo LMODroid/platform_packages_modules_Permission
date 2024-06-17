@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Të gjitha lejet"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Kapacitete të tjera të aplikacionit"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Kërkesa e lejes"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Instalo/çinstalo veprimet që nuk mbështeten në Wear."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Zgjidh se ku do të lejohet të ketë qasje &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; është përditësuar. Zgjidh se ku do të lejohet të ketë qasje ky aplikacion."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Anulo"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Hiq lejet nëse aplikacioni nuk është përdorur"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Hiq lejet dhe liro hapësirën"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Ndërprit aktivitetin nëse nuk përdoret"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Menaxho aplikacionin nëse nuk përdoret"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Hiq lejet, fshi skedarët e përkohshëm dhe ndalo njoftimet"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Hiq lejet, fshi skedarët e përkohshëm, ndalo njoftimet dhe arkivo aplikacionin"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Për të mbrojtur të dhënat e tua, lejet për këtë aplikacion do të hiqen nëse aplikacioni nuk përdoret për disa muaj."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Për të mbrojtur të dhënat e tua, nëse aplikacioni nuk është përdorur për disa muaj, lejet e mëposhtme do të hiqen: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Për të mbrojtur të dhënat e tua, lejet janë hequr nga aplikacionet që nuk i ke përdorur për disa muaj."</string>
@@ -386,7 +386,7 @@
     <string name="role_call_redirection_description" msgid="6091669882014664420">"Aplikacione që të lejojnë t\'i transferosh telefonatat dalëse te një numër tjetër telefoni"</string>
     <string name="role_call_redirection_request_title" msgid="2816244455003562925">"Dëshiron ta caktosh <xliff:g id="APP_NAME">%1$s</xliff:g> si aplikacionin e parazgjedhur për ridrejtimin e telefonatave?"</string>
     <string name="role_call_redirection_request_description" msgid="3118895714178527164">"Nuk ka nevojë për asnjë autorizim"</string>
-    <string name="role_call_screening_label" msgid="883935222060878724">"Aplikacioni i parazgjedhur për ID-në dhe telefonuesit e bezdisshëm"</string>
+    <string name="role_call_screening_label" msgid="883935222060878724">"Apl. i parazgjedhur për ID-në dhe telefonuesit e bezdisshëm"</string>
     <string name="role_call_screening_short_label" msgid="2048465565063130834">"Aplikacioni për ID-në e telefonuesit dhe telefonuesit e bezdisshëm"</string>
     <string name="role_call_screening_description" msgid="2349431420497468981">"Aplikacionet që të lejojnë të identifikosh telefonatat dhe të bllokosh komunikimet e bezdisshme, telefonatat e automatizuara ose numrat e padëshiruar"</string>
     <string name="role_call_screening_request_title" msgid="7358309224566977290">"Dëshiron të caktosh <xliff:g id="APP_NAME">%1$s</xliff:g> si apl. e parazgjedhur për ID-në e telefonuesit dhe filtrimin telefonatave të bezdisshme?"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Aplikacioni për shënime"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Aplikacione që të lejojnë të mbash shënime në pajisjen tënde"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"shënime"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Aplikacioni i parazgjedhur i portofolit"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Aplikacioni i portofolit"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Aplikacionet e portofolit mund të ruajnë kartat e tua të kreditit dhe të besnikërisë, çelësat e makinës dhe gjëra të tjera për të të ndihmuar për forma të ndryshme transaksionesh."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Të caktohet <xliff:g id="APP_NAME">%1$s</xliff:g> si aplikacioni yt i parazgjedhur i portofolit?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Nuk nevojitet asnjë leje"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Parazgjedhja aktuale"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Mos pyet më"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Cakto si parazgjedhje"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Përditësimet për ndarjen e të dhënave"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Disa aplikacione ndryshuan mënyrën se si mund të ndajnë të dhënat e vendndodhjes sate"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Cilësimet"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Qasja e fundit në <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Qasja e fundit dje në <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Qasja e fundit më <xliff:g id="TIME_DATE_0">%1$s</xliff:g> në <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Fjalëkalimi yt njëpërdorimësh është 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Cilësim i kufizuar"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Për sigurinë tënde, ky cilësim nuk ofrohet për momentin."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Leja për të përdorur <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> është refuzuar"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Ky aplikacion ka kërkuar leje për <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>, i cili është një cilësim i kufizuar pasi mund ta vendosë në rrezik sigurinë dhe privatësinë tënde. Kufizimi për këtë leje mund të parandalojë funksionimin e këtij aplikacioni."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Mëso më shumë"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"E kuptova"</string>
 </resources>

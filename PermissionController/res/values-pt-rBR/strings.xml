@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Todas as permissões"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Outros recursos do app"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Solicitação de permissão"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"As ações de instalar/desinstalar não são compatíveis com o Android Wear."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Escolha o que o app &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; terá permissão para acessar"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"O app &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; foi atualizado. Escolha o que esse app terá permissão para acessar."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Cancelar"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Remover permissões se o app não for usado"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Remover permissões e liberar espaço"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Pausar atividade no app quando não usado"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Gerenciar o app fora de uso"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Remove permissões, exclui arquivos temporários e para notificações"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Remover permissões, excluir arquivos temporários, parar notificações e arquivar o app"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Para proteger seus dados, as permissões serão removidas se o app não for usado por alguns meses."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Para proteger seus dados, se o app não for usado por alguns meses, as seguintes permissões serão removidas: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Para proteger seus dados, as permissões de apps que não foram usados nos últimos meses foram removidas."</string>
@@ -223,7 +223,7 @@
     <string name="unused_apps_page_title" msgid="6986983535677572559">"Apps não usados"</string>
     <string name="unused_apps_page_summary" msgid="1867593913217272155">"Se um app fica sem uso por alguns meses:\n\n• as permissões são removidas para proteger seus dados;\n• as notificações são interrompidas para economizar bateria;\n• os arquivos temporários são removidos para liberar espaço.\n\nPara retomar as permissões e notificações, abra o app."</string>
     <string name="unused_apps_page_tv_summary" msgid="2624911608663778308">"Quando um app fica sem uso por um mês:\n\n• As permissões são removidas para proteger seus dados.\n• Os arquivos temporários são removidos para liberar espaço.\n\nSe quiser conceder as permissões novamente, abra o app."</string>
-    <string name="last_opened_category_title" msgid="8796557894614236128">"{count,plural, =1{Usado pela última vez há mais de # mês}one{Usado pela última vez há mais de # mês}many{Usado pela última vez há mais de # de meses}other{Usado pela última vez há mais de # meses}}"</string>
+    <string name="last_opened_category_title" msgid="8796557894614236128">"{count,plural, =1{Usado pela última vez há mais de # mês}one{Usados pela última vez há mais de # mês}many{Usados pela última vez há mais de # de meses}other{Usados pela última vez há mais de # meses}}"</string>
     <string name="last_opened_summary" msgid="5248984030024968808">"App aberto pela última vez em <xliff:g id="DATE">%s</xliff:g>"</string>
     <string name="last_opened_summary_short" msgid="1646067226191176825">"Aberto pela última vez em <xliff:g id="DATE">%s</xliff:g>"</string>
     <string name="app_permission_footer_special_file_access" msgid="1884202176147657788">"Se você permitir o gerenciamento de todos os arquivos, o app poderá acessar, modificar e excluir qualquer arquivo no armazenamento comum do dispositivo ou no armazenamento de dispositivos conectados. O app poderá acessar arquivos sem pedir autorização."</string>
@@ -248,8 +248,8 @@
     <string name="app_permission_never_accessed_summary" msgid="401346181461975090">"Nunca acessou"</string>
     <string name="app_permission_never_accessed_denied_summary" msgid="6596000497490905146">"Negado/nunca acessado"</string>
     <string name="allowed_header" msgid="7769277978004790414">"Permitido"</string>
-    <string name="allowed_always_header" msgid="6455903312589013545">"Permitido sempre"</string>
-    <string name="allowed_foreground_header" msgid="6845655788447833353">"Permitido durante o uso"</string>
+    <string name="allowed_always_header" msgid="6455903312589013545">"Permitidos sempre"</string>
+    <string name="allowed_foreground_header" msgid="6845655788447833353">"Permitidos durante o uso"</string>
     <string name="allowed_storage_scoped" msgid="5383645873719086975">"Com permissão para acessar apenas mídia"</string>
     <string name="allowed_storage_full" msgid="5356699280625693530">"Com permissão para gerenciar todos os arquivos"</string>
     <string name="ask_header" msgid="2633816846459944376">"Perguntar sempre"</string>
@@ -358,14 +358,14 @@
     <string name="role_browser_request_title" msgid="2895200507835937192">"Definir <xliff:g id="APP_NAME">%1$s</xliff:g> como navegador padrão?"</string>
     <string name="role_browser_request_description" msgid="5888803407905985941">"Nenhuma permissão necessária"</string>
     <string name="role_dialer_label" msgid="1100224146343237968">"App de telefone padrão"</string>
-    <string name="role_dialer_short_label" msgid="7186888549465352489">"App Telefone"</string>
+    <string name="role_dialer_short_label" msgid="7186888549465352489">"App de Telefone"</string>
     <string name="role_dialer_description" msgid="8768708633696539612">"Apps que permitem fazer e receber chamadas no seu dispositivo."</string>
     <string name="role_dialer_request_title" msgid="5959618560705912058">"Definir <xliff:g id="APP_NAME">%1$s</xliff:g> como seu app de telefone padrão?"</string>
     <string name="role_dialer_request_description" msgid="6288839625724909320">"Este app poderá acessar contatos, câmera, microfone, telefone e SMS"</string>
     <string name="role_dialer_search_keywords" msgid="3324448983559188087">"discador"</string>
     <string name="role_sms_label" msgid="8456999857547686640">"App de SMS padrão"</string>
     <string name="role_sms_short_label" msgid="4371444488034692243">"App de SMS"</string>
-    <string name="role_sms_description" msgid="3424020199148153513">"Apps que permitem usar o número do telefone para enviar e receber mensagens de texto curtas, fotos, vídeos e muito mais."</string>
+    <string name="role_sms_description" msgid="3424020199148153513">"Apps que permitem usar seu número do telefone para enviar e receber mensagens de texto curtas, fotos, vídeos e muito mais."</string>
     <string name="role_sms_request_title" msgid="7953552109601185602">"Definir <xliff:g id="APP_NAME">%1$s</xliff:g> como app de SMS padrão?"</string>
     <string name="role_sms_request_description" msgid="2691004766132144886">"Este app poderá acessar contatos, câmera, arquivos e mídia, microfone, telefone e SMS"</string>
     <string name="role_sms_search_keywords" msgid="8022048144395047352">"mensagem de texto, enviar mensagens de texto, mensagens"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"App de notas"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Apps que permitem a criação de notas no dispositivo"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"notas"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Carteira digital padrão"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"App de carteira"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Os apps de carteira digital armazenam seus cartões de crédito e de fidelidade, chaves de carros, entre outros itens, para agilizar suas transações."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Definir <xliff:g id="APP_NAME">%1$s</xliff:g> como seu app de carteira padrão?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Nenhuma permissão necessária"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Padrão atual"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Não perguntar novamente"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Definir como padrão"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Atualizações do compartilhamento de dados"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Alguns apps mudaram a forma como podem compartilhar seus dados de local"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Configurações"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Último acesso: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Último acesso: ontem, <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Último acesso: <xliff:g id="TIME_DATE_0">%1$s</xliff:g>, <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Sua senha única é 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Configuração restrita"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Para sua segurança, essa configuração está indisponível no momento."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"A permissão para acessar <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> foi negada"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Este app pediu permissão para acessar <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>, que é uma configuração restrita porque pode colocar sua segurança e privacidade em risco. A restrição a essa permissão pode impedir o funcionamento do app."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Saiba mais"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Entendi"</string>
 </resources>

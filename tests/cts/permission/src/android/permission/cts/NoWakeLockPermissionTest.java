@@ -26,7 +26,8 @@ import android.net.wifi.WifiManager.WifiLock;
 import android.os.PowerManager;
 import android.platform.test.annotations.AppModeFull;
 import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+
+import androidx.test.filters.SmallTest;
 
 /**
  * Verify the Wake Lock related operations require specific permissions.

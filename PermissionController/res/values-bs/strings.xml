@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Sva odobrenja"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Ostale mogućnosti aplikacije"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Zahtjev za odobrenje"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Instaliranje/deinstaliranje nije podržano na Wearu."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Izaberite čemu aplikacija &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&amp;Lt;/b&gt; može pristupiti"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"Aplikacija &amp;Lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&amp;Lt;/b&gt; je ažurirana. Izaberite čemu ova aplikacija može pristupiti."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Otkaži"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Ukloni odobrenja ako se aplikacija ne koristi"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Ukloni odobrenja i oslobodi prostor"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Pauziraj aktivnost apl. ako se ne koristi"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Upravljanje aplikacijom ako se ne koristi"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Uklonite odobrenja, izbrišite privremene fajlove i zaustavite obavještenja"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Uklonite odobrenja, izbrišite privremene fajlove, zaustavite obavještenja i arhivirajte aplikaciju"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Zbog zaštite vaših podataka, odobrenja za ovu aplikaciju će se ukloniti ako se ona ne bude koristila nekoliko mjeseci."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Radi zaštite vaših podataka, ako se aplikacija ne bude koristila nekoliko mjeseci, uklonit će se sljedeća odobrenja: <xliff:g id="PERMS">%1$s</xliff:g>."</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Zbog zaštite vaših podataka uklonjena su odobrenja iz aplikacija koje niste koristili nekoliko mjeseci."</string>
@@ -376,7 +376,7 @@
     <string name="role_emergency_request_description" msgid="131645948770262850">"Nije potrebno odobrenje"</string>
     <string name="role_emergency_search_keywords" msgid="1920007722599213358">"hitni slučaj"</string>
     <string name="role_home_label" msgid="3871847846649769412">"Zadana apl. na početnom ekranu"</string>
-    <string name="role_home_short_label" msgid="8544733747952272337">"Aplikacija na početnom ekranu"</string>
+    <string name="role_home_short_label" msgid="8544733747952272337">"Aplikacija za početni ekran"</string>
     <string name="role_home_description" msgid="7997371519626556675">"Aplikacije, poznate i kao pokretači, koje zamjenjuju početne ekrane na Android uređaju te vam daju pristup sadržaju i funkcijama uređaja"</string>
     <string name="role_home_request_title" msgid="738136983453341081">"Postaviti aplikaciju <xliff:g id="APP_NAME">%1$s</xliff:g> kao zadanu aplikaciju na početnom ekranu?"</string>
     <string name="role_home_request_description" msgid="2658833966716057673">"Nije potrebno odobrenje"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Aplikacija za bilješke"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Aplikacije koje vam dozvoljavaju da pravite bilješke na uređaju"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"bilješke"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Zadana aplikacija za novčanik"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Aplikacija za novčanik"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Aplikacije za novčanik mogu pohranjivati kreditne kartice, kartice lojalnosti, ključeve automobila i druge stvari da vam pomognu pri raznim vrstama transakcija."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Postaviti aplikaciju <xliff:g id="APP_NAME">%1$s</xliff:g> kao zadanu aplikaciju za novčanik?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Nije potrebno odobrenje"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Trenutno zadano"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Ne pitaj ponovo"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Postavi kao zadano"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Promjene u dijeljenju podataka"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Neke aplikacije mogu promijeniti način na koji mogu dijeliti podatke o lokaciji"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Postavke"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Pristupljeno je u <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Pristupljeno je jučer u <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Pristupljeno je <xliff:g id="TIME_DATE_0">%1$s</xliff:g> u <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Jednokratna lozinka je 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Ograničena postavka"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Radi vaše sigurnosti postavka trenutno nije dostupna."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Odbijeno je odobrenje za korištenje odobrenja <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Aplikacija je zatražila odobrenje <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>, što je ograničena postavka jer može ugroziti vašu sigurnost i privatnost. Ograničenje ovog odobrenja može spriječiti rad aplikacije."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Saznajte više"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Razumijem"</string>
 </resources>

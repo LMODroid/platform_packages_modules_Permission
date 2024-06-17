@@ -33,10 +33,12 @@ import android.content.res.Resources;
 import android.safetycenter.config.SafetyCenterConfig;
 import android.safetycenter.config.SafetySource;
 import android.safetycenter.config.SafetySourcesGroup;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
 import com.android.modules.utils.build.SdkLevel;
+import com.android.permission.flags.Flags;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -49,6 +51,7 @@ import java.io.InputStream;
 @RequiresApi(TIRAMISU)
 public final class SafetyCenterConfigParser {
 
+    private static final String TAG = "SafetyCenterConfigParser";
     private static final String TAG_SAFETY_CENTER_CONFIG = "safety-center-config";
     private static final String TAG_SAFETY_SOURCES_CONFIG = "safety-sources-config";
     private static final String TAG_SAFETY_SOURCES_GROUP = "safety-sources-group";
@@ -64,6 +67,8 @@ public final class SafetyCenterConfigParser {
     private static final String ATTR_SAFETY_SOURCE_PACKAGE_NAME = "packageName";
     private static final String ATTR_SAFETY_SOURCE_TITLE = "title";
     private static final String ATTR_SAFETY_SOURCE_TITLE_FOR_WORK = "titleForWork";
+    private static final String ATTR_SAFETY_SOURCE_TITLE_FOR_PRIVATE_PROFILE =
+            "titleForPrivateProfile";
     private static final String ATTR_SAFETY_SOURCE_SUMMARY = "summary";
     private static final String ATTR_SAFETY_SOURCE_INTENT_ACTION = "intentAction";
     private static final String ATTR_SAFETY_SOURCE_PROFILE = "profile";
@@ -270,6 +275,26 @@ public final class SafetyCenterConfigParser {
                                     parser.getAttributeName(i),
                                     resources));
                     break;
+                case ATTR_SAFETY_SOURCE_TITLE_FOR_PRIVATE_PROFILE:
+                    if (SdkLevel.isAtLeastV()) {
+                        if (Flags.privateProfileTitleApi()) {
+                            builder.setTitleForPrivateProfileResId(
+                                    parseStringResourceName(
+                                            parser.getAttributeValue(i),
+                                            name,
+                                            parser.getAttributeName(i),
+                                            resources));
+                        } else {
+                            Log.i(
+                                    TAG,
+                                    String.format(
+                                            "Ignoring attribute %s.%s",
+                                            name, ATTR_SAFETY_SOURCE_TITLE_FOR_PRIVATE_PROFILE));
+                        }
+                        break;
+                    } else {
+                        throw attributeUnexpected(name, parser.getAttributeName(i));
+                    }
                 case ATTR_SAFETY_SOURCE_SUMMARY:
                     builder.setSummaryResId(
                             parseStringResourceName(

@@ -21,7 +21,8 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.platform.test.annotations.AppModeFull;
 import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+
+import androidx.test.filters.SmallTest;
 
 /**
  * Verify the PackageManager related operations require specific permissions.

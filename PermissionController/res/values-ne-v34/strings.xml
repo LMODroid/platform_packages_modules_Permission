@@ -23,5 +23,4 @@
     <string name="health_connect_summary" msgid="815473513776882296">"एपलाई स्वास्थ्यसम्बन्धी जानकारी प्रयोग गर्न दिने कि नदिने भन्ने कुरा व्यवस्थापन गर्नुहोस्"</string>
     <string name="location_settings" msgid="8863940440881290182">"लोकेसन एक्सेस"</string>
     <string name="mic_toggle_description" msgid="1504101620086616040">"एप तथा सेवाहरूका हकमा। यो सेटिङ अफ गरिएको अवस्थामा तपाईंले आपत्‍कालीन नम्बरमा कल गर्नुभयो भने माइक्रोफोनसम्बन्धी जानकारी अझै पनि सेयर गरिन सक्छ"</string>
-    <string name="location_settings_subtitle" msgid="6846532794702613851">"एप तथा सेवाहरूका हकमा"</string>
 </resources>

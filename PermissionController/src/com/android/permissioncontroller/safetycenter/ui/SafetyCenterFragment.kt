@@ -92,7 +92,7 @@ abstract class SafetyCenterFragment : PreferenceFragmentCompat() {
         }
 
         val safetyCenterIntent: ParsedSafetyCenterIntent =
-            requireActivity().getIntent().toSafetyCenterIntent()
+            requireActivity().intent.toSafetyCenterIntent()
         val isQsFragment =
             getArguments()?.getBoolean(QUICK_SETTINGS_SAFETY_CENTER_FRAGMENT, false) ?: false
         collapsableIssuesCardHelper =
@@ -120,7 +120,7 @@ abstract class SafetyCenterFragment : PreferenceFragmentCompat() {
     override fun onStart() {
         super.onStart()
         configureInteractionLogger()
-        safetyCenterViewModel.interactionLogger.record(Action.SAFETY_CENTER_VIEWED)
+        logSafetyCenterViewedEvent()
     }
 
     override fun onResume() {
@@ -161,6 +161,26 @@ abstract class SafetyCenterFragment : PreferenceFragmentCompat() {
     abstract fun renderSafetyCenterData(uiData: SafetyCenterUiData?)
 
     abstract fun configureInteractionLogger()
+
+    private fun logSafetyCenterViewedEvent() {
+        // If Safety Center was opened due to an associated notification click (i.e. intent has an
+        // associated issue), record that issue's metadata on the SAFETY_CENTER_VIEWED event
+        val maybeIssueKey = requireActivity().intent.toSafetyCenterIntent().safetyCenterIssueKey
+        val maybeIssue =
+            maybeIssueKey?.let {
+                safetyCenterViewModel.getCurrentSafetyCenterDataAsUiData().getMatchingIssue(it)
+            }
+
+        if (maybeIssue == null) {
+            safetyCenterViewModel.interactionLogger.record(Action.SAFETY_CENTER_VIEWED)
+        } else {
+            safetyCenterViewModel.interactionLogger.recordForIssue(
+                Action.SAFETY_CENTER_VIEWED,
+                maybeIssue,
+                isDismissed = false
+            )
+        }
+    }
 
     private fun displayErrorDetails(errorDetails: SafetyCenterErrorDetails?) {
         if (errorDetails == null) return

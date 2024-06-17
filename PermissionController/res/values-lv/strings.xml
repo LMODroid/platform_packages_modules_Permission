@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Visas atļaujas"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Citas lietotnes atļaujas"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Atļaujas pieprasījums"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Wear ierīcē netiek atbalstīta instalēšana/atinstalēšana"</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Izvēlieties, kādas piekļuves atļaujas piešķirt lietotnei &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"Lietotne &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ir atjaunināta. Izvēlieties, kādas piekļuves atļaujas tai piešķirt."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Atcelt"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Noņemt atļaujas, ja lietotne netiek izmantota"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Noņemt atļaujas un atbrīvot vietu"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Apturēt lietotni, ja tā netiek izmantota"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Pārvaldīt lietotni, ja tā netiek lietota"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Atsaukt atļaujas, dzēst pagaidu failus un izslēgt paziņojumus"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Noņemt atļaujas, dzēst pagaidu failus, apturēt paziņojumus un arhivēt lietotni"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Ja lietotni dažus mēnešus neizmantosiet, tai tiks noņemtas tālāk norādītās atļaujas, lai aizsargātu jūsu datus."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Ja lietotni dažus mēnešus neizmantosiet, tai tiks noņemtas tālāk norādītās atļaujas, lai aizsargātu jūsu datus: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Lai aizsargātu jūsu datus, tika atsauktas atļaujas tām lietotnēm, kas nav izmantotas vairākus mēnešus."</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Piezīmju lietotne"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Lietotnes, kas ļauj ierīcē veikt piezīmes"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"piezīmes"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Noklusējuma maka lietotne"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Maka lietotne"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Maka lietotnēs var glabāt informāciju par kredītkartēm un lojalitātes kartēm, automašīnas šifratslēgas un citu informāciju, kas palīdz veikt dažādu veidu darījumus."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Vai iestatīt lietotni <xliff:g id="APP_NAME">%1$s</xliff:g> kā noklusējuma maka lietotni?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Nav nepieciešamas nekādas atļaujas."</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Pašreizējais noklusējums"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Nejautāt atkārtoti"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Iest. kā noklusējumu"</string>
@@ -614,7 +619,7 @@
     <string name="show_clip_access_notification_title" msgid="5168467637351109096">"Rādīt paziņojumus par piekļuvi starpliktuvei"</string>
     <string name="show_clip_access_notification_summary" msgid="3532020182782112687">"Rādīt ziņojumu, kad lietotnes piekļūst jūsu nokopētajam tekstam, attēliem vai citam saturam"</string>
     <string name="show_password_title" msgid="2877269286984684659">"Rādīt paroles"</string>
-    <string name="show_password_summary" msgid="1110166488865981610">"Rakstot tiek īslaicīgi rādītas rakstzīmes"</string>
+    <string name="show_password_summary" msgid="1110166488865981610">"Rakstot īslaicīgi rādīt rakstzīmes"</string>
     <string name="permission_rationale_message_location" msgid="2153841534298068414">"Lietotne norādīja, ka tā var kopīgot atrašanās vietas datus ar trešajām pusēm."</string>
     <string name="permission_rationale_location_title" msgid="2404797182678793506">"Datu kopīgošana un atrašanās vieta"</string>
     <string name="permission_rationale_data_sharing_source_title" msgid="6874604543125814316">"Datu kopīgošanas informācijas avots"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Datu kopīgošanas atjauninājumi"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Dažās lietotnēs tika mainīti atrašanās vietas datu kopīgošanas veidi."</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Iestatījumi"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Pēdējā piekļuves reize: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Pēdējā piekļuves reize vakar: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Pēdējā piekļuves reize: <xliff:g id="TIME_DATE_0">%1$s</xliff:g>, <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Jūsu vienreizējā parole ir 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Ierobežots iestatījums"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Drošības apsvērumu dēļ šis iestatījums pašlaik nav pieejams."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Atļauja “<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>” ir liegta"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Šī lietotne ir pieprasījusi atļauju “<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>”. Tas ir ierobežotas piekļuves iestatījums, jo var apdraudēt jūsu drošību un datu konfidencialitāti. Šīs atļaujas ierobežojums var kavēt šīs lietotnes darbību."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Uzzināt vairāk"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Labi"</string>
 </resources>

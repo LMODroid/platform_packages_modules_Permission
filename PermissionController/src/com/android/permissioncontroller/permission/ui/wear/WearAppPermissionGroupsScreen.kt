@@ -35,7 +35,7 @@ import com.android.permissioncontroller.permission.ui.wear.model.RevokeDialogArg
 
 @Composable
 fun WearAppPermissionGroupsScreen(helper: WearAppPermissionGroupsHelper) {
-    val packagePermGroups = helper.viewModel.packagePermGroupsLiveData.observeAsState(emptyMap())
+    val packagePermGroups = helper.viewModel.packagePermGroupsLiveData.observeAsState(null)
     val autoRevoke = helper.viewModel.autoRevokeLiveData.observeAsState(null)
     val appPermissionUsages = helper.wearViewModel.appPermissionUsages.observeAsState(emptyList())
     val showRevokeDialog = helper.revokeDialogViewModel.showDialogLiveData.observeAsState(false)
@@ -53,7 +53,7 @@ fun WearAppPermissionGroupsScreen(helper: WearAppPermissionGroupsHelper) {
         )
     }
 
-    if (isLoading && packagePermGroups.value.isNotEmpty()) {
+    if (isLoading && !packagePermGroups.value.isNullOrEmpty()) {
         isLoading = false
     }
 }

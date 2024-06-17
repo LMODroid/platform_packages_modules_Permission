@@ -34,7 +34,7 @@
     <string name="grant_dialog_button_more_info" msgid="213350268561945193">"Más información"</string>
     <string name="grant_dialog_button_allow_all" msgid="5939066403732409516">"Permitir todo"</string>
     <string name="grant_dialog_button_always_allow_all" msgid="1719900027660252167">"Permitir todo siempre"</string>
-    <string name="grant_dialog_button_allow_limited_access" msgid="5713551784422137594">"Permite el acceso limitado"</string>
+    <string name="grant_dialog_button_allow_limited_access" msgid="5713551784422137594">"Permitir el acceso limitado"</string>
     <string name="grant_dialog_button_allow_selected_photos" msgid="5497042471576153842">"Seleccionar fotos y videos"</string>
     <string name="grant_dialog_button_allow_more_selected_photos" msgid="5145657877588697709">"Seleccionar más"</string>
     <string name="grant_dialog_button_dont_select_more" msgid="6643552729129461268">"No seleccionar más"</string>
@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Todos los permisos"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Otras funciones de la app"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Solicitud de permiso"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Wear no admite las acciones de instalación y desinstalación"</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Selecciona los permisos de acceso para &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"Se actualizó &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;. Selecciona los permisos de acceso para esta app."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Cancelar"</string>
@@ -195,7 +193,7 @@
     <string name="app_permission_button_deny" msgid="6016454069832050300">"No permitir"</string>
     <string name="precise_image_description" msgid="6349638632303619872">"Ubicación precisa"</string>
     <string name="approximate_image_description" msgid="938803699637069884">"Ubicación aproximada"</string>
-    <string name="app_permission_location_accuracy" msgid="7166912915040018669">"Usar la ubicación precisa"</string>
+    <string name="app_permission_location_accuracy" msgid="7166912915040018669">"Ubicación precisa"</string>
     <string name="app_permission_location_accuracy_subtitle" msgid="2654077606404987210">"Cuando la ubicación precisa está desactivada, las apps acceden a la ubicación aproximada"</string>
     <string name="app_permission_title" msgid="2090897901051370711">"Permiso de <xliff:g id="PERM">%1$s</xliff:g>"</string>
     <string name="app_permission_header" msgid="2951363137032603806">"Acceso a <xliff:g id="PERM">%1$s</xliff:g> para esta app"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Quitar los permisos si la app no se usa"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Quitar permisos y liberar espacio"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Pausar actividad en la app si no se usa"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Administrar la app si no se usa"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Quitar permisos, borrar archivos temporales y detener notificaciones"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Quitar permisos, borrar archivos temporales, detener notificaciones y archivar la app"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Para proteger tus datos, se quitarán los permisos de esta app si no la usas durante varios meses."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Para proteger tus datos, si no usas la app durante varios meses, se quitarán los siguientes permisos: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Para proteger tus datos, se quitaron los permisos de las apps que están en desuso hace varios meses."</string>
@@ -352,7 +352,7 @@
     <string name="role_assistant_label" msgid="4727586018198208128">"App de asistente digital pred."</string>
     <string name="role_assistant_short_label" msgid="3369003713187703399">"App de asistente digital"</string>
     <string name="role_assistant_description" msgid="6622458130459922952">"Las aplicaciones de asistencia pueden brindarte ayuda en función de la pantalla que estás viendo. Para ofrecerte asistencia integrada, algunas aplicaciones son compatibles con los servicios de selector y entrada de voz."</string>
-    <string name="role_browser_label" msgid="2877796144554070207">"Navegador predet."</string>
+    <string name="role_browser_label" msgid="2877796144554070207">"Navegador predeterminado"</string>
     <string name="role_browser_short_label" msgid="6745009127123292296">"App de navegador"</string>
     <string name="role_browser_description" msgid="3465253637499842671">"Apps que te permiten acceder a Internet y ver los vínculos que presionas"</string>
     <string name="role_browser_request_title" msgid="2895200507835937192">"¿Quieres establecer <xliff:g id="APP_NAME">%1$s</xliff:g> como tu app de navegador predeterminada?"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"App de notas"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Apps que te permiten tomar notas en tu dispositivo"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"notas"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Billetera predeterminada"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"App de billetera"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Las apps de billetera pueden almacenar tus tarjetas de crédito y lealtad, las llaves de tu vehículo y otros elementos para ayudarte con los diferentes tipos de transacciones."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"¿Quieres configurar <xliff:g id="APP_NAME">%1$s</xliff:g> como tu app de billetera predeterminada?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"No se requieren permisos"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"App predeterminada actualmente"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"No volver a preguntar"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Hacer predeterminada"</string>
@@ -429,7 +434,7 @@
     <string name="default_apps_manage_domain_urls" msgid="6775566451561036069">"Abrir vínculos"</string>
     <string name="default_apps_for_work" msgid="4970308943596201811">"Predeterminadas de trabajo"</string>
     <string name="default_app_none" msgid="9084592086808194457">"Ninguna"</string>
-    <string name="default_app_system_default" msgid="6218386768175513760">"(Predeterminada de sistema)"</string>
+    <string name="default_app_system_default" msgid="6218386768175513760">"(Predeterminada del sistema)"</string>
     <string name="default_app_no_apps" msgid="115720991680586885">"Sin apps"</string>
     <string name="car_default_app_selected" msgid="5416420830430644174">"Seleccionada"</string>
     <string name="car_default_app_selected_with_info" msgid="1932204186080593500">"Se seleccionó: <xliff:g id="ADDITIONAL_INFO">%1$s</xliff:g>"</string>
@@ -448,7 +453,7 @@
     <string name="incident_report_dialog_text" msgid="5675553296891757523">"<xliff:g id="APP_NAME_0">%1$s</xliff:g> solicita subir un informe de errores de este dispositivo generado el <xliff:g id="DATE">%2$s</xliff:g> a las <xliff:g id="TIME">%3$s</xliff:g>. Los informes de errores pueden incluir información personal sobre tu dispositivo o registrada por apps, como nombres de usuario, datos de ubicación, identificadores del dispositivo y datos de red. Solo debes compartir los informes de errores con personas y apps de confianza. ¿Permitir que <xliff:g id="APP_NAME_1">%4$s</xliff:g> suba un informe de errores?"</string>
     <string name="incident_report_error_dialog_text" msgid="4189647113387092272">"Se produjo un error al procesar el informe de errores para <xliff:g id="APP_NAME">%1$s</xliff:g>. Por lo tanto, no es posible compartir los datos detallados de depuración. Lamentamos la interrupción."</string>
     <string name="incident_report_dialog_allow_label" msgid="2970242967721155239">"Permitir"</string>
-    <string name="incident_report_dialog_deny_label" msgid="3535314290677579383">"Denegar"</string>
+    <string name="incident_report_dialog_deny_label" msgid="3535314290677579383">"Rechazar"</string>
     <string name="adjust_user_sensitive_title" msgid="4196724451314280527">"Configuración avanzada"</string>
     <string name="menu_adjust_user_sensitive" msgid="6497923610654425780">"Configuración avanzada"</string>
     <string name="adjust_user_sensitive_globally_title" msgid="8649190949066029174">"Mostrar uso de las apps del sistema"</string>
@@ -503,7 +508,7 @@
     <string name="permgroupupgraderequestdetail_microphone" msgid="2870497719571464239">"Esta app quiere grabar audio todo el tiempo, incluso cuando no la uses. "<annotation id="link">"Permite el acceso en Configuración."</annotation></string>
     <string name="permgrouprequest_activityRecognition" msgid="5415121592794230330">"¿Quieres permitir que &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; acceda a tu actividad física?"</string>
     <string name="permgrouprequest_device_aware_activityRecognition" msgid="3408326850847755759">"¿Permitir que &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; acceda a la actividad física en tu &lt;b&gt;<xliff:g id="DEVICE">%2$s</xliff:g>&lt;/b&gt;?"</string>
-    <string name="permgrouprequest_camera" msgid="5123097035410002594">"¿Permitir que &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; tome fotos y grabe videos?"</string>
+    <string name="permgrouprequest_camera" msgid="5123097035410002594">"¿Quieres permitir que &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; tome fotos y grabe videos?"</string>
     <string name="permgrouprequest_device_aware_camera" msgid="3525106924487608868">"¿Permitir que &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; tome fotos y grabe videos en tu &lt;b&gt;<xliff:g id="DEVICE">%2$s</xliff:g>&lt;/b&gt;?"</string>
     <string name="permgrouprequestdetail_camera" msgid="9085323239764667883">"La app solo podrá tomar fotos y grabar videos cuando esté en uso"</string>
     <string name="permgroupbackgroundrequest_camera" msgid="1274286575704213875">"¿Permitir que &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; tome fotos y grabe videos?"</string>
@@ -614,7 +619,7 @@
     <string name="show_clip_access_notification_title" msgid="5168467637351109096">"Mostrar acceso a portapapeles"</string>
     <string name="show_clip_access_notification_summary" msgid="3532020182782112687">"Muestra un mensaje cuando las apps accedan a texto, imágenes y otro contenido que hayas copiado"</string>
     <string name="show_password_title" msgid="2877269286984684659">"Mostrar contraseñas"</string>
-    <string name="show_password_summary" msgid="1110166488865981610">"Mostrar caracteres brevemente mientras escribes"</string>
+    <string name="show_password_summary" msgid="1110166488865981610">"Muestra los caracteres brevemente mientras escribes"</string>
     <string name="permission_rationale_message_location" msgid="2153841534298068414">"Esta app indicó que podría compartir datos de ubicación con terceros"</string>
     <string name="permission_rationale_location_title" msgid="2404797182678793506">"Uso compartido de datos y ubicación"</string>
     <string name="permission_rationale_data_sharing_source_title" msgid="6874604543125814316">"De dónde proviene la información de uso compartido de datos"</string>
@@ -644,8 +649,18 @@
     <string name="shares_location_with_third_parties" msgid="2278051743742057767">"Tus datos de ubicación ahora se comparten con terceros"</string>
     <string name="shares_location_with_third_parties_for_advertising" msgid="1918588064014480513">"Tus datos de ubicación ahora se comparten con terceros para publicidad o marketing"</string>
     <string name="updated_in_last_days" msgid="8371811947153042322">"{count,plural, =0{Se actualizó en el último día}=1{Se actualizó en el último día}many{Se actualizó en los últimos # de días}other{Se actualizó en los últimos # días}}"</string>
-    <string name="no_updates_at_this_time" msgid="9031085635689982935">"No hay novedades por el momento"</string>
+    <string name="no_updates_at_this_time" msgid="9031085635689982935">"No hay actualizaciones por el momento"</string>
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Actualizaciones del uso compartido de datos"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Algunas apps cambiaron la forma en que podrían compartir tus datos de ubicación"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Configuración"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Último acceso: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Último acceso: ayer a la(s) <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Último acceso: <xliff:g id="TIME_DATE_0">%1$s</xliff:g> a la(s) <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Tu contraseña de un solo uso es 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Parámetro restringido"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Por seguridad, este parámetro de configuración no está disponible actualmente."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Se rechazó el permiso para usar <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Esta app solicitó el permiso <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>, que es un parámetro de configuración restringido porque puede poner en peligro tu seguridad y privacidad. La restricción de este permiso puede hacer que la app deje de funcionar."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Más información"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Entendido"</string>
 </resources>

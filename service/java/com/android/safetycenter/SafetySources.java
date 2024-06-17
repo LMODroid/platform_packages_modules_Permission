@@ -20,6 +20,8 @@ import android.safetycenter.SafetySourceData;
 import android.safetycenter.config.SafetySource;
 import android.util.Log;
 
+import com.android.safetycenter.UserProfileGroup.ProfileType;
+
 /**
  * A helper class to facilitate working with {@link SafetySource} objects.
  *
@@ -48,6 +50,23 @@ public final class SafetySources {
 
     /** Returns whether a {@link SafetySource} supports managed profiles. */
     public static boolean supportsManagedProfiles(SafetySource safetySource) {
+        return supportsAllProfiles(safetySource);
+    }
+
+    /**
+     * Returns whether a {@link SafetySource} supports the profile of the given type
+     * {@code profileType}.
+     */
+    public static boolean supportsProfileType(
+            SafetySource safetySource, @ProfileType int profileType) {
+        if (UserProfileGroup.PROFILE_TYPE_PRIMARY == profileType) {
+            return true;
+        }
+        return supportsAllProfiles(safetySource);
+    }
+
+    /** Returns whether a {@link SafetySource} supports all profiles. */
+    private static boolean supportsAllProfiles(SafetySource safetySource) {
         int safetySourceProfile = safetySource.getProfile();
         switch (safetySourceProfile) {
             case SafetySource.PROFILE_PRIMARY:

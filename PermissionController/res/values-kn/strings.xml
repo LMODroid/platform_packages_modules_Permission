@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"ಎಲ್ಲಾ ಅನುಮತಿಗಳು"</string>
     <string name="other_permissions" msgid="2901186127193849594">"ಇತರ ಆ್ಯಪ್‌ ಸಾಮರ್ಥ್ಯಗಳು"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"ಅನುಮತಿಯ ವಿನಂತಿ"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Wear ನಲ್ಲಿ ಇನ್‌ಸ್ಟಾಲ್/ಅನ್ಇನ್‌ಸ್ಟಾಲ್ ಕ್ರಿಯೆಗಳು ಬೆಂಬಲಿತವಾಗಿಲ್ಲ."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ಆ್ಯಪ್‌ಗೆ ಪ್ರವೇಶಿಸಲು ಯಾವುದನ್ನು ಅನುಮತಿಸಬೇಕು ಎಂಬುದನ್ನು ಆಯ್ಕೆಮಾಡಿ"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ಆ್ಯಪ್ ಅನ್ನು ಅಪ್‌ಡೇಟ್ ಮಾಡಲಾಗಿದೆ. ಈ ಆ್ಯಪ್‌ಗೆ ಪ್ರವೇಶಿಸಲು ಯಾವುದನ್ನು ಅನುಮತಿಸಬೇಕು ಎಂಬುದನ್ನು ಆಯ್ಕೆಮಾಡಿ."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"ರದ್ದುಮಾಡಿ"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"ಆ್ಯಪ್‌ ಬಳಸದಿದ್ದರೆ ಅನುಮತಿಗಳನ್ನು ತೆಗೆದುಹಾಕಿ"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"ಅನುಮತಿಗಳನ್ನು ತೆಗೆಯಿರಿ, ಸ್ಥಳ ಮುಕ್ತಗೊಳಿಸಿ"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"ಬಳಸದಿದ್ದರೆ, ಆ್ಯಪ್‌ನ ಚಟುವಟಿಕೆಯನ್ನು ವಿರಾಮಗೊಳಿಸಿ"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"ಬಳಸದಿದ್ದರೆ ಆ್ಯಪ್ ಅನ್ನು ನಿರ್ವಹಿಸಿ"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"ಅನುಮತಿಗಳನ್ನು ತೆಗೆದುಹಾಕಿ, ತಾತ್ಕಾಲಿಕ ಫೈಲ್‌ಗಳನ್ನು ಅಳಿಸಿ ಹಾಗೂ ಅಧಿಸೂಚನೆಗಳನ್ನು ನಿಲ್ಲಿಸಿ"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"ಅನುಮತಿಗಳನ್ನು ತೆಗೆದುಹಾಕಿ, ತಾತ್ಕಾಲಿಕ ಫೈಲ್‌ಗಳನ್ನು ಅಳಿಸಿ, ನೋಟಿಫಿಕೇಶನ್‌ಗಳನ್ನು ನಿಲ್ಲಿಸಿ ಮತ್ತು ಆ್ಯಪ್ ಅನ್ನು ಆರ್ಕೈವ್ ಮಾಡಿ"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"ಆ್ಯಪ್ ಅನ್ನು ಕೆಲವು ತಿಂಗಳುಗಳ ಕಾಲ ಬಳಸದಿದ್ದರೆ, ನಿಮ್ಮ ಡೇಟಾವನ್ನು ರಕ್ಷಿಸಲು ಈ ಆ್ಯಪ್‌ನ ಅನುಮತಿಗಳನ್ನು ತೆಗೆದುಹಾಕಲಾಗುವುದು."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"ಆ್ಯಪ್ ಅನ್ನು ಕೆಲವು ತಿಂಗಳುಗಳ ಕಾಲ ಬಳಸದಿದ್ದರೆ, ನಿಮ್ಮ ಡೇಟಾವನ್ನು ರಕ್ಷಿಸಲು, ಈ ಕೆಳಗಿನ ಅನುಮತಿಗಳನ್ನು ತೆಗೆದುಹಾಕಲಾಗುವುದು: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"ನಿಮ್ಮ ಡೇಟಾವನ್ನು ರಕ್ಷಿಸಲು, ಕೆಲವು ತಿಂಗಳುಗಳಿಂದ ನೀವು ಬಳಸದಿರುವ ಆ್ಯಪ್‌ಗಳಿಂದ ಅನುಮತಿಗಳನ್ನು ತೆಗೆದುಹಾಕಲಾಗಿದೆ."</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"ಟಿಪ್ಪಣಿಗಳು ಆ್ಯಪ್"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ ಟಿಪ್ಪಣಿಗಳನ್ನು ತೆಗೆದುಕೊಳ್ಳಲು ನಿಮಗೆ ಅನುಮತಿಸುವ ಆ್ಯಪ್‌ಗಳು"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"ಟಿಪ್ಪಣಿಗಳು"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"ಡೀಫಾಲ್ಟ್ ವಾಲೆಟ್ ಆ್ಯಪ್"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Wallet ಆ್ಯಪ್"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"ವಾಲೆಟ್ ಆ್ಯಪ್‌ಗಳು ನಿಮ್ಮ ಕ್ರೆಡಿಟ್ ಮತ್ತು ಲಾಯಲ್ಟಿ ಕಾರ್ಡ್‌ಗಳು, ಕಾರ್ ಕೀಗಳು ಮತ್ತು ವಿವಿಧ ವಹಿವಾಟುಗಳಿಗೆ ಸಹಾಯ ಮಾಡುವ ಇತರ ವಿಷಯಗಳನ್ನು ಸಂಗ್ರಹಿಸಬಹುದು."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"<xliff:g id="APP_NAME">%1$s</xliff:g> ಆ್ಯಪ್ ಅನ್ನು ನಿಮ್ಮ ಡೀಫಾಲ್ಟ್ ವಾಲೆಟ್ ಆ್ಯಪ್ ಆಗಿ ಸೆಟ್ ಮಾಡಬೇಕೆ?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"ಯಾವುದೇ ಅನುಮತಿಗಳ ಅಗತ್ಯವಿಲ್ಲ"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"ಪ್ರಸ್ತುತ ಡೀಫಾಲ್ಟ್"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"ಮತ್ತೆ ಕೇಳಬೇಡ"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"ಡೀಫಾಲ್ಟ್ ಆಗಿ ಸೆಟ್ ಮಾಡಿ"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"ಡೇಟಾ ಹಂಚಿಕೆ ಅಪ್‌ಡೇಟ್‌ಗಳು"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"ಕೆಲವು ಆ್ಯಪ್‌ಗಳು, ನಿಮ್ಮ ಸ್ಥಳ ಡೇಟಾವನ್ನು ಅವು ಹಂಚಿಕೊಳ್ಳಬಹುದಾದ ವಿಧಾನವನ್ನು ಬದಲಾಯಿಸಿವೆ"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"ಸೆಟ್ಟಿಂಗ್‌ಗಳು"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"<xliff:g id="TIME_DATE">%1$s</xliff:g> ಸಮಯಕ್ಕೆ ಆ್ಯಕ್ಸೆಸ್ ಮಾಡಲಾಗಿದೆ"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"ನಿನ್ನೆ <xliff:g id="TIME_DATE">%1$s</xliff:g> ಸಮಯಕ್ಕೆ ಆ್ಯಕ್ಸೆಸ್ ಮಾಡಲಾಗಿದೆ"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"<xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g> ಸಮಯಕ್ಕೆ ಆ್ಯಕ್ಸೆಸ್ ಮಾಡಲಾಗಿದೆ"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"ನಿಮ್ಮ ಒನ್‌-ಟೈಮ್ ಪಾಸ್‌ವರ್ಡ್ 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"ನಿರ್ಬಂಧಿಸಲಾದ ಸೆಟ್ಟಿಂಗ್"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"ನಿಮ್ಮ ಸುರಕ್ಷತೆಗಾಗಿ, ಈ ಸೆಟ್ಟಿಂಗ್ ಪ್ರಸ್ತುತ ಲಭ್ಯವಿಲ್ಲ."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"<xliff:g id="PERMISSION_NAME">%1$s</xliff:g> ಅನ್ನು ಬಳಸುವ ಅನುಮತಿಯನ್ನು ನಿರಾಕರಿಸಲಾಗಿದೆ"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"ಈ ಆ್ಯಪ್ <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> ಅನುಮತಿಯನ್ನು ವಿನಂತಿಸಿದ್ದು, ಅದು ನಿರ್ಬಂಧಿಸಲಾದ ಸೆಟ್ಟಿಂಗ್ ಆಗಿದೆ ಏಕೆಂದರೆ ಅದು ಭದ್ರತೆ ಮತ್ತು ಗೌಪ್ಯತೆಯನ್ನು ಅಪಾಯಕ್ಕೆ ಸಿಲುಕಿಸಬಹುದು. ಈ ಅನುಮತಿಗೆ ಇರುವ ನಿರ್ಬಂಧವು ಕೆಲಸ ಮಾಡದಂತೆ ಈ ಆ್ಯಪ್ ಅನ್ನು ತಡೆಯಬಹುದು."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"ಅರ್ಥವಾಯಿತು"</string>
 </resources>

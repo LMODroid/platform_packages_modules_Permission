@@ -16,6 +16,7 @@
 
 // APK to hold all the Safety Center overlayable resources.
 package {
+    default_team: "trendy_team_android_permissions",
     default_applicable_licenses: ["Android-Apache-2.0"],
 }
 
@@ -41,9 +42,10 @@ android_app {
     min_sdk_version: "30",
     apex_available: ["com.android.permission"],
     certificate: ":com.android.safetycenter.resources.certificate",
-    lint: {
-        extra_check_modules: ["ConfigLintChecker"],
-    },
+    // TODO(b/322944911): Reconsider enabling linter checker
+    //lint: {
+    //    extra_check_modules: ["ConfigLintChecker"],
+    //},
     static_libs: [
         "SafetyCenterResourcesShared",
     ],
@@ -51,5 +53,5 @@ android_app {
 
 android_app_certificate {
     name: "com.android.safetycenter.resources.certificate",
-    certificate: "com.android.safetycenter.resources"
+    certificate: "com.android.safetycenter.resources",
 }

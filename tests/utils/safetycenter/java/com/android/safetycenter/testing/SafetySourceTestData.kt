@@ -175,6 +175,24 @@ class SafetySourceTestData(private val context: Context) {
             .addIssue(informationIssue)
             .build()
 
+    /**
+     * A [SafetySourceData] with a [SEVERITY_LEVEL_INFORMATION] redirecting [SafetySourceIssue] and
+     * a [SEVERITY_LEVEL_UNSPECIFIED] [SafetySourceStatus], to be used for a private profile entry.
+     */
+    val unspecifiedWithIssueForPrivate =
+        SafetySourceData.Builder()
+            .setStatus(
+                SafetySourceStatus.Builder(
+                        "Unspecified title for Private",
+                        "Unspecified summary",
+                        SEVERITY_LEVEL_UNSPECIFIED
+                    )
+                    .setPendingIntent(createTestActivityRedirectPendingIntent())
+                    .build()
+            )
+            .addIssue(informationIssue)
+            .build()
+
     /** A [SafetySourceData] with a [SEVERITY_LEVEL_INFORMATION] [SafetySourceStatus]. */
     val information =
         SafetySourceData.Builder()
@@ -273,6 +291,24 @@ class SafetySourceTestData(private val context: Context) {
             .setStatus(
                 SafetySourceStatus.Builder(
                         "Ok title for Work",
+                        "Ok summary",
+                        SEVERITY_LEVEL_INFORMATION
+                    )
+                    .setPendingIntent(createTestActivityRedirectPendingIntent())
+                    .build()
+            )
+            .addIssue(informationIssue)
+            .build()
+
+    /**
+     * A [SafetySourceData] with a [SEVERITY_LEVEL_INFORMATION] redirecting [SafetySourceIssue] and
+     * [SafetySourceStatus], to be used for a private profile entry.
+     */
+    val informationWithIssueForPrivate =
+        SafetySourceData.Builder()
+            .setStatus(
+                SafetySourceStatus.Builder(
+                        "Ok title for Private",
                         "Ok summary",
                         SEVERITY_LEVEL_INFORMATION
                     )
@@ -802,7 +838,9 @@ class SafetySourceTestData(private val context: Context) {
         const val CRITICAL_ISSUE_ACTION_ID = "critical_issue_action_id"
 
         /** Issue type ID for all the issues in this file */
+        // LINT.IfChange(issue_type_id)
         const val ISSUE_TYPE_ID = "issue_type_id"
+        // LINT.ThenChange(/tests/hostside/safetycenter/src/android/safetycenter/hostside/SafetyCenterInteractionLoggingHostTest.kt:issue_type_id)
 
         const val CONFIRMATION_TITLE = "Confirmation title"
         const val CONFIRMATION_TEXT = "Confirmation text"

@@ -42,6 +42,7 @@ android_test {
         "CtsAccessibilityCommon",
         "platform-test-rules",
         "platform-test-annotations",
+        "android.permission.flags-aconfig-java",
     ],
     data: [
         ":CtsPermissionPolicyApp25",

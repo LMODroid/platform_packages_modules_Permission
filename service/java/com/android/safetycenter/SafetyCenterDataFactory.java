@@ -17,7 +17,11 @@
 package com.android.safetycenter;
 
 import static android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE;
+import static android.os.Build.VERSION_CODES.VANILLA_ICE_CREAM;
 
+import static com.android.safetycenter.UserProfileGroup.PROFILE_TYPE_MANAGED;
+import static com.android.safetycenter.UserProfileGroup.PROFILE_TYPE_PRIMARY;
+import static com.android.safetycenter.UserProfileGroup.PROFILE_TYPE_PRIVATE;
 import static com.android.safetycenter.internaldata.SafetyCenterBundles.ISSUES_TO_GROUPS_BUNDLE_KEY;
 import static com.android.safetycenter.internaldata.SafetyCenterBundles.STATIC_ENTRIES_TO_IDS_BUNDLE_KEY;
 
@@ -53,7 +57,8 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.android.modules.utils.build.SdkLevel;
-import com.android.permission.util.UserUtils;
+import com.android.permission.flags.Flags;
+import com.android.safetycenter.UserProfileGroup.ProfileType;
 import com.android.safetycenter.data.SafetyCenterDataManager;
 import com.android.safetycenter.internaldata.SafetyCenterBundles;
 import com.android.safetycenter.internaldata.SafetyCenterEntryId;
@@ -387,42 +392,36 @@ public final class SafetyCenterDataFactory {
 
         List<SafetySource> safetySources = safetySourcesGroup.getSafetySources();
         List<SafetyCenterEntry> entries = new ArrayList<>(safetySources.size());
-        for (int i = 0; i < safetySources.size(); i++) {
-            SafetySource safetySource = safetySources.get(i);
+        for (int safetySourceIdx = 0; safetySourceIdx < safetySources.size(); ++safetySourceIdx) {
+            SafetySource safetySource = safetySources.get(safetySourceIdx);
+            for (int profileTypeIdx = 0;
+                    profileTypeIdx < ProfileType.ALL_PROFILE_TYPES.length;
+                    ++profileTypeIdx) {
+                @ProfileType int profileType = ProfileType.ALL_PROFILE_TYPES[profileTypeIdx];
+                if (!SafetySources.supportsProfileType(safetySource, profileType)) {
+                    continue;
+                }
 
-            groupSafetyCenterEntryLevel =
-                    mergeSafetyCenterEntrySeverityLevels(
-                            groupSafetyCenterEntryLevel,
-                            addSafetyCenterEntry(
-                                    safetyCenterOverallState,
-                                    entries,
-                                    safetySource,
-                                    defaultPackageName,
-                                    userProfileGroup.getProfileParentUserId(),
-                                    /* isUserManaged= */ false,
-                                    /* isManagedUserRunning= */ false));
-
-            if (!SafetySources.supportsManagedProfiles(safetySource)) {
-                continue;
-            }
-
-            int[] managedProfilesUserIds = userProfileGroup.getManagedProfilesUserIds();
-            for (int j = 0; j < managedProfilesUserIds.length; j++) {
-                int managedProfileUserId = managedProfilesUserIds[j];
-                boolean isManagedUserRunning =
-                        userProfileGroup.isManagedUserRunning(managedProfileUserId);
-
-                groupSafetyCenterEntryLevel =
-                        mergeSafetyCenterEntrySeverityLevels(
-                                groupSafetyCenterEntryLevel,
-                                addSafetyCenterEntry(
-                                        safetyCenterOverallState,
-                                        entries,
-                                        safetySource,
-                                        defaultPackageName,
-                                        managedProfileUserId,
-                                        /* isUserManaged= */ true,
-                                        isManagedUserRunning));
+                int[] profileIds = userProfileGroup.getProfilesOfType(profileType);
+                for (int profileIdx = 0; profileIdx < profileIds.length; profileIdx++) {
+                    int profileId = profileIds[profileIdx];
+                    boolean isUserRunning =
+                            userProfileGroup.containsRunningUserId(profileId, profileType);
+                    if (profileType == PROFILE_TYPE_PRIVATE && !isUserRunning) {
+                        continue;
+                    }
+                    groupSafetyCenterEntryLevel =
+                            mergeSafetyCenterEntrySeverityLevels(
+                                    groupSafetyCenterEntryLevel,
+                                    addSafetyCenterEntry(
+                                            safetyCenterOverallState,
+                                            entries,
+                                            safetySource,
+                                            defaultPackageName,
+                                            profileId,
+                                            profileType,
+                                            isUserRunning));
+                }
             }
         }
 
@@ -534,7 +533,8 @@ public final class SafetyCenterDataFactory {
                 SafetyCenterEntry entry = entries.get(i);
                 SafetyCenterEntryId entryId = SafetyCenterIds.entryIdFromString(entry.getId());
 
-                if (UserUtils.isManagedProfile(entryId.getUserId(), mContext)) {
+                if (UserProfileGroup.getProfileTypeOfUser(entryId.getUserId(), mContext)
+                        != PROFILE_TYPE_PRIMARY) {
                     continue;
                 }
 
@@ -558,15 +558,15 @@ public final class SafetyCenterDataFactory {
             SafetySource safetySource,
             String defaultPackageName,
             @UserIdInt int userId,
-            boolean isUserManaged,
-            boolean isManagedUserRunning) {
+            @ProfileType int profileType,
+            boolean isUserRunning) {
         SafetyCenterEntry safetyCenterEntry =
                 toSafetyCenterEntry(
                         safetySource,
                         defaultPackageName,
                         userId,
-                        isUserManaged,
-                        isManagedUserRunning);
+                        profileType,
+                        isUserRunning);
         if (safetyCenterEntry == null) {
             return SafetyCenterEntry.ENTRY_SEVERITY_LEVEL_UNSPECIFIED;
         }
@@ -584,8 +584,8 @@ public final class SafetyCenterDataFactory {
             SafetySource safetySource,
             String defaultPackageName,
             @UserIdInt int userId,
-            boolean isUserManaged,
-            boolean isManagedUserRunning) {
+            @ProfileType int profileType,
+            boolean isUserRunning) {
         switch (safetySource.getType()) {
             case SafetySource.SAFETY_SOURCE_TYPE_ISSUE_ONLY:
                 return null;
@@ -594,7 +594,7 @@ public final class SafetyCenterDataFactory {
                 SafetySourceStatus safetySourceStatus =
                         getSafetySourceStatus(
                                 mSafetyCenterDataManager.getSafetySourceDataInternal(key));
-                boolean inQuietMode = isUserManaged && !isManagedUserRunning;
+                boolean inQuietMode = (PROFILE_TYPE_MANAGED == profileType) && !isUserRunning;
                 if (safetySourceStatus == null) {
                     int severityLevel =
                             inQuietMode
@@ -606,8 +606,8 @@ public final class SafetyCenterDataFactory {
                             severityLevel,
                             SafetyCenterEntry.SEVERITY_UNSPECIFIED_ICON_TYPE_NO_RECOMMENDATION,
                             userId,
-                            isUserManaged,
-                            isManagedUserRunning);
+                            profileType,
+                            isUserRunning);
                 }
                 PendingIntent sourceProvidedPendingIntent =
                         inQuietMode ? null : safetySourceStatus.getPendingIntent();
@@ -665,8 +665,8 @@ public final class SafetyCenterDataFactory {
                         SafetyCenterEntry.ENTRY_SEVERITY_LEVEL_UNSPECIFIED,
                         SafetyCenterEntry.SEVERITY_UNSPECIFIED_ICON_TYPE_NO_ICON,
                         userId,
-                        isUserManaged,
-                        isManagedUserRunning);
+                        profileType,
+                        isUserRunning);
         }
         Log.w(
                 TAG,
@@ -681,8 +681,8 @@ public final class SafetyCenterDataFactory {
             @SafetyCenterEntry.EntrySeverityLevel int entrySeverityLevel,
             @SafetyCenterEntry.SeverityUnspecifiedIconType int severityUnspecifiedIconType,
             @UserIdInt int userId,
-            boolean isUserManaged,
-            boolean isManagedUserRunning) {
+            @ProfileType int profileType,
+            boolean isUserRunning) {
         if (SafetySources.isDefaultEntryHidden(safetySource)) {
             return null;
         }
@@ -692,7 +692,7 @@ public final class SafetyCenterDataFactory {
                         .setSafetySourceId(safetySource.getId())
                         .setUserId(userId)
                         .build();
-        boolean isQuietModeEnabled = isUserManaged && !isManagedUserRunning;
+        boolean isQuietModeEnabled = (PROFILE_TYPE_MANAGED == profileType) && !isUserRunning;
         PendingIntent pendingIntent =
                 mPendingIntentFactory.getPendingIntent(
                         safetySource.getId(),
@@ -702,13 +702,7 @@ public final class SafetyCenterDataFactory {
                         isQuietModeEnabled);
         boolean enabled =
                 pendingIntent != null && !SafetySources.isDefaultEntryDisabled(safetySource);
-        CharSequence title =
-                isUserManaged
-                        ? DevicePolicyResources.getSafetySourceWorkString(
-                                mSafetyCenterResourcesApk,
-                                safetySource.getId(),
-                                safetySource.getTitleForWorkResId())
-                        : mSafetyCenterResourcesApk.getString(safetySource.getTitleResId());
+        CharSequence title = getTitleForProfileType(profileType, safetySource);
         CharSequence summary =
                 mSafetyCenterDataManager.sourceHasError(
                                 SafetySourceKey.of(safetySource.getId(), userId))
@@ -738,38 +732,33 @@ public final class SafetyCenterDataFactory {
             UserProfileGroup userProfileGroup) {
         List<SafetySource> safetySources = safetySourcesGroup.getSafetySources();
         List<SafetyCenterStaticEntry> staticEntries = new ArrayList<>(safetySources.size());
-        for (int i = 0; i < safetySources.size(); i++) {
-            SafetySource safetySource = safetySources.get(i);
-
-            addSafetyCenterStaticEntry(
-                    staticEntriesToIds,
-                    safetyCenterOverallState,
-                    staticEntries,
-                    safetySource,
-                    defaultPackageName,
-                    userProfileGroup.getProfileParentUserId(),
-                    /* isUserManaged= */ false,
-                    /* isManagedUserRunning= */ false);
-
-            if (!SafetySources.supportsManagedProfiles(safetySource)) {
-                continue;
-            }
-
-            int[] managedProfilesUserIds = userProfileGroup.getManagedProfilesUserIds();
-            for (int j = 0; j < managedProfilesUserIds.length; j++) {
-                int managedProfileUserId = managedProfilesUserIds[j];
-                boolean isManagedUserRunning =
-                        userProfileGroup.isManagedUserRunning(managedProfileUserId);
-
-                addSafetyCenterStaticEntry(
-                        staticEntriesToIds,
-                        safetyCenterOverallState,
-                        staticEntries,
-                        safetySource,
-                        defaultPackageName,
-                        managedProfileUserId,
-                        /* isUserManaged= */ true,
-                        isManagedUserRunning);
+        for (int safetySourceIdx = 0; safetySourceIdx < safetySources.size(); safetySourceIdx++) {
+            SafetySource safetySource = safetySources.get(safetySourceIdx);
+            for (int profileTypeIdx = 0;
+                    profileTypeIdx < ProfileType.ALL_PROFILE_TYPES.length;
+                    ++profileTypeIdx) {
+                @ProfileType int profileType = ProfileType.ALL_PROFILE_TYPES[profileTypeIdx];
+                if (!SafetySources.supportsProfileType(safetySource, profileType)) {
+                    continue;
+                }
+                int[] profileIds = userProfileGroup.getProfilesOfType(profileType);
+                for (int profileIdx = 0; profileIdx < profileIds.length; ++profileIdx) {
+                    int profileId = profileIds[profileIdx];
+                    boolean isUserRunning =
+                            userProfileGroup.containsRunningUserId(profileId, profileType);
+                    if (profileType == PROFILE_TYPE_PRIVATE && !isUserRunning) {
+                        continue;
+                    }
+                    addSafetyCenterStaticEntry(
+                            staticEntriesToIds,
+                            safetyCenterOverallState,
+                            staticEntries,
+                            safetySource,
+                            defaultPackageName,
+                            profileId,
+                            profileType,
+                            isUserRunning);
+                }
             }
         }
 
@@ -790,15 +779,15 @@ public final class SafetyCenterDataFactory {
             SafetySource safetySource,
             String defaultPackageName,
             @UserIdInt int userId,
-            boolean isUserManaged,
-            boolean isManagedUserRunning) {
+            @ProfileType int profileType,
+            boolean isUserRunning) {
         SafetyCenterStaticEntry staticEntry =
                 toSafetyCenterStaticEntry(
                         safetySource,
                         defaultPackageName,
                         userId,
-                        isUserManaged,
-                        isManagedUserRunning);
+                        profileType,
+                        isUserRunning);
         if (staticEntry == null) {
             return;
         }
@@ -826,8 +815,8 @@ public final class SafetyCenterDataFactory {
             SafetySource safetySource,
             String defaultPackageName,
             @UserIdInt int userId,
-            boolean isUserManaged,
-            boolean isManagedUserRunning) {
+            @ProfileType int profileType,
+            boolean isUserRunning) {
         switch (safetySource.getType()) {
             case SafetySource.SAFETY_SOURCE_TYPE_ISSUE_ONLY:
                 return null;
@@ -836,7 +825,7 @@ public final class SafetyCenterDataFactory {
                 SafetySourceStatus safetySourceStatus =
                         getSafetySourceStatus(
                                 mSafetyCenterDataManager.getSafetySourceDataInternal(key));
-                boolean inQuietMode = isUserManaged && !isManagedUserRunning;
+                boolean inQuietMode = (profileType == PROFILE_TYPE_MANAGED) && !isUserRunning;
                 if (safetySourceStatus != null) {
                     PendingIntent sourceProvidedPendingIntent =
                             inQuietMode ? null : safetySourceStatus.getPendingIntent();
@@ -867,15 +856,15 @@ public final class SafetyCenterDataFactory {
                         safetySource,
                         safetySource.getPackageName(),
                         userId,
-                        isUserManaged,
-                        isManagedUserRunning);
+                        profileType,
+                        isUserRunning);
             case SafetySource.SAFETY_SOURCE_TYPE_STATIC:
                 return toDefaultSafetyCenterStaticEntry(
                         safetySource,
                         getStaticSourcePackageNameOrDefault(safetySource, defaultPackageName),
                         userId,
-                        isUserManaged,
-                        isManagedUserRunning);
+                        profileType,
+                        isUserRunning);
         }
         Log.w(TAG, "Unknown safety source type found in rigid group: " + safetySource.getType());
         return null;
@@ -886,12 +875,12 @@ public final class SafetyCenterDataFactory {
             SafetySource safetySource,
             String packageName,
             @UserIdInt int userId,
-            boolean isUserManaged,
-            boolean isManagedUserRunning) {
+            @ProfileType int profileType,
+            boolean isUserRunning) {
         if (SafetySources.isDefaultEntryHidden(safetySource)) {
             return null;
         }
-        boolean isQuietModeEnabled = isUserManaged && !isManagedUserRunning;
+        boolean isQuietModeEnabled = (profileType == PROFILE_TYPE_MANAGED) && !isUserRunning;
         PendingIntent pendingIntent =
                 mPendingIntentFactory.getPendingIntent(
                         safetySource.getId(),
@@ -905,13 +894,7 @@ public final class SafetyCenterDataFactory {
             return null;
         }
 
-        CharSequence title =
-                isUserManaged
-                        ? DevicePolicyResources.getSafetySourceWorkString(
-                                mSafetyCenterResourcesApk,
-                                safetySource.getId(),
-                                safetySource.getTitleForWorkResId())
-                        : mSafetyCenterResourcesApk.getString(safetySource.getTitleResId());
+        CharSequence title = getTitleForProfileType(profileType, safetySource);
         CharSequence summary =
                 mSafetyCenterDataManager.sourceHasError(
                                 SafetySourceKey.of(safetySource.getId(), userId))
@@ -1240,6 +1223,29 @@ public final class SafetyCenterDataFactory {
 
         Log.w(TAG, "Unexpected SafetyCenterStatus.RefreshStatus: " + refreshStatus);
         return null;
+    }
+
+    private CharSequence getTitleForProfileType(
+            @ProfileType int profileType, SafetySource safetySource) {
+        switch (profileType) {
+            case PROFILE_TYPE_PRIMARY:
+                return mSafetyCenterResourcesApk.getString(safetySource.getTitleResId());
+            case PROFILE_TYPE_MANAGED:
+                return DevicePolicyResources.getSafetySourceWorkString(
+                    mSafetyCenterResourcesApk,
+                    safetySource.getId(),
+                    safetySource.getTitleForWorkResId());
+            case PROFILE_TYPE_PRIVATE:
+                if (SdkLevel.isAtLeastV() && Flags.privateProfileTitleApi()) {
+                    return mSafetyCenterResourcesApk.getString(
+                            safetySource.getTitleForPrivateProfileResId());
+                }
+                Log.w(TAG, "unsupported private profile type encountered");
+                return mSafetyCenterResourcesApk.getString(safetySource.getTitleResId());
+            default:
+                Log.w(TAG, "unexpected value for the profile type " + profileType);
+                return mSafetyCenterResourcesApk.getString(safetySource.getTitleResId());
+        }
     }
 
     private static SafetySourceKey toSafetySourceKey(String safetyCenterEntryIdString) {

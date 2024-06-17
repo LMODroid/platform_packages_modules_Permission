@@ -171,7 +171,17 @@ class GrantPermissionsViewModel(
 
     private var appPermGroupLiveDatas = mutableMapOf<String, LightAppPermGroupLiveData>()
 
-    var activityResultCallback: Consumer<Intent>? = null
+    internal data class ResultCallback(val consumer: Consumer<Intent?>, val requestCode: Int)
+
+    private var activityResultCallback: ResultCallback? = null
+
+    init {
+        if (storedState?.containsKey(SAVED_REQUEST_CODE_KEY) == true) {
+            if (storedState.getInt(SAVED_REQUEST_CODE_KEY) == PHOTO_PICKER_REQUEST_CODE) {
+                setPhotoPickerCallback()
+            }
+        }
+    }
 
     /**
      * An internal class which represents the state of a current AppPermissionGroup grant request.
@@ -996,7 +1006,9 @@ class GrantPermissionsViewModel(
         Log.i(
             LOG_TAG,
             "Permission grant result requestId=$sessionId " +
-                "callingUid=${packageInfo.uid} callingPackage=$packageName permission=$permission " +
+                "callingUid=${packageInfo.uid} " +
+                "callingPackage=$packageName " +
+                "permission=$permission " +
                 "isImplicit=$isImplicit result=$result " +
                 "isPermissionRationaleShown=$isPermissionRationaleShown"
         )
@@ -1023,6 +1035,7 @@ class GrantPermissionsViewModel(
         for ((groupName, groupState) in groupStates) {
             outState.putInt(groupName, groupState.state)
         }
+        activityResultCallback?.let { outState.putInt(SAVED_REQUEST_CODE_KEY, it.requestCode) }
     }
 
     /**
@@ -1048,12 +1061,25 @@ class GrantPermissionsViewModel(
         }
     }
 
+    fun handleCallback(data: Intent?, requestCode: Int) {
+        val currCallback = activityResultCallback
+        if (currCallback == null || requestCode != currCallback.requestCode) {
+            return
+        }
+        currCallback.consumer.accept(data)
+        activityResultCallback = null
+    }
+
     fun handleHealthConnectPermissions(activity: Activity) {
         if (activityResultCallback == null) {
-            activityResultCallback = Consumer {
-                groupStates[HEALTH_PERMISSION_GROUP]?.state = STATE_SKIPPED
-                requestInfosLiveData.update()
-            }
+            activityResultCallback =
+                ResultCallback(
+                    {
+                        groupStates[HEALTH_PERMISSION_GROUP]?.state = STATE_SKIPPED
+                        requestInfosLiveData.update()
+                    },
+                    APP_PERMISSION_REQUEST_CODE
+                )
             val healthPermissions =
                 unfilteredAffectedPermissions
                     .filter { permission -> isHealthPermission(activity, permission) }
@@ -1076,57 +1102,69 @@ class GrantPermissionsViewModel(
      */
     fun sendDirectlyToSettings(activity: Activity, groupName: String) {
         if (activityResultCallback == null) {
-            activityResultCallback = Consumer { data ->
-                if (data?.getStringExtra(EXTRA_RESULT_PERMISSION_INTERACTED) == null) {
-                    // User didn't interact, count against rate limit
-                    val group = groupStates[groupName]?.group ?: return@Consumer
-                    if (group.background.isUserSet) {
-                        KotlinUtils.setGroupFlags(
-                            app,
-                            group,
-                            FLAG_PERMISSION_USER_FIXED to true,
-                            filterPermissions = group.backgroundPermNames
-                        )
-                    } else {
-                        KotlinUtils.setGroupFlags(
-                            app,
-                            group,
-                            FLAG_PERMISSION_USER_SET to true,
-                            filterPermissions = group.backgroundPermNames
-                        )
-                    }
-                }
+            activityResultCallback =
+                ResultCallback(
+                    Consumer { data ->
+                        if (data?.getStringExtra(EXTRA_RESULT_PERMISSION_INTERACTED) == null) {
+                            // User didn't interact, count against rate limit
+                            val group = groupStates[groupName]?.group ?: return@Consumer
+                            if (group.background.isUserSet) {
+                                KotlinUtils.setGroupFlags(
+                                    app,
+                                    group,
+                                    FLAG_PERMISSION_USER_FIXED to true,
+                                    filterPermissions = group.backgroundPermNames
+                                )
+                            } else {
+                                KotlinUtils.setGroupFlags(
+                                    app,
+                                    group,
+                                    FLAG_PERMISSION_USER_SET to true,
+                                    filterPermissions = group.backgroundPermNames
+                                )
+                            }
+                        }
 
-                groupStates[groupName]?.state = STATE_SKIPPED
-                // Update our liveData now that there is a new skipped group
-                requestInfosLiveData.update()
-            }
+                        groupStates[groupName]?.state = STATE_SKIPPED
+                        // Update our liveData now that there is a new skipped group
+                        requestInfosLiveData.update()
+                    },
+                    APP_PERMISSION_REQUEST_CODE
+                )
             startAppPermissionFragment(activity, groupName)
         }
     }
 
-    fun openPhotoPicker(activity: Activity, result: Int) {
+    fun openPhotoPicker(activity: Activity) {
         if (activityResultCallback != null) {
             return
         }
         if (groupStates[READ_MEDIA_VISUAL]?.affectedPermissions == null) {
             return
         }
-        activityResultCallback = Consumer { data ->
-            val anySelected = data?.getBooleanExtra(INTENT_PHOTOS_SELECTED, true) == true
-            if (anySelected) {
-                onPermissionGrantResult(READ_MEDIA_VISUAL, null, result)
-            } else {
-                onPermissionGrantResult(READ_MEDIA_VISUAL, null, CANCELED)
-            }
-            requestInfosLiveData.update()
-        }
+        setPhotoPickerCallback()
         openPhotoPickerForApp(
             activity,
             packageInfo.uid,
             unfilteredAffectedPermissions,
             PHOTO_PICKER_REQUEST_CODE
         )
+    }
+
+    private fun setPhotoPickerCallback() {
+        activityResultCallback =
+            ResultCallback(
+                { data ->
+                    val anySelected = data?.getBooleanExtra(INTENT_PHOTOS_SELECTED, true) == true
+                    if (anySelected) {
+                        onPermissionGrantResult(READ_MEDIA_VISUAL, null, GRANTED_USER_SELECTED)
+                    } else {
+                        onPermissionGrantResult(READ_MEDIA_VISUAL, null, CANCELED)
+                    }
+                    requestInfosLiveData.update()
+                },
+                PHOTO_PICKER_REQUEST_CODE
+            )
     }
 
     /**
@@ -1137,15 +1175,19 @@ class GrantPermissionsViewModel(
      */
     fun sendToSettingsFromLink(activity: Activity, groupName: String) {
         startAppPermissionFragment(activity, groupName)
-        activityResultCallback = Consumer { data ->
-            val returnGroupName = data?.getStringExtra(EXTRA_RESULT_PERMISSION_INTERACTED)
-            if (returnGroupName != null) {
-                groupStates[returnGroupName]?.state = STATE_SKIPPED
-                val result = data.getIntExtra(EXTRA_RESULT_PERMISSION_RESULT, -1)
-                logSettingsInteraction(returnGroupName, result)
-                requestInfosLiveData.update()
-            }
-        }
+        activityResultCallback =
+            ResultCallback(
+                { data ->
+                    val returnGroupName = data?.getStringExtra(EXTRA_RESULT_PERMISSION_INTERACTED)
+                    if (returnGroupName != null) {
+                        groupStates[returnGroupName]?.state = STATE_SKIPPED
+                        val result = data.getIntExtra(EXTRA_RESULT_PERMISSION_RESULT, -1)
+                        logSettingsInteraction(returnGroupName, result)
+                        requestInfosLiveData.update()
+                    }
+                },
+                APP_PERMISSION_REQUEST_CODE
+            )
     }
 
     /**
@@ -1165,15 +1207,19 @@ class GrantPermissionsViewModel(
                 putExtra(Intent.EXTRA_PERMISSION_GROUP_NAME, groupName)
                 putExtra(Constants.EXTRA_SESSION_ID, sessionId)
             }
-        activityResultCallback = Consumer { data ->
-            val returnGroupName = data?.getStringExtra(EXTRA_RESULT_PERMISSION_INTERACTED)
-            if (returnGroupName != null) {
-                groupStates[returnGroupName]?.state = STATE_SKIPPED
-                val result = data.getIntExtra(EXTRA_RESULT_PERMISSION_RESULT, CANCELED)
-                logSettingsInteraction(returnGroupName, result)
-                requestInfosLiveData.update()
-            }
-        }
+        activityResultCallback =
+            ResultCallback(
+                { data ->
+                    val returnGroupName = data?.getStringExtra(EXTRA_RESULT_PERMISSION_INTERACTED)
+                    if (returnGroupName != null) {
+                        groupStates[returnGroupName]?.state = STATE_SKIPPED
+                        val result = data.getIntExtra(EXTRA_RESULT_PERMISSION_RESULT, CANCELED)
+                        logSettingsInteraction(returnGroupName, result)
+                        requestInfosLiveData.update()
+                    }
+                },
+                APP_PERMISSION_REQUEST_CODE
+            )
         activity.startActivityForResult(intent, APP_PERMISSION_REQUEST_CODE)
     }
 
@@ -1325,6 +1371,8 @@ class GrantPermissionsViewModel(
     companion object {
         const val APP_PERMISSION_REQUEST_CODE = 1
         const val PHOTO_PICKER_REQUEST_CODE = 2
+        const val ECM_REQUEST_CODE = 3
+        const val SAVED_REQUEST_CODE_KEY = "saved_request_code"
         private const val STATE_UNKNOWN = 0
         private const val STATE_GRANTED = 1
         private const val STATE_DENIED = 2

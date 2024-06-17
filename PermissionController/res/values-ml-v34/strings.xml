@@ -23,5 +23,4 @@
     <string name="health_connect_summary" msgid="815473513776882296">"നിങ്ങളുടെ ആരോഗ്യം സംബന്ധിച്ച ഡാറ്റയിലേക്കുള്ള ആപ്പ് ആക്‌സസ് നിയന്ത്രിക്കുക"</string>
     <string name="location_settings" msgid="8863940440881290182">"ലൊക്കേഷൻ ആക്‌സസ്"</string>
     <string name="mic_toggle_description" msgid="1504101620086616040">"ആപ്പുകൾക്കും സേവനങ്ങൾക്കും. ഈ ക്രമീകരണം ഓഫാണെങ്കിൽ, നിങ്ങൾ അടിയന്തര നമ്പറിൽ വിളിക്കുമ്പോഴും മൈക്രോഫോൺ ഡാറ്റ തുടർന്നും പങ്കിട്ടേക്കാം"</string>
-    <string name="location_settings_subtitle" msgid="6846532794702613851">"ആപ്പുകൾക്കും സേവനങ്ങൾക്കും"</string>
 </resources>

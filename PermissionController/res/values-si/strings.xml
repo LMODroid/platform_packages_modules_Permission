@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"සියලු අවසර"</string>
     <string name="other_permissions" msgid="2901186127193849594">"වෙනත් යෙදුම් හැකියාවන්"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"අවසර ඉල්ලීම"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Wear මත ස්ථාපන/අස්ථාපනය ක්‍රියා සහාය දක්වන්නේ නැත."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; හට පිවිසීමට ඉඩ දෙන දේ තෝරන්න"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; යාවත්කාලීන කර ඇත. මෙම යෙදුමට පිවිසීමට ඉඩ දෙන දේ තෝරන්න."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"අවලංගු කරන්න"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"යෙදුම භාවිත කර නැති නම් අවසර ඉවත් කරන්න"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"අවසර ඉවත් කරන්න සහ ඉඩ හිස් කරන්න"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"භාවිත නොකළේ නම් යෙදුම් ක්‍රියාකාරකම් විරාම කරන්න"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"යෙදුම භාවිතා නොකළේ නම් කළමනාකරණය කරන්න"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"අවසර ඉවත් කරන්න, තාවකාලික ගොනු මකන්න සහ දැනුම්දීම් නවත්වන්න"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"අවසර ඉවත් කරන්න, තාවකාලික ගොනු මකා දමන්න, දැනුම්දීම් නවත්වන්න, සහ යෙදුම ලේඛනාරක්ෂණය කරන්න"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"ඔබගේ දත්ත ආරක්ෂා කිරීම සඳහා, යෙදුම මාස කිහිපයක් භාවිතා නොකරන්නේ නම් මෙම යෙදුම සඳහා අවසර ඉවත් කරනු ලැබේ."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"ඔබගේ දත්ත ආරක්ෂා කිරීම සඳහා, යෙදුම මාස කිහිපයක් භාවිතා නොකරන්නේ නම් පහත අවසර ඉවත් කරනු ලැබේ: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"ඔබේ දත්ත ආරක්ෂා කිරීමට, ඔබ මාස කීපයක් තුළ භාවිත කර නැති යෙදුම්වලින් අවසර ඉවත් කර ඇත"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"සටහන් යෙදුම"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"ඔබේ උපාංගයෙහි සටහන් ගැනීමට ඔබට ඉඩ දෙන යෙදුම්"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"සටහන්"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"පෙරනිමි පසුම්බි යෙදුම"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"පසුම්බි යෙදුම"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"පසුම්බි යෙදුම්වලට විවිධ ආකාරයේ ගනුදෙනුවලට උදවු කිරීමට ඔබේ ණය සහ ලැදියා කාඩ්පත්, මෝටර් රථ යතුරු සහ වෙනත් දේවල් ගබඩා කළ හැක."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"ඔබේ පෙරනිමි පසුම්බි යෙදුම ලෙස <xliff:g id="APP_NAME">%1$s</xliff:g> සකසන්න ද?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"අවසර අවශ්‍ය නැත"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"වත්මන් පෙරනිමිය"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"නැවත නොඅසන්න"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"පෙරනිමි ලෙස සකසන්න"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"දත්ත බෙදා ගැනීමේ යාවත්කාලීන"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"සමහර යෙදුම් ඒවා ඔබේ ස්ථාන දත්ත බෙදා ගත හැකි ආකාරය වෙනස් කර ඇත"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"සැකසීම්"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"ප්‍රවේශ වූයේ <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"ප්‍රවේශ වූයේ ඊයේ <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"ප්‍රවේශ වූයේ <xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"ඔබේ එක් වරක මුරපදය 132435 වේ"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"සීමා කළ සැකසීම"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"ඔබේ ආරක්ෂාව සඳහා, මෙම සැකසීම දැනට නොමැත."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"<xliff:g id="PERMISSION_NAME">%1$s</xliff:g> භාවිතා කිරීමට අවසරය ප්‍රතික්ෂේප කර ඇත"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"මෙම යෙදුම <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> අවසරය ඉල්ලා ඇති අතර, එය ඔබේ ආරක්ෂාව සහ පෞද්ගලිකත්වය අවදානමට ලක් කළ හැකි බැවින් එය සීමා කළ සැකසීමකි. මෙම අවසරයට සීමා කිරීම මෙම යෙදුම ක්‍රියා කිරීමෙන් වළක්වනු ඇත."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"තව දැන ගන්න"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"තේරුණා"</string>
 </resources>

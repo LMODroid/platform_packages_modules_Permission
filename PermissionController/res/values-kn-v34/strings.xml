@@ -23,5 +23,4 @@
     <string name="health_connect_summary" msgid="815473513776882296">"ಆರೋಗ್ಯದ ಡೇಟಾಕ್ಕೆ ಸಂಬಂಧಿಸಿದಂತೆ ಆ್ಯಪ್‌ನ ಆ್ಯಕ್ಸೆಸ್ ಅನ್ನು ನಿರ್ವಹಿಸಿ"</string>
     <string name="location_settings" msgid="8863940440881290182">"ಸ್ಥಳದ ಆ್ಯಕ್ಸೆಸ್"</string>
     <string name="mic_toggle_description" msgid="1504101620086616040">"ಆ್ಯಪ್‌ಗಳು ಮತ್ತು ಸೇವೆಗಳಿಗಾಗಿ. ಈ ಸೆಟ್ಟಿಂಗ್ ಆಫ್ ಆಗಿದ್ದಾಗಲೂ, ನೀವು ತುರ್ತು ಸಂಖ್ಯೆಯೊಂದಕ್ಕೆ ಕರೆ ಮಾಡಿದಾಗ ಮೈಕ್ರೊಫೋನ್ ಡೇಟಾವನ್ನು ಹಂಚಿಕೊಳ್ಳಬಹುದು"</string>
-    <string name="location_settings_subtitle" msgid="6846532794702613851">"ಆ್ಯಪ್‌ಗಳು ಮತ್ತು ಸೇವೆಗಳಿಗಾಗಿ"</string>
 </resources>

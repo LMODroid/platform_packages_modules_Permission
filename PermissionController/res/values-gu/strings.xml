@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"બધી પરવાનગીઓ"</string>
     <string name="other_permissions" msgid="2901186127193849594">"અન્ય ઍપ સુવિધાઓ"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"પરવાનગીની વિનંતી"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Wear પર ઇન્સ્ટૉલ/અનઇન્સ્ટૉલ ક્રિયાઓ સમર્થિત નથી."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;ને શેના ઍક્સેસ માટેની મંજૂરી આપવી તે પસંદ કરો"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; અપડેટ કરવામાં આવી છે. આ ઍપને શેના ઍક્સેસ માટેની મંજૂરી આપવી તે પસંદ કરો."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"રદ કરો"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"ઍપ ઉપયોગમાં ન હોવા પર પરવાનગીઓ કાઢી નાખો"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"પરવાનગીઓ કાઢી નાખો અને જગ્યા ખાલી કરો"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"જો ઉપયોગ કરતા ન હો, તો ઍપ પ્રવૃત્તિ થોભાવો"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"જો ઍપ વાપરતા ન હો, તો તેને મેનેજ કરો"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"પરવાનગીઓ કાઢી નાખો, હંગામી ફાઇલો ડિલીટ કરો અને નોટિફિકેશન બંધ કરો"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"પરવાનગીઓ કાઢી નાખો, હંગામી ફાઇલો ડિલીટ કરો, નોટિફિકેશન બંધ કરો અને ઍપને આર્કાઇવ કરો"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"તમારા ડેટાની સુરક્ષા કરવા માટે, જો ઍપનો કેટલાક મહિનાથી ઉપયોગ કરવામાં આવ્યો ન હોય, તો આ ઍપની પરવાનગીઓ કાઢી નાખવામાં આવશે."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"તમારા ડેટાની સુરક્ષા કરવા માટે, જો ઍપનો કેટલાક મહિનાથી ઉપયોગ કરવામાં આવ્યો ન હોય, તો નીચેની પરવાનગીઓ કાઢી નાખવામાં આવશે: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"તમારા ડેટાની સુરક્ષા માટે, તમારા દ્વારા કેટલાક મહિનાથી ઉપયોગમાં ન લેવાયેલી ઍપની પરવાનગીઓ કાઢી નાખવામાં આવી છે."</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"નોંધ માટેની ઍપ"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"ઍપ કે જે તમને તમારા ડિવાઇસ પર નોંધ કરવાની મંજૂરી આપે છે"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"નોંધ"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"ડિફૉલ્ટ વૉલેટ ઍપ"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Wallet ઍપ"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"વૉલેટ સંબંધી ઍપ તમારા ક્રેડિટ અને લૉયલ્ટિ કાર્ડ, કાર કી તેમજ વિવિધ વ્યવહારોમાં સહાય કરી શકતી અન્ય બાબતો સ્ટોર કરી શકે છે."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"શું <xliff:g id="APP_NAME">%1$s</xliff:g>ને તમારી ડિફૉલ્ટ વૉલેટ ઍપ તરીકે સેટ કરીએ?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"કોઈ પરવાનગી જરૂરી નથી"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"હાલની ડિફૉલ્ટ"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"ફરીથી પૂછશો નહીં"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"ડિફૉલ્ટ તરીકે સેટ"</string>
@@ -610,7 +615,7 @@
     <string name="mic_toggle_title" msgid="2649991093496110162">"માઇક્રોફોનનો ઍક્સેસ"</string>
     <string name="perm_toggle_description" msgid="7801326363741451379">"ઍપ અને સેવાઓ માટે"</string>
     <string name="mic_toggle_description" msgid="9163104307990677157">"ઍપ અને સેવાઓ માટે. આ સેટિંગ બંધ હોવા છતાં પણ, જ્યારે તમે ઇમર્જન્સી નંબર પર કૉલ કરો ત્યારે કદાચ માઇક્રોફોનનો ડેટા શેર કરવામાં આવી શકે."</string>
-    <string name="location_settings_subtitle" msgid="2328360561197430695">"સ્થાનનો ઍક્સેસ ધરાવતી ઍપ અને તેની સેવાઓ જુઓ"</string>
+    <string name="location_settings_subtitle" msgid="2328360561197430695">"લોકેશનનો ઍક્સેસ ધરાવતી ઍપ અને તેની સેવાઓ જુઓ"</string>
     <string name="show_clip_access_notification_title" msgid="5168467637351109096">"ક્લિપબોર્ડનો ઍક્સેસ બતાવો"</string>
     <string name="show_clip_access_notification_summary" msgid="3532020182782112687">"જ્યારે ઍપ તમે કૉપિ કરેલી ટેક્સ્ટ, છબીઓ કે અન્ય કન્ટેન્ટનો ઍક્સેસ કરે, ત્યારે મેસેજ બતાવો"</string>
     <string name="show_password_title" msgid="2877269286984684659">"પાસવર્ડ બતાવો"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"ડેટા શેરિંગ સંબંધિત અપડેટ"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"કેટલીક ઍપ દ્વારા તમારા લોકેશન ડેટાને શેર કરવાની રીત બદલવામાં આવી હોઈ શકે છે"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"સેટિંગ"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"ઍક્સેસ કર્યાનો સમય <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"ઍક્સેસ કર્યાનો સમય ગઈકાલે <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"ઍક્સેસ કર્યાનો સમય <xliff:g id="TIME_DATE_0">%1$s</xliff:g>ના રોજ <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"તમારો એક-વખત વપરાશનો પાસવર્ડ 132435 છે"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"પ્રતિબંધિત સેટિંગ"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"તમારી સુરક્ષા માટે, આ સેટિંગ હાલમાં ઉપલબ્ધ નથી."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>નો ઉપયોગ કરવાની પરવાનગી નકારવામાં આવી છે"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"આ ઍપ દ્વારા <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> માટેની પરવાનગીની વિનંતી કરવામાં આવી છે, જે કોઈ પ્રતિબંધિત સેટિંગ છે કારણ કે તે તમારી સુરક્ષા અને પ્રાઇવસીને જોખમમાં મૂકી શકે છે. આ પરવાનગીને પ્રતિબંધિત કરવાથી, આ ઍપને કામ કરવાથી રોકી શકાય છે."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"વધુ જાણો"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"સમજાઈ ગયું"</string>
 </resources>

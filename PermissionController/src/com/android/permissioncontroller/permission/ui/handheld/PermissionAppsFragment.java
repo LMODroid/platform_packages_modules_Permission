@@ -34,6 +34,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.UserHandle;
+import android.os.UserManager;
 import android.provider.Settings;
 import android.safetycenter.SafetyCenterManager;
 import android.util.ArrayMap;
@@ -115,6 +116,7 @@ public final class PermissionAppsFragment extends SettingsWithLargeHeader implem
     private PermissionUsages mPermissionUsages;
     private List<AppPermissionUsage> mAppPermissionUsages = new ArrayList<>();
     private Boolean mSensorStatus;
+    private UserManager mUserManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -168,6 +170,8 @@ public final class PermissionAppsFragment extends SettingsWithLargeHeader implem
                 mViewModel.getSensorStatusLiveData().observe(this, this::setSensorStatus);
             }
         }
+
+        mUserManager = Utils.getSystemServiceSafe(getContext(), UserManager.class);
     }
 
     @Override
@@ -436,6 +440,9 @@ public final class PermissionAppsFragment extends SettingsWithLargeHeader implem
             }
 
             for (Pair<String, UserHandle> packageUserLabel : packages) {
+                if (!Utils.shouldShowInSettings(packageUserLabel.getSecond(), mUserManager)) {
+                    continue;
+                }
                 String packageName = packageUserLabel.getFirst();
                 UserHandle user = packageUserLabel.getSecond();
 

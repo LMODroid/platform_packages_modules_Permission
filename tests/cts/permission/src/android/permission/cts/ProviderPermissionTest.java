@@ -35,12 +35,11 @@ import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.provider.Telephony;
 import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.MediumTest;
 import android.util.Log;
 
 import androidx.test.InstrumentationRegistry;
+import androidx.test.filters.MediumTest;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 

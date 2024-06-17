@@ -146,6 +146,15 @@ public final class RoleManager {
     public static final String ROLE_NOTES = "android.app.role.NOTES";
 
     /**
+     * The name of the Wallet role.
+     *
+     * @see android.nfc.cardemulation.CardEmulation
+     */
+    @FlaggedApi(Flags.FLAG_WALLET_ROLE_ENABLED)
+    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
+    public static final String ROLE_WALLET = "android.app.role.WALLET";
+
+    /**
      * The name of the system wellbeing role.
      *
      * @hide
@@ -960,6 +969,28 @@ public final class RoleManager {
     public String getSmsRoleHolder(@UserIdInt int userId) {
         try {
             return mService.getSmsRoleHolder(userId);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Allows getting the role holder for {@link #ROLE_EMERGENCY} without requiring
+     * {@link Manifest.permission#OBSERVE_ROLE_HOLDERS}.
+     *
+     * @param userId the user ID to get the default emergency package for
+     * @return the package name of the default emergency app, or {@code null} if none
+     *
+     * @hide
+     */
+    @FlaggedApi(Flags.FLAG_GET_EMERGENCY_ROLE_HOLDER_API_ENABLED)
+    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
+    @RequiresPermission(Manifest.permission.READ_PRIVILEGED_PHONE_STATE)
+    @Nullable
+    @SystemApi(client = SystemApi.Client.MODULE_LIBRARIES)
+    public String getEmergencyRoleHolder(@UserIdInt int userId) {
+        try {
+            return mService.getEmergencyRoleHolder(userId);
         } catch (RemoteException e) {
             throw e.rethrowFromSystemServer();
         }

@@ -34,7 +34,6 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.android.permission.util.UserUtils;
 import com.android.safetycenter.logging.SafetyCenterStatsdLogger;
 
 import java.io.PrintWriter;
@@ -175,7 +174,7 @@ public final class SafetyCenterRefreshTracker {
             SafetyCenterStatsdLogger.writeSourceRefreshSystemEvent(
                     requestType,
                     safetySourceKey.getSourceId(),
-                    UserUtils.isManagedProfile(safetySourceKey.getUserId(), mContext),
+                    UserProfileGroup.getProfileTypeOfUser(safetySourceKey.getUserId(), mContext),
                     duration,
                     sourceResult,
                     refreshReason,
@@ -284,7 +283,7 @@ public final class SafetyCenterRefreshTracker {
                 SafetyCenterStatsdLogger.writeSourceRefreshSystemEvent(
                         requestType,
                         sourceKey.getSourceId(),
-                        UserUtils.isManagedProfile(sourceKey.getUserId(), mContext),
+                        UserProfileGroup.getProfileTypeOfUser(sourceKey.getUserId(), mContext),
                         duration,
                         SAFETY_CENTER_SYSTEM_EVENT_REPORTED__RESULT__TIMEOUT,
                         refreshReason,

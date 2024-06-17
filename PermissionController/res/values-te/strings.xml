@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"అన్ని అనుమతులు"</string>
     <string name="other_permissions" msgid="2901186127193849594">"ఇతర యాప్ సామర్థ్యాలు"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"అనుమతి రిక్వెస్ట్‌"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android వేర్"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Wearలో ఇన్‌స్టాల్/అన్ఇన్‌స్టాల్ చర్యలకు మద్దతు లేదు."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; యాక్సెస్ చేయడానికి అనుమతించాల్సిన వాటిని ఎంచుకోండి"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; అప్‌డేట్ చేయబడింది. ఈ యాప్ యాక్సెస్ చేయడానికి అనుమతించాల్సిన వాటిని ఎంచుకోండి."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"రద్దు చేయండి"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"యాప్‌ని ఉపయోగించకపోతే, అనుమతులను తీసివేయండి"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"అనుమతులను తీసివేసి స్పేస్‌ను ఖాళీ చేయండి"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"యాప్‌ను ఉపయోగించకపోతే దాని యాక్టివిటీని పాజ్ చేయండి"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"యాప్‌ను ఉపయోగించకపోతే, మేనేజ్ చేయండి"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"అనుమతులను తీసివేయండి, తాత్కాలిక ఫైళ్లను తొలగించండి, అలాగే నోటిఫికేషన్‌లను ఆపివేయండి"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"అనుమతులను తీసివేయండి, తాత్కాలిక ఫైళ్లను తొలగించండి, నోటిఫికేషన్‌లను ఆపివేయండి, యాప్‌ను ఆర్కైవ్ చేయండి"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"మీ డేటాను సురక్షితంగా ఉంచడానికి, ఈ యాప్ కొన్ని నెలలుగా వినియోగంలో లేకుంటే, దాని అనుమతులు తీసివేయబడతాయి."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"మీ డేటాను సురక్షితంగా ఉంచడానికి, ఈ యాప్ కొన్ని నెలలుగా వినియోగంలో లేకుంటే, దానికి ఇచ్చిన కింది అనుమతులు తీసివేయబడతాయి: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"మీ డేటాను సురక్షితంగా ఉంచడానికి, కొన్ని నెలలుగా వినియోగంలో లేని యాప్‌ల అనుమతులు తీసివేయబడ్డాయి."</string>
@@ -268,7 +268,7 @@
     <string name="unused_apps_notification_title" msgid="4314832015894238019">"{count,plural, =1{# ఉపయోగించని యాప్}other{# ఉపయోగించని యాప్‌లు}}"</string>
     <string name="unused_apps_notification_content" msgid="9195026773244581246">"అనుమతులు, తాత్కాలిక ఫైళ్లు తీసివేయబడ్డాయి అలాగే నోటిఫికేషన్‌లు ఆపివేయబడ్డాయి. రివ్యూ చేయడానికి ట్యాప్ చేయండి."</string>
     <string name="unused_apps_safety_center_card_title" msgid="5638409355530099149">"అనుమతులు తీసివేయబడిన యాప్‌లను రివ్యూ చేయండి"</string>
-    <string name="unused_apps_safety_center_card_content" msgid="1088557243627427820">"కొంతకాలంగా మీరు ఉపయోగించని యాప్‌లకు సంబంధించిన అనుమతులు, తాత్కాలిక ఫైల్‌లు తొలగించబడ్డాయి, అలాగే నోటిఫికేషన్‌లు నిలిపివేయబడ్డాయి."</string>
+    <string name="unused_apps_safety_center_card_content" msgid="1088557243627427820">"కొంతకాలంగా మీరు ఉపయోగించని యాప్‌లకు సంబంధించిన అనుమతులు, తాత్కాలిక ఫైళ్లు తొలగించబడ్డాయి, అలాగే నోటిఫికేషన్‌లు నిలిపివేయబడ్డాయి."</string>
     <string name="unused_apps_safety_center_action_title" msgid="8865914432518993194">"యాప్‌లను రివ్యూ చేయండి"</string>
     <string name="post_drive_permission_decision_reminder_title" msgid="1290697371418139976">"ఇటీవలి అనుమతులను చెక్ చేయండి"</string>
     <string name="post_drive_permission_decision_reminder_summary_1_app_1_permission" msgid="670521503734140711">"డ్రైవింగ్‌లో ఉన్నప్పుడు, మీరు <xliff:g id="APP">%1$s</xliff:g> యాప్‌నకు <xliff:g id="PERMISSION">%2$s</xliff:g>‌కు యాక్సెస్‌ను ఇచ్చారు"</string>
@@ -354,7 +354,7 @@
     <string name="role_assistant_description" msgid="6622458130459922952">"సహాయక యాప్‌లు మీరు వీక్షిస్తున్న స్క్రీన్‌పై ఉన్న సమాచారం ఆధారంగా మీకు సహాయపడగలవు. కొన్ని యాప్‌లు మీకు సమగ్రమైన సహాయాన్ని అందించడానికి లాంచర్‌కు, వాయిస్ ఇన్‌పుట్ సర్వీసులకు రెండింటికీ సపోర్ట్‌ చేస్తాయి."</string>
     <string name="role_browser_label" msgid="2877796144554070207">"ఆటోమేటిక్ బ్రౌజర్ యాప్"</string>
     <string name="role_browser_short_label" msgid="6745009127123292296">"బ్రౌజర్ యాప్"</string>
-    <string name="role_browser_description" msgid="3465253637499842671">"మీకు ఇంటర్నెట్ యాక్సెస్‌ను అందించే, అలాగే మీరు నొక్కే లింక్‌లను చూపించే యాప్‌లు"</string>
+    <string name="role_browser_description" msgid="3465253637499842671">"మీకు ఇంటర్నెట్‌కు యాక్సెస్‌ ఇచ్చి, ట్యాప్ చేయడానికి లింక్‌ల‌ను డిస్‌ప్లే చేసే యాప్‌లు"</string>
     <string name="role_browser_request_title" msgid="2895200507835937192">"<xliff:g id="APP_NAME">%1$s</xliff:g>ను మీ ఆటోమేటిక్ బ్రౌజర్ యాప్‌గా సెట్ చేయాలా?"</string>
     <string name="role_browser_request_description" msgid="5888803407905985941">"అనుమతులు ఇవ్వనవసరం లేదు"</string>
     <string name="role_dialer_label" msgid="1100224146343237968">"ఆటోమేటిక్ ఫోన్ యాప్"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"నోట్స్ యాప్"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"మీ పరికరంలో నోట్స్ తీసుకోవడానికి మిమ్మల్ని అనుమతించే యాప్‌లు"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"నోట్స్"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"ఆటోమేటిక్ వాలెట్ యాప్"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"వాలెట్ యాప్"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"వాలెట్ యాప్‌లు మీ క్రెడిట్‌ను, లాయల్టీ కార్డ్‌లను, కార్ కీలను, ఇంకా వివిధ రకాల లావాదేవీలకు సహాయపడటానికి ఇతర వస్తువులను స్టోర్ చేయగలవు."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"<xliff:g id="APP_NAME">%1$s</xliff:g>‌ను డిఫాల్ట్ వాలెట్ యాప్‌గా సెట్ చేయాలా?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"అనుమతులు ఏవీ అవసరం లేదు"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"ప్రస్తుతం ఆటోమేటిక్‌గా ఉంది"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"మళ్లీ అడగవద్దు"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"ఆటోమేటిక్ చేయండి"</string>
@@ -610,9 +615,9 @@
     <string name="mic_toggle_title" msgid="2649991093496110162">"మైక్రోఫోన్ యాక్సెస్"</string>
     <string name="perm_toggle_description" msgid="7801326363741451379">"యాప్‌లు, సర్వీస్‌ల కోసం"</string>
     <string name="mic_toggle_description" msgid="9163104307990677157">"యాప్‌లు, సర్వీస్‌ల కోసం. ఈ సెట్టింగ్ ఆఫ్ చేయబడి ఉన్నట్లయితే, మీరు ఎమర్జెన్సీ నంబర్‌కు కాల్ చేసినప్పుడు మైక్రోఫోన్ డేటా ఇప్పటికీ షేర్ చేయబడవచ్చు."</string>
-    <string name="location_settings_subtitle" msgid="2328360561197430695">"లొకేషన్‌కు యాక్సెస్ ఉన్న యాప్‌లు, సర్వీస్‌లను చూడండి"</string>
+    <string name="location_settings_subtitle" msgid="2328360561197430695">"లొకేషన్ యాక్సెస్ ఉన్న యాప్‌లను, సర్వీస్‌లను చూడండి"</string>
     <string name="show_clip_access_notification_title" msgid="5168467637351109096">"క్లిప్‌బోర్డ్ యాక్సెస్‌ను చూపించండి"</string>
-    <string name="show_clip_access_notification_summary" msgid="3532020182782112687">"మీరు కాపీ చేసిన టెక్స్ట్, ఇమేజ్‌లను లేదా ఇతర కంటెంట్‌ను యాప్‌లు యాక్సెస్ చేసినప్పుడు మెసేజ్‌ను చూపుతుంది"</string>
+    <string name="show_clip_access_notification_summary" msgid="3532020182782112687">"మీరు కాపీ చేసిన టెక్స్ట్‌ను, ఇమేజ్‌లను లేదా ఇతర కంటెంట్‌ను యాప్‌లు యాక్సెస్ చేసినప్పుడు ఒక మెసేజ్‌ను చూపుతుంది"</string>
     <string name="show_password_title" msgid="2877269286984684659">"పాస్‌వర్డ్‌లను చూపిస్తుంది"</string>
     <string name="show_password_summary" msgid="1110166488865981610">"మీరు టైప్ చేస్తున్నప్పుడు అక్షరాలను క్లుప్తంగా చూపిస్తుంది"</string>
     <string name="permission_rationale_message_location" msgid="2153841534298068414">"ఈ యాప్, అది లొకేషన్ డేటాను థర్డ్-పార్టీలతో షేర్ చేయవచ్చని పేర్కొంది"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"డేటా షేరింగ్ అప్‌డేట్‌లు"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"కొన్ని యాప్‌లు మీ లొకేషన్ డేటాను షేర్ చేయగల విధానాన్ని మార్చాయి"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"సెట్టింగ్‌లు"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"<xliff:g id="TIME_DATE">%1$s</xliff:g>‌కు యాక్సెస్‌ చేశారు"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"నిన్న <xliff:g id="TIME_DATE">%1$s</xliff:g>‌కు యాక్సెస్‌ చేశారు"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"<xliff:g id="TIME_DATE_0">%1$s</xliff:g>‌న<xliff:g id="TIME_DATE_1">%2$s</xliff:g>‌కు యాక్సెస్‌ చేశారు"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"మీ ఒకసారి ఉపయోగించగల పాస్‌వర్డ్ 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"పరిమితం చేయబడిన సెట్టింగ్"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"మీ సెక్యూరిటీ కోసం, ఈ సెట్టింగ్ ప్రస్తుతం అందుబాటులో లేదు."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>‌ను ఉపయోగించడానికి అనుమతి నిరాకరించబడింది"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"ఈ యాప్ పరిమితం చేయబడిన సెట్టింగ్ అయిన <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> అనుమతిని రిక్వెస్ట్ చేసింది, దీనివల్ల మీ సెక్యూరిటీకీ, &amp; గోప్యతకు ప్రమాదం ఏర్పడవచ్చు. ఈ అనుమతికి పరిమితి విధించడం వలన ఈ యాప్‌ను పని చేయకుండా నిరోధించవచ్చు."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"మరింత తెలుసుకోండి"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"సరే"</string>
 </resources>

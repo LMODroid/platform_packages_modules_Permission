@@ -76,8 +76,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-@VisibleForTesting
-const val PROPERTY_SC_ACCESSIBILITY_SOURCE_ENABLED = "sc_accessibility_source_enabled"
 const val PROPERTY_SC_ACCESSIBILITY_LISTENER_ENABLED = "sc_accessibility_listener_enabled"
 const val SC_ACCESSIBILITY_SOURCE_ID = "AndroidAccessibility"
 const val SC_ACCESSIBILITY_REMOVE_ACCESS_ACTION_ID = "revoke_accessibility_app_access"
@@ -86,14 +84,6 @@ private const val DEBUG = false
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU)
 private fun isAccessibilitySourceSupported(): Boolean {
     return SdkLevel.isAtLeastT()
-}
-
-fun isAccessibilitySourceEnabled(): Boolean {
-    return DeviceConfig.getBoolean(
-        DeviceConfig.NAMESPACE_PRIVACY,
-        PROPERTY_SC_ACCESSIBILITY_SOURCE_ENABLED,
-        true
-    )
 }
 
 /** cts test needs to disable the listener. */
@@ -907,11 +897,8 @@ class AccessibilityJobService : JobService() {
                 Log.i(LOG_TAG, "Accessibility privacy source job already running")
                 return false
             }
-            if (
-                !isAccessibilitySourceEnabled() ||
-                    !isSafetyCenterEnabled(this@AccessibilityJobService)
-            ) {
-                Log.i(LOG_TAG, "either privacy source or safety center is not enabled")
+            if (!isSafetyCenterEnabled(this@AccessibilityJobService)) {
+                Log.i(LOG_TAG, "safety center is not enabled")
                 jobFinished(params, false)
                 mCurrentJob = null
                 return false
@@ -964,9 +951,7 @@ class SafetyCenterAccessibilityListener(val context: Context) :
             return
         }
 
-        if (
-            !isAccessibilitySourceEnabled() || !isSafetyCenterEnabled(context) || isProfile(context)
-        ) {
+        if (!isSafetyCenterEnabled(context) || isProfile(context)) {
             Log.i(LOG_TAG, "accessibility event occurred, safety center feature not enabled.")
             return
         }

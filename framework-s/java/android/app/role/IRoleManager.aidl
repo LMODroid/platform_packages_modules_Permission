@@ -74,6 +74,8 @@ interface IRoleManager {
 
     String getSmsRoleHolder(int userId);
 
+    String getEmergencyRoleHolder(int userId);
+
     boolean isRoleVisibleAsUser(in String roleName, int userId);
 
     boolean isApplicationVisibleForRoleAsUser(in String roleName, in String packageName,

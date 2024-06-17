@@ -22,8 +22,9 @@ import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
 import android.media.ImageReader;
 import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
 import android.util.DisplayMetrics;
+
+import androidx.test.filters.SmallTest;
 
 /**
  * Verify the capture system video output permission requirements.

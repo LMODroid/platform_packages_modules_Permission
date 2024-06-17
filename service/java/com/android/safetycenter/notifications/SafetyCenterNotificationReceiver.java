@@ -27,7 +27,6 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.android.internal.annotations.GuardedBy;
-import com.android.permission.util.UserUtils;
 import com.android.safetycenter.ApiLock;
 import com.android.safetycenter.PendingIntentFactory;
 import com.android.safetycenter.SafetyCenterDataChangeNotifier;
@@ -214,7 +213,7 @@ public final class SafetyCenterNotificationReceiver extends BroadcastReceiver {
         if (dismissedIssue != null) {
             SafetyCenterStatsdLogger.writeNotificationDismissedEvent(
                     issueKey.getSafetySourceId(),
-                    UserUtils.isManagedProfile(userId, context),
+                    UserProfileGroup.getProfileTypeOfUser(userId, context),
                     dismissedIssue.getIssueTypeId(),
                     dismissedIssue.getSeverityLevel());
         }
@@ -240,7 +239,7 @@ public final class SafetyCenterNotificationReceiver extends BroadcastReceiver {
         if (issue != null) {
             SafetyCenterStatsdLogger.writeNotificationActionClickedEvent(
                     issueKey.getSafetySourceId(),
-                    UserUtils.isManagedProfile(issueKey.getUserId(), context),
+                    UserProfileGroup.getProfileTypeOfUser(issueKey.getUserId(), context),
                     issue.getIssueTypeId(),
                     issue.getSeverityLevel(),
                     SafetySourceIssues.isPrimaryAction(

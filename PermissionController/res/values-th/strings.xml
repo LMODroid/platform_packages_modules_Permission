@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"สิทธิ์ทั้งหมด"</string>
     <string name="other_permissions" msgid="2901186127193849594">"ความสามารถอื่นๆ ของแอป"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"คำขอสิทธิ์"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"ไม่สามารถติดตั้ง/ถอนการติดตั้งบน Wear"</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"โปรดเลือกข้อมูลที่อนุญาตให้ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; เข้าถึง"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"อัปเดต &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; แล้ว โปรดเลือกข้อมูลที่อนุญาตให้แอปนี้เข้าถึง"</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"ยกเลิก"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"นำสิทธิ์ออกหากไม่ได้ใช้งานแอป"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"นำสิทธิ์ออกและเพิ่มพื้นที่ว่าง"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"หยุดกิจกรรมบนแอปไว้ชั่วคราวหากไม่ได้ใช้"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"จัดการแอปหากไม่ได้ใช้งาน"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"นำสิทธิ์ออก ลบไฟล์ชั่วคราว และหยุดการแจ้งเตือน"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"นำสิทธิ์ออก ลบไฟล์ชั่วคราว หยุดการแจ้งเตือน และเก็บแอป"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"หากคุณไม่ได้ใช้งานแอปนาน 2-3 เดือน ระบบจะนำสิทธิ์ของ​แอปนี้ออกเพื่อปกป้องข้อมูลของคุณ"</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"หากไม่มีการใช้งานแอปนาน 2-3 เดือน ระบบจะปกป้องข้อมูลของคุณด้วยการนำสิทธิ์ต่อไปนี้ออก ได้แก่ <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"ระบบนำสิทธิ์ออกจากแอปที่คุณไม่ได้ใช้งานนาน 2-3 เดือนเพื่อปกป้องข้อมูลของคุณ"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"แอปโน้ต"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"แอปที่ให้คุณจดโน้ตในอุปกรณ์ได้"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"บันทึก"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"แอปกระเป๋าเงินเริ่มต้น"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"แอปกระเป๋าเงิน"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"แอปกระเป๋าเงินสามารถจัดเก็บบัตรเครดิต บัตรสะสมคะแนน กุญแจรถยนต์ รวมถึงสิ่งอื่นๆ เพื่อช่วยในการทำธุรกรรมรูปแบบต่างๆ"</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"ตั้งค่า <xliff:g id="APP_NAME">%1$s</xliff:g> เป็นแอปกระเป๋าเงินเริ่มต้นไหม"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"ไม่ต้องใช้สิทธิ์"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"แอปเริ่มต้นปัจจุบัน"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"ไม่ต้องถามอีก"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"ตั้งเป็นแอปเริ่มต้น"</string>
@@ -461,10 +466,10 @@
     <string name="permgrouprequest_contacts" msgid="8391550064551053695">"อนุญาตให้ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; เข้าถึงรายชื่อติดต่อไหม"</string>
     <string name="permgrouprequest_device_aware_contacts" msgid="2270563860206654757">"อนุญาตให้ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; เข้าถึงรายชื่อติดต่อบน&lt;b&gt;<xliff:g id="DEVICE">%2$s</xliff:g>&lt;/b&gt;ไหม"</string>
     <string name="permgrouprequest_location" msgid="6990232580121067883">"อนุญาตให้ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; เข้าถึงตำแหน่งของอุปกรณ์นี้ไหม"</string>
-    <string name="permgrouprequest_device_aware_location" msgid="6641436550953715107">"อนุญาตให้ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; เข้าถึงตำแหน่งของ&lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>&lt;/b&gt;ไหม"</string>
+    <string name="permgrouprequest_device_aware_location" msgid="6641436550953715107">"อนุญาตให้ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; เข้าถึงตำแหน่งของ &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>&lt;/b&gt; ไหม"</string>
     <string name="permgrouprequestdetail_location" msgid="2635935335778429894">"แอปจะมีสิทธิ์เข้าถึงตำแหน่งในขณะที่คุณใช้แอปเท่านั้น"</string>
     <string name="permgroupbackgroundrequest_location" msgid="1085680897265734809">"อนุญาตให้ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; เข้าถึงตำแหน่งของอุปกรณ์นี้ไหม"</string>
-    <string name="permgroupbackgroundrequest_device_aware_location" msgid="7660465507029650527">"อนุญาตให้ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; เข้าถึงตำแหน่งของ&lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>ไหม"</string>
+    <string name="permgroupbackgroundrequest_device_aware_location" msgid="7660465507029650527">"อนุญาตให้ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; เข้าถึงตำแหน่งของ &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g> ไหม"</string>
     <string name="permgroupbackgroundrequestdetail_location" msgid="8021219324989662957">"แอปนี้อาจต้องการเข้าถึงตำแหน่งของคุณตลอดเวลา แม้ในขณะที่คุณไม่ได้ใช้แอป โปรด"<annotation id="link">"อนุญาตในการตั้งค่า"</annotation></string>
     <string name="permgroupupgraderequest_location" msgid="8328408946822691636">"เปลี่ยนการเข้าถึงตำแหน่งสำหรับ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ไหม"</string>
     <string name="permgroupupgraderequest_device_aware_location" msgid="4528266408056426513">"เปลี่ยนแปลงสิทธิ์เข้าถึงตำแหน่งของ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; บน&lt;b&gt;<xliff:g id="DEVICE">%2$s</xliff:g>&lt;/b&gt;ไหม"</string>
@@ -610,7 +615,7 @@
     <string name="mic_toggle_title" msgid="2649991093496110162">"สิทธิ์เข้าถึงไมโครโฟน"</string>
     <string name="perm_toggle_description" msgid="7801326363741451379">"สำหรับแอปและบริการ"</string>
     <string name="mic_toggle_description" msgid="9163104307990677157">"สำหรับแอปและบริการ หากปิดการตั้งค่านี้ ระบบอาจยังคงแชร์ข้อมูลไมโครโฟนเมื่อคุณโทรหาหมายเลขฉุกเฉิน"</string>
-    <string name="location_settings_subtitle" msgid="2328360561197430695">"ดูแอปและบริการที่มีสิทธิ์เข้าถึงสถานที่ตั้ง"</string>
+    <string name="location_settings_subtitle" msgid="2328360561197430695">"ดูแอปและบริการที่มีสิทธิ์เข้าถึงตำแหน่ง"</string>
     <string name="show_clip_access_notification_title" msgid="5168467637351109096">"แสดงการเข้าถึงคลิปบอร์ด"</string>
     <string name="show_clip_access_notification_summary" msgid="3532020182782112687">"แสดงข้อความเมื่อแอปเข้าถึงข้อความ รูปภาพ หรือเนื้อหาอื่นๆ ที่คุณคัดลอก"</string>
     <string name="show_password_title" msgid="2877269286984684659">"แสดงรหัสผ่าน"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"การอัปเดตการแชร์ข้อมูล"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"มีบางแอปเปลี่ยนแปลงวิธีที่แอปอาจแชร์ข้อมูลตำแหน่งของคุณ"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"การตั้งค่า"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"เข้าถึงตอน <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"เข้าถึงเมื่อวานตอน <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"เข้าถึงเมื่อวันที่ <xliff:g id="TIME_DATE_0">%1$s</xliff:g> ตอน <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"รหัสผ่านที่สามารถใช้งานได้เพียงครั้งเดียวของคุณคือ 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"การตั้งค่าที่จำกัด"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"การตั้งค่านี้ใช้ไม่ได้ในตอนนี้เพื่อความปลอดภัยของคุณ"</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"ปฏิเสธสิทธิ์ในการใช้ <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> แล้ว"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"แอปนี้ได้ขอสิทธิ์ <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> ซึ่งเป็นการตั้งค่าที่ถูกจำกัด เนื่องจากอาจทำให้ความปลอดภัยและความเป็นส่วนตัวของคุณตกอยู่ในความเสี่ยง การจำกัดสิทธิ์นี้อาจทำให้แอปนี้ไม่ทำงาน"</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"ดูข้อมูลเพิ่มเติม"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"รับทราบ"</string>
 </resources>

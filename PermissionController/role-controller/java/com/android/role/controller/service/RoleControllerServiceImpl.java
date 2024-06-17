@@ -131,10 +131,12 @@ public class RoleControllerServiceImpl extends RoleControllerService {
                 String packageName = currentPackageNames.get(currentPackageNamesIndex);
 
                 if (role.isPackageQualifiedAsUser(packageName, mUser, mContext)) {
-                    // We should not override user set or fixed permissions because we are only
-                    // redoing the grant here. Otherwise, user won't be able to revoke permissions
-                    // granted by role.
-                    addRoleHolderInternal(role, packageName, false, false, true);
+                    if (!role.shouldOnlyGrantWhenAdded()) {
+                        // We should not override user set or fixed permissions because we are only
+                        // redoing the grant here. Otherwise, user won't be able to revoke
+                        // permissions granted by role.
+                        addRoleHolderInternal(role, packageName, false, false, true);
+                    }
                 } else {
                     Log.i(LOG_TAG, "Removing package that no longer qualifies for the role,"
                             + " package: " + packageName + ", role: " + roleName);

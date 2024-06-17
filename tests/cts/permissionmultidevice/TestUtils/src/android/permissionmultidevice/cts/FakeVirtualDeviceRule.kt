@@ -26,6 +26,7 @@ class FakeVirtualDeviceRule : FakeAssociationRule() {
 
     private lateinit var virtualDeviceManager: VirtualDeviceManager
     lateinit var virtualDevice: VirtualDeviceManager.VirtualDevice
+    lateinit var deviceDisplayName: String
     var virtualDisplayId: Int = -1
 
     override fun before() {
@@ -57,6 +58,10 @@ class FakeVirtualDeviceRule : FakeAssociationRule() {
                 )
             Truth.assertThat(display).isNotNull()
             virtualDisplayId = display!!.display.displayId
+            deviceDisplayName =
+                virtualDeviceManager
+                    .getDisplayNameForPersistentDeviceId(virtualDevice.persistentDeviceId!!)
+                    .toString()
         }
     }
 

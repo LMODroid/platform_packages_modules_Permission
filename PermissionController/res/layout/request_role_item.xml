@@ -24,28 +24,23 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:duplicateParentState="true"
         style="@style/RequestRoleItemIcon" />
 
     <LinearLayout
         android:id="@+id/title_and_subtitle"
-        android:duplicateParentState="true"
         style="@style/RequestRoleItemTitleLayout">
 
         <TextView
             android:id="@+id/title"
-            android:duplicateParentState="true"
             style="@style/RequestRoleItemTitleText" />
 
         <TextView
             android:id="@+id/subtitle"
-            android:duplicateParentState="true"
             style="@style/RequestRoleItemSubtitleText" />
     </LinearLayout>
 
     <RadioButton
         android:clickable="false"
-        android:duplicateParentState="true"
         android:focusable="false"
         style="@style/RequestRoleItemRadioButton" />
 </com.android.permissioncontroller.role.ui.CheckableLinearLayout>

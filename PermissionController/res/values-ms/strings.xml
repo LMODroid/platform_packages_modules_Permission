@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Semua kebenaran"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Keupayaan apl lain"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Permintaan kebenaran"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Tindakan pasang/nyahpasang tidak disokong pada Wear."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Pilih perkara yang boleh diakses oleh &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; telah dikemas kini. Pilih perkara yang boleh diakses oleh apl ini."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Batal"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Alih keluar kebenaran jika apl tidak digunakan"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Alih keluar kebenaran dan kosongkan ruang"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Jeda aktiviti apl jika tidak digunakan"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Urus apl jika tidak digunakan"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Alih keluar kebenaran, padamkan fail sementara dan hentikan pemberitahuan"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Alih keluar kebenaran, padamkan fail sementara, hentikan pemberitahuan dan arkibkan apl tersebut"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Untuk melindungi data anda, kebenaran apl ini akan dialih keluar jika apl tidak digunakan selama beberapa bulan."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Untuk melindungi data anda, jika apl tidak digunakan selama beberapa bulan, kebenaran berikut akan dialih keluar: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Untuk melindungi data anda, kebenaran telah dialih keluar daripada apl yang tidak anda gunakan selama beberapa bulan."</string>
@@ -249,7 +249,7 @@
     <string name="app_permission_never_accessed_denied_summary" msgid="6596000497490905146">"Ditolak / Tidak pernah mengakses"</string>
     <string name="allowed_header" msgid="7769277978004790414">"Dibenarkan"</string>
     <string name="allowed_always_header" msgid="6455903312589013545">"Dibenarkan sepanjang masa"</string>
-    <string name="allowed_foreground_header" msgid="6845655788447833353">"Dibenarkan hanya semasa dalam penggunaan"</string>
+    <string name="allowed_foreground_header" msgid="6845655788447833353">"Dibenarkan hanya semasa digunakan"</string>
     <string name="allowed_storage_scoped" msgid="5383645873719086975">"Dibenarkan mengakses media sahaja"</string>
     <string name="allowed_storage_full" msgid="5356699280625693530">"Dibenarkan mengurus semua fail"</string>
     <string name="ask_header" msgid="2633816846459944376">"Tanya setiap kali"</string>
@@ -377,7 +377,7 @@
     <string name="role_emergency_search_keywords" msgid="1920007722599213358">"ice"</string>
     <string name="role_home_label" msgid="3871847846649769412">"Apl skrin utama lalai"</string>
     <string name="role_home_short_label" msgid="8544733747952272337">"Apl skrin utama"</string>
-    <string name="role_home_description" msgid="7997371519626556675">"Apl, yang sering dipanggil pelancar, yang menggantikan Skrin Utama pada peranti Android anda dan memberi anda akses kepada kandungan dan ciri peranti anda"</string>
+    <string name="role_home_description" msgid="7997371519626556675">"Apl, yang sering dipanggil pelancar, yang menggantikan Skrin Utama pada peranti Android dan memberi anda akses kepada kandungan dan ciri peranti anda"</string>
     <string name="role_home_request_title" msgid="738136983453341081">"Tetapkan <xliff:g id="APP_NAME">%1$s</xliff:g> sebagai apl skrin utama lalai anda?"</string>
     <string name="role_home_request_description" msgid="2658833966716057673">"Kebenaran tidak diperlukan"</string>
     <string name="role_home_search_keywords" msgid="3830755001192666285">"pelancar"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Apl nota"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Apl yang membolehkan anda mengambil nota pada peranti anda"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"nota"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Apl dompet lalai"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Apl dompet"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Apl dompet boleh menyimpan kad kredit dan kad kesetiaan, kunci kereta dan perkara lain untuk membantu pelbagai bentuk transaksi."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Tetapkan <xliff:g id="APP_NAME">%1$s</xliff:g> sebagai apl dompet lalai anda?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Kebenaran tidak diperlukan"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Lalai semasa"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Jangan tanya lagi"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Tetapkan sbg lalai"</string>
@@ -461,7 +466,7 @@
     <string name="permgrouprequest_contacts" msgid="8391550064551053695">"Benarkan &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; mengakses kenalan anda?"</string>
     <string name="permgrouprequest_device_aware_contacts" msgid="2270563860206654757">"Benarkan &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; mengakses kenalan anda pada &lt;b&gt;<xliff:g id="DEVICE">%2$s</xliff:g>&lt;/b&gt; anda?"</string>
     <string name="permgrouprequest_location" msgid="6990232580121067883">"Benarkan &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; mengakses lokasi peranti ini?"</string>
-    <string name="permgrouprequest_device_aware_location" msgid="6641436550953715107">"Benarkan &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; mengakses lokasi &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>s&lt;/b&gt; anda?"</string>
+    <string name="permgrouprequest_device_aware_location" msgid="6641436550953715107">"Benarkan &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; mengakses lokasi &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>&lt;/b&gt; anda?"</string>
     <string name="permgrouprequestdetail_location" msgid="2635935335778429894">"Apl ini hanya dapat mengakses lokasi semasa anda menggunakan apl tersebut"</string>
     <string name="permgroupbackgroundrequest_location" msgid="1085680897265734809">"Benarkan &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; mengakses lokasi peranti ini?"</string>
     <string name="permgroupbackgroundrequest_device_aware_location" msgid="7660465507029650527">"Benarkan &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; mengakses lokasi &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g> anda?"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Kemaskinian perkongsian data"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Sesetengah apl mengubah cara apl itu boleh berkongsi data lokasi anda"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Tetapan"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Diakses <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Diakses semalam <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Diakses <xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Kata laluan sekali guna anda ialah 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Tetapan terhad"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Untuk keselamatan anda, tetapan ini tidak tersedia pada masa ini."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Kebenaran untuk menggunakan <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> telah ditolak"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Apl ini telah meminta kebenaran <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> yang merupakan tetapan yang dihadkan kerana kebenaran ini boleh merisikokan keselamatan &amp; privasi anda. Pengehadan terhadap kebenaran ini mungkin menghalang apl ini daripada berfungsi."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Ketahui lebih lanjut"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"OK"</string>
 </resources>

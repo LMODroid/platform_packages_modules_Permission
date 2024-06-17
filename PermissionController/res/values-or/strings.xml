@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"ସମସ୍ତ ଅନୁମତିଗୁଡ଼ିକ"</string>
     <string name="other_permissions" msgid="2901186127193849594">"ଅନ୍ୟାନ୍ୟ ଆପ୍‍ ଦକ୍ଷତା"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"ଅନୁମତି ଅନୁରୋଧ"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android ୱିୟର୍‌"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"ୱିୟର୍‌ରେ ଇନଷ୍ଟଲ୍‍/ଅନଇନଷ୍ଟଲ୍‍ କାର୍ଯ୍ୟଗୁଡ଼ିକ ସମର୍ଥନ କରେନାହିଁ।"</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ଆକ୍ସେସ୍‍ କରିବା ପାଇଁ କେଉଁସବୁ ଅନୁମତି ଦିଆଯିବ, ତାହା ବାଛନ୍ତୁ"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ଅପଡେଟ୍‍ କରାଯାଇଛି। ଏହି ଆପ୍‍ କେଉଁସବୁ ଆକ୍ସେସ୍‍ କରିପାରିବ, ତାହା ବାଛନ୍ତୁ।"</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"ବାତିଲ କରନ୍ତୁ"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"ଯଦି ଆପ୍ ବ୍ୟବହାର କରାଯାଇନାହିଁ, ତେବେ ଅନୁମତିଗୁଡ଼ିକୁ କାଢ଼ି ଦିଅନ୍ତୁ"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"ଅନୁମତିଗୁଡ଼ିକୁ କାଢ଼ି ସ୍ପେସ୍ ଖାଲି କରନ୍ତୁ"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"ବ୍ୟବହାର ହେଉନଥିଲେ ଆପ କାର୍ଯ୍ୟକଳାପ ବିରତ କରନ୍ତୁ"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"ଆପକୁ ବ୍ୟବହାର କରାଯାଉନଥିଲେ ପରିଚାଳନା କରନ୍ତୁ"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"ଅନୁମତିଗୁଡ଼ିକୁ କାଢ଼ି ଦିଅନ୍ତୁ, ଅସ୍ଥାୟୀ ଫାଇଲଗୁଡ଼ିକୁ ଡିଲିଟ କରନ୍ତୁ ଏବଂ ବିଜ୍ଞପ୍ତିଗୁଡ଼ିକୁ ବନ୍ଦ କରନ୍ତୁ"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"ଅନୁମତିଗୁଡ଼ିକୁ କାଢ଼ି ଦିଅନ୍ତୁ, ଅସ୍ଥାୟୀ ଫାଇଲଗୁଡ଼ିକୁ ଡିଲିଟ କରନ୍ତୁ, ବିଜ୍ଞପ୍ତିଗୁଡ଼ିକୁ ବନ୍ଦ କରନ୍ତୁ ଏବଂ ଆପକୁ ଆର୍କାଇଭ କରନ୍ତୁ"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"ଯଦି ଏହି ଆପକୁ କିଛି ମାସ ପାଇଁ ବ୍ୟବହାର କରାଯାଇନାହିଁ, ତେବେ ଆପଣଙ୍କ ଡାଟାର ସୁରକ୍ଷା ନିମନ୍ତେ ଏହାର ଅନୁମତିଗୁଡ଼ିକୁ କାଢ଼ି ଦିଆଯିବ।"</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"ଯଦି ଏହି ଆପକୁ କିଛି ମାସ ପାଇଁ ବ୍ୟବହାର କରାଯାଇନାହିଁ ତେବେ ଆପଣଙ୍କ ଡାଟାର ସୁରକ୍ଷା ନିମନ୍ତେ, ନିମ୍ନୋକ୍ତ ଅନୁମତିଗୁଡ଼ିକୁ କାଢ଼ି ଦିଆଯିବ: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"ଆପଣଙ୍କ ଡାଟାର ସୁରକ୍ଷା ପାଇଁ, ଆପଣ କିଛି ମାସ ହେଲା ବ୍ୟବହାର କରିନଥିବା ଆପଗୁଡ଼ିକରୁ ଅନୁମତିଗୁଡ଼ିକୁ କାଢ଼ି ଦିଆଯାଇଛି।"</string>
@@ -354,10 +354,10 @@
     <string name="role_assistant_description" msgid="6622458130459922952">"ଆପଣ ଦେଖୁଥିବା ସ୍କ୍ରିନ୍‌ ସୂଚନାକୁ ଆଧାର କରି ସହାୟକ ଆପ୍‌ ଆପଣଙ୍କୁ ସାହାଯ୍ୟ କରିପାରିବ। କେତେକ ଆପ୍‌, ଆପଣଙ୍କୁ ଉତ୍ତମ ସହାୟତା ଦେବା ପାଇଁ, ଉଭୟ ଲଞ୍ଚର୍ ଓ ଭଏସ୍‍ ଇନପୁଟ୍‍ ସେବାକୁ ସମର୍ଥନ କରେ।"</string>
     <string name="role_browser_label" msgid="2877796144554070207">"ଡିଫଲ୍ଟ ବ୍ରାଉଜର୍‌ ଆପ୍‌"</string>
     <string name="role_browser_short_label" msgid="6745009127123292296">"ବ୍ରାଉଜର୍‌ ଆପ୍‌"</string>
-    <string name="role_browser_description" msgid="3465253637499842671">"ଆପ୍ସ ଯାହା ଆପଣଙ୍କୁ ଇଣ୍ଟର୍ନେଟ୍ ପାଇଁ ଆକ୍ସେସ୍ ଦିଏ ଏବଂ ଆପଣ ଟାପ୍ କରିଥିବା ଲିଙ୍କ୍‌ଗୁଡ଼ିକ ପ୍ରଦର୍ଶନ କରେ"</string>
+    <string name="role_browser_description" msgid="3465253637499842671">"ଆପ୍ସ ଯାହା ଆପଣଙ୍କୁ ଇଣ୍ଟର୍ନେଟ ପାଇଁ ଆକ୍ସେସ ଦିଏ ଏବଂ ଆପଣ ଟାପ କରୁଥିବା ଲିଙ୍କଗୁଡ଼ିକୁ ଡିସପ୍ଲେ କରେ"</string>
     <string name="role_browser_request_title" msgid="2895200507835937192">"<xliff:g id="APP_NAME">%1$s</xliff:g>କୁ ଆପଣଙ୍କ ଡିଫଲ୍ଟ ବ୍ରାଉଜର୍ ଭାବେ ସେଟ୍ କରିବେ କି?"</string>
     <string name="role_browser_request_description" msgid="5888803407905985941">"କୌଣସି ଅନୁମତି ଆବଶ୍ୟକ ନାହିଁ"</string>
-    <string name="role_dialer_label" msgid="1100224146343237968">"ଡିଫଲ୍ଟ ଫୋନ୍‌ ଆପ୍‌"</string>
+    <string name="role_dialer_label" msgid="1100224146343237968">"ଡିଫଲ୍ଟ ଫୋନ ଆପ"</string>
     <string name="role_dialer_short_label" msgid="7186888549465352489">"ଫୋନ୍ ଆପ୍"</string>
     <string name="role_dialer_description" msgid="8768708633696539612">"ଆପ୍ସ, ଯାହା ଆପଣଙ୍କୁ ଆପଣଙ୍କର ଡିଭାଇସ୍‌ରେ ଟେଲିଫୋନ୍ କଲ୍ କରିବାକୁ ଏବଂ ଗ୍ରହଣ କରିବାକୁ ଅନୁମତି ଦିଏ"</string>
     <string name="role_dialer_request_title" msgid="5959618560705912058">"<xliff:g id="APP_NAME">%1$s</xliff:g>କୁ ଆପଣଙ୍କ ଡିଫଲ୍ଟ ଫୋନ୍ ଆପ୍ ଭାବରେ ସେଟ୍ କରିବେ କି?"</string>
@@ -386,7 +386,7 @@
     <string name="role_call_redirection_description" msgid="6091669882014664420">"ସେହି ଆପ୍ସ ଯାହା ଆଉଟ୍‌ଗୋଇଂ କଲ୍‍ଗୁଡ଼ିକୁ ଅନ୍ୟ ଏକ ଫୋନ୍ ନମ୍ବରକୁ ଫର୍‍ୱାର୍ଡ କରିବାକୁ ଆପଣଙ୍କୁ ଅନୁମତି ଦିଏ"</string>
     <string name="role_call_redirection_request_title" msgid="2816244455003562925">"<xliff:g id="APP_NAME">%1$s</xliff:g>କୁ ଆପଣଙ୍କ ଡିଫଲ୍ଟ କଲ୍ ପୁନଃନିର୍ଦ୍ଦେଶନା ଆପ୍ ଭାବରେ ସେଟ୍ କରିବେ କି?"</string>
     <string name="role_call_redirection_request_description" msgid="3118895714178527164">"କୌଣସି ଅନୁମତି ଆବଶ୍ୟକ ନାହିଁ"</string>
-    <string name="role_call_screening_label" msgid="883935222060878724">"ଡିଫଲ୍ଟ କଲର୍ ID &amp; ସ୍ପାମ୍ ଆପ୍"</string>
+    <string name="role_call_screening_label" msgid="883935222060878724">"ଡିଫଲ୍ଟ କଲର ID ଏବଂ ସ୍ପାମ ଆପ"</string>
     <string name="role_call_screening_short_label" msgid="2048465565063130834">"କଲର୍ ID &amp; ସ୍ପାମ୍ ଆପ୍"</string>
     <string name="role_call_screening_description" msgid="2349431420497468981">"ସେହି ଆପ୍ସ ଯାହା କଲଗୁଡ଼ିକୁ ଚିହ୍ନଟ କରିବା, ସ୍ପାମ୍ ଓ ରୋବୋକଲ୍ ବା ଅଦରକାରୀ ନମ୍ବରଗୁଡ଼ିକୁ ବ୍ଲକ୍ କରିବାକୁ ଅନୁମତି ଦିଏ"</string>
     <string name="role_call_screening_request_title" msgid="7358309224566977290">"<xliff:g id="APP_NAME">%1$s</xliff:g>କୁ ଆପଣଙ୍କର ଡିଫଲ୍ଟ କଲର୍ ଆଇଡି &amp; ସ୍ପାମ୍ ଆପ୍ ଭାବ୍ ସେଟ୍ କରିବେ କି?"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"ନୋଟ୍ସ ଆପ"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"ଆପଣଙ୍କ ଡିଭାଇସରେ ଆପଣଙ୍କୁ ନୋଟ ନେବା ପାଇଁ ଅନୁମତି ଦେଉଥିବା ଆପ୍ସ"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"ନୋଟ"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"ଡିଫଲ୍ଟ ୱାଲେଟ ଆପ"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"ୱାଲେଟ ଆପ"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"ବିଭିନ୍ନ ପ୍ରକାରର ଟ୍ରାଞ୍ଜେକସନରେ ସାହାଯ୍ୟ କରିବାକୁ ୱାଲେଟ ଆପ୍ସ ଆପଣଙ୍କ କ୍ରେଡିଟ ଓ ଲୟାଲ୍ଟି କାର୍ଡ, କାର କୀ ଏବଂ ଅନ୍ୟ ଜିନିଷଗୁଡ଼ିକୁ ଷ୍ଟୋର କରିପାରିବ।"</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"<xliff:g id="APP_NAME">%1$s</xliff:g>କୁ ଆପଣଙ୍କ ଡିଫଲ୍ଟ ୱାଲେଟ ଆପ ଭାବେ ସେଟ କରିବେ?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"କୌଣସି ଅନୁମତି ଆବଶ୍ୟକ ନାହିଁ"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"ସମ୍ପ୍ରତ୍ତି ଡିଫଲ୍ଟ"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"ଆଉ ପଚାରନ୍ତୁ ନାହିଁ"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"ଡିଫଲ୍ଟ ଭାବେ ସେଟ୍ କରନ୍ତୁ"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"ଡାଟା ସେୟାରିଂ ଅପଡେଟଗୁଡ଼ିକ"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"କିଛି ଆପ୍ସ ଆପଣଙ୍କ ଲୋକେସନ ଡାଟା ସେୟାର କରିବା ଉପାୟକୁ ପରିବର୍ତ୍ତନ କରିଛି"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"ସେଟିଂସ"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"<xliff:g id="TIME_DATE">%1$s</xliff:g>ରେ ଆକ୍ସେସ କରାଯାଇଛି"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"ଗତକାଲି <xliff:g id="TIME_DATE">%1$s</xliff:g>ରେ ଆକ୍ସେସ କରାଯାଇଛି"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"<xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>ରେ ଆକ୍ସେସ କରାଯାଇଛି"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"ଆପଣଙ୍କ ଗୋଟିଏ ଥରର ପାସୱାର୍ଡ ହେଉଛି 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"ପ୍ରତିବନ୍ଧିତ ସେଟିଂ"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"ଆପଣଙ୍କ ସୁରକ୍ଷା ପାଇଁ ଏହି ସେଟିଂ ବର୍ତ୍ତମାନ ଅନୁପଲବ୍ଧ ଅଟେ।"</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"<xliff:g id="PERMISSION_NAME">%1$s</xliff:g> ବ୍ୟବହାର କରିବା ପାଇଁ ଅନୁମତିକୁ ଅଗ୍ରାହ୍ୟ କରାଯାଇଛି"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"ଏହି ଆପ <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> ଅନୁମତି ପାଇଁ ଅନୁରୋଧ କରିଛି, ଯାହା ଏକ ପ୍ରତିବନ୍ଧିତ ସେଟିଂସ ଅଟେ କାରଣ ଏହା ଆପଣଙ୍କ ସୁରକ୍ଷା ଏବଂ ଗୋପନୀୟତାକୁ ବିପଦରେ ପକାଇପାରେ। ଏହି ଅନୁମତି ଉପରେ ପ୍ରତିବନ୍ଧକ ଏ ଆପକୁ କାର୍ଯ୍ୟ କରିବାରୁ ପ୍ରତିରୋଧ କରିପାରେ।"</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"ଅଧିକ ଜାଣନ୍ତୁ"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"ବୁଝିଗଲି"</string>
 </resources>

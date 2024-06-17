@@ -21,7 +21,7 @@
     <string name="biometrics_title_for_work" msgid="1842284049407771568">"用於工作應用程式的生物識別選項"</string>
     <string name="privacy_sources_summary" msgid="4083646673569677049">"權限、資訊主頁、控制項"</string>
     <string name="health_connect_title" msgid="8318152190040327804">"Health Connect"</string>
-    <string name="health_connect_search_terms" msgid="4998970586245680829">"健康, Health Connect"</string>
+    <string name="health_connect_search_terms" msgid="4998970586245680829">"健康, 健康資料同步"</string>
     <string name="app_data_sharing_updates_title" msgid="7428862330643262588">"位置資料分享更新"</string>
     <string name="app_data_sharing_updates_search_terms" msgid="8414777373734245398">"資料, 資料分享, 資料分享更新, 位置資料分享更新, 分享"</string>
     <string name="advanced_title" msgid="6259362998269627310">"其他設定"</string>

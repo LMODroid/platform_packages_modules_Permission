@@ -17,25 +17,27 @@
 package com.android.permissioncontroller.role.ui.auto;
 
 import android.content.Context;
+import android.content.Intent;
 import android.widget.RadioButton;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.TypedArrayUtils;
 import androidx.preference.PreferenceViewHolder;
 import androidx.preference.TwoStatePreference;
 
 import com.android.permissioncontroller.R;
+import com.android.permissioncontroller.role.ui.RestrictionAwarePreferenceMixin;
 import com.android.permissioncontroller.role.ui.RoleApplicationPreference;
-import com.android.permissioncontroller.role.ui.UserRestrictionAwarePreferenceMixin;
 
 /** Preference used to represent apps that can be picked as a default app. */
 public class AutoRadioPreference extends TwoStatePreference implements
         RoleApplicationPreference {
 
-    private final UserRestrictionAwarePreferenceMixin mUserRestrictionAwarePreferenceMixin =
-            new UserRestrictionAwarePreferenceMixin(this);
+    private final RestrictionAwarePreferenceMixin mRestrictionAwarePreferenceMixin =
+            new RestrictionAwarePreferenceMixin(this);
 
-    public AutoRadioPreference(Context context) {
+    public AutoRadioPreference(@NonNull Context context) {
         super(context, null,
                 TypedArrayUtils.getAttr(context, androidx.preference.R.attr.preferenceStyle,
                         android.R.attr.preferenceStyle));
@@ -48,20 +50,21 @@ public class AutoRadioPreference extends TwoStatePreference implements
     }
 
     @Override
-    public void onBindViewHolder(PreferenceViewHolder holder) {
+    public void onBindViewHolder(@NonNull PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
 
         RadioButton radioButton = (RadioButton) holder.findViewById(R.id.radio_button);
         radioButton.setChecked(isChecked());
 
-        mUserRestrictionAwarePreferenceMixin.onAfterBindViewHolder(holder);
+        mRestrictionAwarePreferenceMixin.onAfterBindViewHolder(holder);
     }
 
     @Override
-    public void setUserRestriction(@Nullable String userRestriction) {
-        mUserRestrictionAwarePreferenceMixin.setUserRestriction(userRestriction);
+    public void setRestrictionIntent(@Nullable Intent restrictionIntent) {
+        mRestrictionAwarePreferenceMixin.setRestrictionIntent(restrictionIntent);
     }
 
+    @NonNull
     @Override
     public AutoRadioPreference asTwoStatePreference() {
         return this;

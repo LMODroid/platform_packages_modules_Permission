@@ -27,7 +27,7 @@ object MultiDeviceUtils {
     @JvmStatic
     @ChecksSdkIntAtLeast(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     fun isDeviceAwareGrantFlowEnabled(): Boolean {
-        return SdkLevel.isAtLeastV() && Flags.deviceAwarePermissionGrant()
+        return SdkLevel.isAtLeastV() && Flags.deviceAwarePermissionGrantEnabled()
     }
 
     @JvmStatic

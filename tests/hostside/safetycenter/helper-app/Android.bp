@@ -15,6 +15,7 @@
 //
 
 package {
+    default_team: "trendy_team_safety_center",
     default_applicable_licenses: ["Android-Apache-2.0"],
 }
 
@@ -30,6 +31,7 @@ android_test_helper_app {
     static_libs: [
         "androidx.test.rules",
         "androidx.test.ext.junit",
+        "safety-center-pending-intents",
         "safety-center-test-util-lib",
     ],
 }

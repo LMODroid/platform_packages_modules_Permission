@@ -18,9 +18,11 @@ package android.safetycenter.config;
 
 import static android.os.Build.VERSION_CODES.TIRAMISU;
 import static android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE;
+import static android.os.Build.VERSION_CODES.VANILLA_ICE_CREAM;
 
 import static java.util.Objects.requireNonNull;
 
+import android.annotation.FlaggedApi;
 import android.annotation.IntDef;
 import android.annotation.NonNull;
 import android.annotation.Nullable;
@@ -34,6 +36,7 @@ import android.util.ArraySet;
 import androidx.annotation.RequiresApi;
 
 import com.android.modules.utils.build.SdkLevel;
+import com.android.permission.flags.Flags;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -182,6 +185,9 @@ public final class SafetySource implements Parcelable {
                             builder.addPackageCertificateHash(certs.get(i));
                         }
                     }
+                    if (SdkLevel.isAtLeastV() && Flags.privateProfileTitleApi()) {
+                        builder.setTitleForPrivateProfileResId(in.readInt());
+                    }
                     return builder.build();
                 }
 
@@ -207,6 +213,7 @@ public final class SafetySource implements Parcelable {
     private final boolean mNotificationsAllowed;
     @Nullable final String mDeduplicationGroup;
     @NonNull private final Set<String> mPackageCertificateHashes;
+    @StringRes private final int mTitleForPrivateProfileResId;
 
     private SafetySource(
             @SafetySourceType int type,
@@ -224,7 +231,8 @@ public final class SafetySource implements Parcelable {
             boolean refreshOnPageOpenAllowed,
             boolean notificationsAllowed,
             @Nullable String deduplicationGroup,
-            @NonNull Set<String> packageCertificateHashes) {
+            @NonNull Set<String> packageCertificateHashes,
+            @StringRes int titleForPrivateProfileResId) {
         mType = type;
         mId = id;
         mPackageName = packageName;
@@ -241,6 +249,7 @@ public final class SafetySource implements Parcelable {
         mNotificationsAllowed = notificationsAllowed;
         mDeduplicationGroup = deduplicationGroup;
         mPackageCertificateHashes = Set.copyOf(packageCertificateHashes);
+        mTitleForPrivateProfileResId = titleForPrivateProfileResId;
     }
 
     /** Returns the type of this safety source. */
@@ -344,6 +353,37 @@ public final class SafetySource implements Parcelable {
                     "getTitleForWorkResId unsupported for primary profile safety source");
         }
         return mTitleForWorkResId;
+    }
+
+    /**
+     * Returns the resource id of the title for private profile of this safety source.
+     *
+     * <p>The id refers to a string resource that is either accessible from any resource context or
+     * that is accessible from the same resource context that was used to load the Safety Center
+     * configuration. The id is {@link Resources#ID_NULL} when a title for private profile is not
+     * provided.
+     *
+     * @throws UnsupportedOperationException if the source is of type {@link
+     *     SafetySource#SAFETY_SOURCE_TYPE_ISSUE_ONLY} or if the profile property of the source is
+     *     set to {@link SafetySource#PROFILE_PRIMARY}
+     */
+    @FlaggedApi(Flags.FLAG_PRIVATE_PROFILE_TITLE_API)
+    @RequiresApi(VANILLA_ICE_CREAM)
+    @StringRes
+    public int getTitleForPrivateProfileResId() {
+        if (!SdkLevel.isAtLeastV()) {
+            throw new UnsupportedOperationException(
+                    "getTitleForPrivateProfileResId unsupported for SDKs lower than V");
+        }
+        if (mType == SAFETY_SOURCE_TYPE_ISSUE_ONLY) {
+            throw new UnsupportedOperationException(
+                    "getTitleForPrivateProfileResId unsupported for issue-only safety source");
+        }
+        if (mProfile == PROFILE_PRIMARY) {
+            throw new UnsupportedOperationException(
+                    "getTitleForPrivateProfileResId unsupported for primary profile safety source");
+        }
+        return mTitleForPrivateProfileResId;
     }
 
     /**
@@ -554,7 +594,8 @@ public final class SafetySource implements Parcelable {
                 && mRefreshOnPageOpenAllowed == that.mRefreshOnPageOpenAllowed
                 && mNotificationsAllowed == that.mNotificationsAllowed
                 && Objects.equals(mDeduplicationGroup, that.mDeduplicationGroup)
-                && Objects.equals(mPackageCertificateHashes, that.mPackageCertificateHashes);
+                && Objects.equals(mPackageCertificateHashes, that.mPackageCertificateHashes)
+                && mTitleForPrivateProfileResId == that.mTitleForPrivateProfileResId;
     }
 
     @Override
@@ -575,7 +616,8 @@ public final class SafetySource implements Parcelable {
                 mRefreshOnPageOpenAllowed,
                 mNotificationsAllowed,
                 mDeduplicationGroup,
-                mPackageCertificateHashes);
+                mPackageCertificateHashes,
+                mTitleForPrivateProfileResId);
     }
 
     @Override
@@ -613,6 +655,8 @@ public final class SafetySource implements Parcelable {
                 + mDeduplicationGroup
                 + ", mPackageCertificateHashes="
                 + mPackageCertificateHashes
+                + ", mTitleForPrivateProfileResId="
+                + mTitleForPrivateProfileResId
                 + '}';
     }
 
@@ -641,6 +685,9 @@ public final class SafetySource implements Parcelable {
             dest.writeString(mDeduplicationGroup);
             dest.writeStringList(List.copyOf(mPackageCertificateHashes));
         }
+        if (SdkLevel.isAtLeastV() && Flags.privateProfileTitleApi()) {
+            dest.writeInt(mTitleForPrivateProfileResId);
+        }
     }
 
     /** Builder class for {@link SafetySource}. */
@@ -662,6 +709,7 @@ public final class SafetySource implements Parcelable {
         @Nullable private Boolean mNotificationsAllowed;
         @Nullable private String mDeduplicationGroup;
         @NonNull private final ArraySet<String> mPackageCertificateHashes = new ArraySet<>();
+        @Nullable @StringRes private Integer mTitleForPrivateProfileResId;
 
         /** Creates a {@link Builder} for a {@link SafetySource}. */
         public Builder(@SafetySourceType int type) {
@@ -692,6 +740,7 @@ public final class SafetySource implements Parcelable {
             mNotificationsAllowed = safetySource.mNotificationsAllowed;
             mDeduplicationGroup = safetySource.mDeduplicationGroup;
             mPackageCertificateHashes.addAll(safetySource.mPackageCertificateHashes);
+            mTitleForPrivateProfileResId = safetySource.mTitleForPrivateProfileResId;
         }
 
         /**
@@ -755,6 +804,32 @@ public final class SafetySource implements Parcelable {
         @NonNull
         public Builder setTitleForWorkResId(@StringRes int titleForWorkResId) {
             mTitleForWorkResId = titleForWorkResId;
+            return this;
+        }
+
+        /**
+         * Sets the resource id of the title for private profile of this safety source.
+         *
+         * <p>The id must refer to a string resource that is either accessible from any resource
+         * context or that is accessible from the same resource context that was used to load the
+         * Safety Center configuration. The id defaults to {@link Resources#ID_NULL} when a title
+         * for private profile is not provided.
+         *
+         * <p>The title for private profile is required if the profile property of the source is set
+         * to {@link SafetySource#PROFILE_ALL} and either the source is of type static or the source
+         * is a source of type dynamic that is not hidden and that does not provide search terms.
+         * The title for private profile is prohibited for sources of type issue-only and if the
+         * profile property of the source is not set to {@link SafetySource#PROFILE_ALL}.
+         */
+        @FlaggedApi(Flags.FLAG_PRIVATE_PROFILE_TITLE_API)
+        @RequiresApi(VANILLA_ICE_CREAM)
+        @NonNull
+        public Builder setTitleForPrivateProfileResId(@StringRes int titleForPrivateProfileResId) {
+            if (!SdkLevel.isAtLeastV()) {
+                throw new UnsupportedOperationException(
+                        "setTitleForPrivateProfileResId unsupported for SDKs lower than V");
+            }
+            mTitleForPrivateProfileResId = titleForPrivateProfileResId;
             return this;
         }
 
@@ -984,7 +1059,7 @@ public final class SafetySource implements Parcelable {
                             PROFILE_NONE,
                             PROFILE_PRIMARY,
                             PROFILE_ALL);
-            boolean hasWork = profile == PROFILE_ALL;
+            boolean hasAllProfiles = profile == PROFILE_ALL;
 
             int searchTermsResId =
                     BuilderUtils.validateResId(
@@ -1000,8 +1075,8 @@ public final class SafetySource implements Parcelable {
                     BuilderUtils.validateResId(
                             mTitleForWorkResId,
                             "titleForWork",
-                            hasWork && titleRequired,
-                            !hasWork || isIssueOnly);
+                            hasAllProfiles && titleRequired,
+                            !hasAllProfiles || isIssueOnly);
 
             int summaryResId =
                     BuilderUtils.validateResId(
@@ -1052,6 +1127,16 @@ public final class SafetySource implements Parcelable {
                         packageCertificateHashes, "packageCertificateHashes", false, isStatic);
             }
 
+            int titleForPrivateProfileResId = Resources.ID_NULL;
+            if (SdkLevel.isAtLeastV() && Flags.privateProfileTitleApi()) {
+                titleForPrivateProfileResId =
+                        BuilderUtils.validateResId(
+                                mTitleForPrivateProfileResId,
+                                "titleForPrivateProfile",
+                                hasAllProfiles && titleRequired,
+                                !hasAllProfiles || isIssueOnly);
+            }
+
             return new SafetySource(
                     type,
                     id,
@@ -1068,7 +1153,8 @@ public final class SafetySource implements Parcelable {
                     refreshOnPageOpenAllowed,
                     notificationsAllowed,
                     deduplicationGroup,
-                    packageCertificateHashes);
+                    packageCertificateHashes,
+                    titleForPrivateProfileResId);
         }
     }
 }

@@ -27,7 +27,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.core.os.BundleCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.android.permissioncontroller.permission.ui.wear.setContent
+import com.android.permissioncontroller.permission.ui.wear.theme.WearPermissionTheme
 import com.android.permissioncontroller.role.ui.DefaultAppViewModel
 import com.android.permissioncontroller.role.ui.ManageRoleHolderStateLiveData
 import com.android.permissioncontroller.role.ui.wear.model.DefaultAppConfirmDialogViewModel
@@ -75,9 +75,17 @@ class WearDefaultAppFragment : Fragment() {
 
         return ComposeView(activity).apply {
             setContent {
-                WearDefaultAppScreen(
-                    WearDefaultAppHelper(activity, user, role, viewModel, confirmDialogViewModel)
-                )
+                WearPermissionTheme {
+                    WearDefaultAppScreen(
+                        WearDefaultAppHelper(
+                            activity,
+                            user,
+                            role,
+                            viewModel,
+                            confirmDialogViewModel
+                        )
+                    )
+                }
             }
         }
     }

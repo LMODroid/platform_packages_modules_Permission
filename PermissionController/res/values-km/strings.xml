@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"ការអនុញ្ញាត​ទាំងអស់"</string>
     <string name="other_permissions" msgid="2901186127193849594">"សមត្ថភាពកម្មវិធីផ្សេងទៀត"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"សំណើសុំ​ការអនុញ្ញាត"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"សកម្មភាព​ដំឡើង/លុបចេញមិនអាចប្រើ​នៅលើ Wear បានទេ។"</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"ជ្រើសរើស​អ្វីដែលត្រូវ​អនុញ្ញាតឱ្យ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ចូលប្រើ"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ត្រូវបាន​ដំឡើងជំនាន់។ ជ្រើសរើស​អ្វីដែលត្រូវ​អនុញ្ញាតឱ្យ​កម្មវិធីនេះ​ចូលប្រើ។"</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"បោះបង់"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"ដកការ​អនុញ្ញាតចេញ ប្រសិនបើ​មិនប្រើប្រាស់​កម្មវិធី"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"ដក​ការអនុញ្ញាតចេញ និងបង្កើន​ទំហំផ្ទុក"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"ផ្អាក​សកម្មភាព​កម្មវិធី ប្រសិនបើមិនប្រើ"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"គ្រប់គ្រងកម្មវិធី ប្រសិនបើមិនបានប្រើ"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"ដកការអនុញ្ញាតចេញ លុបឯកសារបណ្ដោះអាសន្ន និងបញ្ឈប់ការជូនដំណឹង"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"ដកការអនុញ្ញាតចេញ លុបឯកសារបណ្ដោះអាសន្ន បញ្ឈប់ការជូនដំណឹង និងទុកកម្មវិធីក្នុងបណ្ណសារ"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"ដើម្បីការពារ​ទិន្នន័យរបស់អ្នក ការអនុញ្ញាត​សម្រាប់កម្មវិធីនេះ​នឹងត្រូវ​ដកចេញ ប្រសិនបើ​មិនប្រើប្រាស់​កម្មវិធីនេះ​រយៈពេល​ពីរបីខែ។"</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"ដើម្បីការពារ​ទិន្នន័យរបស់អ្នក ការអនុញ្ញាត​ខាងក្រោម​នឹងត្រូវដកចេញ ប្រសិនបើ​មិនប្រើប្រាស់​កម្មវិធីនេះ​រយៈពេល​ពីរបីខែ៖ <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"ដើម្បីការពារ​ទិន្នន័យរបស់អ្នក ការអនុញ្ញាត​ត្រូវបាន​ដកចេញ​ពីកម្មវិធី​ដែល​អ្នកមិនបាន​ប្រើប្រាស់​រយៈពេល​ពីរបីខែ។"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"កម្មវិធី​កំណត់ចំណាំ"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"កម្មវិធីដែលអនុញ្ញាតឱ្យអ្នក​កត់ចំណាំនៅលើឧបករណ៍របស់អ្នក"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"កំណត់ចំណាំ"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"កម្មវិធីកាបូបលំនាំដើម"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"កម្មវិធីកាបូប"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"កម្មវិធីកាបូបអាចរក្សាទុកកាតឥណទាននិងកាតសមាជិក សោរថយន្ត និងអ្វីៗផ្សេងទៀតរបស់អ្នក ដើម្បីជួយពាក់ព័ន្ធនឹងទម្រង់ផ្សេងៗរបស់ប្រតិបត្តិការ។"</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"កំណត់ <xliff:g id="APP_NAME">%1$s</xliff:g> ជាកម្មវិធីកាបូបលំនាំដើមរបស់អ្នកឬ?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"មិនត្រូវការ​ការអនុញ្ញាត​ទេ"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"លំនាំដើម​បច្ចុប្បន្ន"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"កុំសួរទៀត"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"កំណត់ជាលំនាំដើម"</string>
@@ -461,7 +466,7 @@
     <string name="permgrouprequest_contacts" msgid="8391550064551053695">"អនុញ្ញាតឱ្យ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ចូលប្រើ​ទំនាក់ទំនង​របស់អ្នក?"</string>
     <string name="permgrouprequest_device_aware_contacts" msgid="2270563860206654757">"អនុញ្ញាតឱ្យ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ចូលប្រើទំនាក់ទំនងរបស់អ្នកនៅលើ &lt;b&gt;<xliff:g id="DEVICE">%2$s</xliff:g>&lt;/b&gt; របស់អ្នកឬ?"</string>
     <string name="permgrouprequest_location" msgid="6990232580121067883">"អនុញ្ញាតឱ្យ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ចូលប្រើ​ទីតាំងរបស់​ឧបករណ៍នេះ​ដែរទេ?"</string>
-    <string name="permgrouprequest_device_aware_location" msgid="6641436550953715107">"អនុញ្ញាតឱ្យ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ចូលប្រើទីតាំងនៃ &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>’s&lt;/b&gt; របស់អ្នកឬ?"</string>
+    <string name="permgrouprequest_device_aware_location" msgid="6641436550953715107">"អនុញ្ញាតឱ្យ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ចូលប្រើទីតាំងនៃ &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>&lt;/b&gt; របស់អ្នកឬ?"</string>
     <string name="permgrouprequestdetail_location" msgid="2635935335778429894">"កម្មវិធីនេះ​នឹងមាន​សិទ្ធិ​ចូលប្រើ​ទីតាំង នៅពេល​អ្នកកំពុង​ប្រើ​កម្មវិធីនេះ​តែ​ប៉ុណ្ណោះ"</string>
     <string name="permgroupbackgroundrequest_location" msgid="1085680897265734809">"អនុញ្ញាតឱ្យ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ចូលប្រើ​ទីតាំងរបស់​ឧបករណ៍នេះ​ដែរទេ?"</string>
     <string name="permgroupbackgroundrequest_device_aware_location" msgid="7660465507029650527">"អនុញ្ញាតឱ្យ &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ចូលប្រើទីតាំង &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g> របស់អ្នកឬ?"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"បច្ចុប្បន្នភាពការចែករំលែកទិន្នន័យ"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"កម្មវិធីមួយចំនួន​បានផ្លាស់ប្ដូររបៀបដែលវាអាចចែករំលែកទិន្នន័យ​ទីតាំងរបស់អ្នក"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"ការកំណត់"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"បានចូលប្រើនៅម៉ោង <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"បានចូលប្រើម្សិលមិញនៅម៉ោង <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"បានចូលប្រើនៅថ្ងៃទី <xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"ពាក្យ​សម្ងាត់​ប្រើបាន​តែ​ម្ដងរបស់អ្នកគឺ 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"ការកំណត់​ដែលបានដាក់កំហិត"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"ដើម្បីសុវត្ថិភាព​របស់អ្នក បច្ចុប្បន្នមិនអាចប្រើការកំណត់នេះបានទេ។"</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"ការអនុញ្ញាតឱ្យប្រើ<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>ត្រូវបានបដិសេធ"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"កម្មវិធីនេះបានស្នើសុំការអនុញ្ញាតឱ្យប្រើ<xliff:g id="PERMISSION_NAME">%1$s</xliff:g> ដែលជាការកំណត់ដែលបានដាក់កំហិត ដោយសារវាអាចធ្វើឱ្យសុវត្ថិភាព និងឯកជនភាពរបស់អ្នកប្រឈមនឹងហានិភ័យ។ ការដាក់កំហិតលើការអនុញ្ញាតនេះអាចទប់ស្កាត់កម្មវិធីនេះមិនឱ្យដំណើរការ។"</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"ស្វែងយល់បន្ថែម"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"យល់ហើយ"</string>
 </resources>

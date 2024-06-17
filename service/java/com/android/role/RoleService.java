@@ -100,15 +100,22 @@ public class RoleService extends SystemService implements RoleUserState.Callback
 
     private static final long GRANT_DEFAULT_ROLES_INTERVAL_MILLIS = 1000;
 
-    private static final String[] DEFAULT_APPLICATION_ROLES = {
-        RoleManager.ROLE_ASSISTANT,
-        RoleManager.ROLE_BROWSER,
-        RoleManager.ROLE_CALL_REDIRECTION,
-        RoleManager.ROLE_CALL_SCREENING,
-        RoleManager.ROLE_DIALER,
-        RoleManager.ROLE_HOME,
-        RoleManager.ROLE_SMS,
-    };
+    private static final String[] DEFAULT_APPLICATION_ROLES;
+
+    static {
+        List<String> defaultApplicationRoles = new ArrayList<>();
+        defaultApplicationRoles.add(RoleManager.ROLE_ASSISTANT);
+        defaultApplicationRoles.add(RoleManager.ROLE_BROWSER);
+        defaultApplicationRoles.add(RoleManager.ROLE_CALL_REDIRECTION);
+        defaultApplicationRoles.add(RoleManager.ROLE_CALL_SCREENING);
+        defaultApplicationRoles.add(RoleManager.ROLE_DIALER);
+        defaultApplicationRoles.add(RoleManager.ROLE_HOME);
+        defaultApplicationRoles.add(RoleManager.ROLE_SMS);
+        if (SdkLevel.isAtLeastV()) {
+            defaultApplicationRoles.add(RoleManager.ROLE_WALLET);
+        }
+        DEFAULT_APPLICATION_ROLES = defaultApplicationRoles.toArray(new String[0]);
+    }
 
     @NonNull
     private final AppOpsManager mAppOpsManager;
@@ -912,6 +919,33 @@ public class RoleService extends SystemService implements RoleUserState.Callback
             try {
                 packageName = CollectionUtils.firstOrNull(getRoleHoldersAsUser(RoleManager.ROLE_SMS,
                         userId));
+            } finally {
+                Binder.restoreCallingIdentity(identity);
+            }
+            if (packageName != null && !PackageUtils.canCallingOrSelfPackageQuery(packageName,
+                    userId, context)) {
+                return null;
+            }
+            return packageName;
+        }
+
+        @Override
+        public String getEmergencyRoleHolder(int userId) {
+            final Context context = getContext();
+            UserUtils.enforceCrossUserPermission(userId, false, "getEmergencyRoleHolder", context);
+            if (!UserUtils.isUserExistent(userId, getContext())) {
+                Log.e(LOG_TAG, "user " + userId + " does not exist");
+                return null;
+            }
+
+            getContext().enforceCallingOrSelfPermission(
+                    Manifest.permission.READ_PRIVILEGED_PHONE_STATE, "getEmergencyRoleHolder");
+
+            final String packageName;
+            final long identity = Binder.clearCallingIdentity();
+            try {
+                packageName = CollectionUtils.firstOrNull(getRoleHoldersAsUser(
+                        RoleManager.ROLE_EMERGENCY, userId));
             } finally {
                 Binder.restoreCallingIdentity(identity);
             }

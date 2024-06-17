@@ -100,12 +100,10 @@ public class CheckableLinearLayout extends LinearLayout implements Checkable {
         int count = viewGroup.getChildCount();
         for (int i = 0; i < count; i++) {
             View child = viewGroup.getChildAt(i);
-            if (child.isDuplicateParentStateEnabled()) {
-                if (child instanceof Checkable) {
-                    ((Checkable) child).setChecked(checked);
-                } else if (child instanceof ViewGroup) {
-                    updateChildrenChecked((ViewGroup) child, checked);
-                }
+            if (child instanceof Checkable) {
+                ((Checkable) child).setChecked(checked);
+            } else if (child instanceof ViewGroup) {
+                updateChildrenChecked((ViewGroup) child, checked);
             }
         }
     }

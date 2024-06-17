@@ -16,14 +16,16 @@
 
 package com.android.permissioncontroller.role.ui;
 
+import androidx.annotation.NonNull;
 import androidx.preference.Preference;
 
 /**
  * Preference used by the default apps list UI.
  */
-public interface RolePreference extends TwoTargetPreference, UserRestrictionAwarePreference {
+public interface RolePreference extends TwoTargetPreference, RestrictionAwarePreference {
     /**
      * Return this preference as {@link Preference}.
      */
+    @NonNull
     Preference asPreference();
 }

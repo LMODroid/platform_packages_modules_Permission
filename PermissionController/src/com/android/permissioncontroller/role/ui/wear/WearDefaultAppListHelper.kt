@@ -61,6 +61,7 @@ class WearDefaultAppListHelper(val context: Context, val user: UserHandle) {
                     .let {
                         RoleUiBehaviorUtils.preparePreferenceAsUser(
                             roleItem.role,
+                            roleItem.holderApplicationInfos,
                             it,
                             user,
                             context

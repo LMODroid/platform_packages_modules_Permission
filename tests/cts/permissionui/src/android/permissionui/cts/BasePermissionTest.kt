@@ -111,6 +111,11 @@ abstract class BasePermissionTest {
         @JvmStatic
         protected val isAutomotive =
             packageManager.hasSystemFeature(PackageManager.FEATURE_AUTOMOTIVE)
+        @JvmStatic
+        protected val isAutomotiveSplitscreen = isAutomotive &&
+            packageManager.hasSystemFeature(
+                    /* PackageManager.FEATURE_CAR_SPLITSCREEN_MULTITASKING */
+                    "android.software.car.splitscreen_multitasking")
     }
 
     @get:Rule val screenRecordRule = ScreenRecordRule(false, false)
@@ -276,9 +281,13 @@ abstract class BasePermissionTest {
     protected fun installPackageViaSession(
         apkName: String,
         appMetadata: PersistableBundle? = null,
-        packageSource: Int? = null
+        packageSource: Int? = null,
+        allowlistedRestrictedPermissions: Set<String>? = null
     ) {
-        val (sessionId, session) = createPackageInstallerSession(packageSource)
+        val (sessionId, session) = createPackageInstallerSession(
+            packageSource,
+            allowlistedRestrictedPermissions
+        )
         runWithShellPermissionIdentity {
             writePackageInstallerSession(session, apkName)
             if (appMetadata != null) {
@@ -443,10 +452,15 @@ abstract class BasePermissionTest {
     }
 
     private fun createPackageInstallerSession(
-        packageSource: Int? = null
+        packageSource: Int? = null,
+        allowlistedRestrictedPermissions: Set<String>? = null
     ): Pair<Int, PackageInstaller.Session> {
         // Create session
         val sessionParam = SessionParams(SessionParams.MODE_FULL_INSTALL)
+        allowlistedRestrictedPermissions?.let {
+            sessionParam.setWhitelistedRestrictedPermissions(it)
+        }
+
         if (packageSource != null) {
             sessionParam.setPackageSource(packageSource)
         }

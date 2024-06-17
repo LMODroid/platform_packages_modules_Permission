@@ -48,10 +48,10 @@ public interface RoleBehavior {
     /**
      * @see Role#getDefaultHolders(Context)
      */
-    @NonNull
+    @Nullable
     default List<String> getDefaultHoldersAsUser(@NonNull Role role, @NonNull UserHandle user,
             @NonNull Context context) {
-        return Collections.emptyList();
+        return null;
     }
 
     /**

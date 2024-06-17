@@ -19,7 +19,8 @@ package android.permission.cts;
 import android.content.pm.PackageManager;
 import android.os.Process;
 import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+
+import androidx.test.filters.SmallTest;
 
 /**
  * Verify permission behaviors with android:maxSdkVersion

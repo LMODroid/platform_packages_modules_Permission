@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Барлық рұқсаттар"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Басқа қолданба мүмкіндіктері"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Рұқсат сұрау"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Wear жүйесінде \"Орнату\"/\"Жою\" әрекеттері қолданылмайды."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; қолданбасы қайда кіре алатынын таңдаңыз"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; қолданбасы жаңартылды. Бұл қолданбаның қайда кіре алатынын таңдаңыз."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Бас тарту"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Қолданба пайдаланылмаса, рұқсаттарды өшіру"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Рұқсаттарды өшіру және орын босату"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Әрекетсіз қолданба жұмысын кідірту"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Пайдаланылмайтын қолданбалардың жұмысын кідірту"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Рұқсаттарды өшіру, уақытша файлдарды жою және хабарландыруларды тоқтату"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Рұқсаттарды өшіру, уақытша файлдарды жою, хабарландыруларды тоқтату және қолданбаны мұрағаттау"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Бұл қолданба бірнеше ай бойы пайдаланылмаса, деректеріңізді қорғау үшін оған берілген рұқсаттар өшіріледі."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Қолданба бірнеше ай бойы пайдаланылмаса, деректеріңізді қорғау үшін мына рұқсаттар өшіріледі: <xliff:g id="PERMS">%1$s</xliff:g>."</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Бірнеше ай бойы пайдаланылмаған қолданбаларға берілген рұқсаттар деректеріңізді қорғау үшін өшірілді."</string>
@@ -388,7 +388,7 @@
     <string name="role_call_redirection_request_description" msgid="3118895714178527164">"Ешқандай рұқсат қажет емес."</string>
     <string name="role_call_screening_label" msgid="883935222060878724">"Нөмір мен спамды анықтаудың әдепкі қолданбасы"</string>
     <string name="role_call_screening_short_label" msgid="2048465565063130834">"Нөмірді автоматты анықтау қызметі, спамды анықтау қолданбасы"</string>
-    <string name="role_call_screening_description" msgid="2349431420497468981">"Қоңырау шалушыны анықтауға, спамды және автоматты қоңырауларды және қажетсіз нөмірлерді бөгеуге мүмкіндік беретін қолданбалар"</string>
+    <string name="role_call_screening_description" msgid="2349431420497468981">"Қоңырау шалушыны анықтауға, спамды және автоматты қоңырауларды және қажетсіз нөмірлерді блоктауға мүмкіндік беретін қолданбалар"</string>
     <string name="role_call_screening_request_title" msgid="7358309224566977290">"<xliff:g id="APP_NAME">%1$s</xliff:g> нөмірді автоматты анықтау қызметі мен спам анықтау қолданбасы болып орнатылсын ба?"</string>
     <string name="role_call_screening_request_description" msgid="7338511921032446006">"Ешқандай рұқсат қажет емес."</string>
     <string name="role_automotive_navigation_label" msgid="2701890757955474751">"Әдепкі навигация қолданбасы"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Ескертпелер қолданбасы"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Құрылғыда ескертпелер жазуға арналған қолданбалар"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"ескертпелер"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Әдепкі әмиян қолданбасы"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Әмиян қолданбасы"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Әмиян қолданбаларында несиелік және тұрақты клиент карталарын, көлік кілттерін, сондай-ақ басқа да транзакция түрлері үшін қолайлы заттарды сақтауға болады."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"<xliff:g id="APP_NAME">%1$s</xliff:g> қолданбасын әдепкі әмиян қолданбасы ретінде орнату керек пе?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Рұқсаттар қажет емес."</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Ағымдағы әдепкі қолданба"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Қайта сұралмасын"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Әдепкі етіп орнату"</string>
@@ -461,7 +466,7 @@
     <string name="permgrouprequest_contacts" msgid="8391550064551053695">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; қолданбасына контактілерді пайдалануға рұқсат берілсін бе?"</string>
     <string name="permgrouprequest_device_aware_contacts" msgid="2270563860206654757">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; қолданбасына &lt;b&gt;<xliff:g id="DEVICE">%2$s</xliff:g>&lt;/b&gt; құрылғысында контактілерді пайдалану рұқсаты берілсін бе?"</string>
     <string name="permgrouprequest_location" msgid="6990232580121067883">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; қолданбасына осы құрылғының локациясын пайдалануға рұқсат берілсін бе?"</string>
-    <string name="permgrouprequest_device_aware_location" msgid="6641436550953715107">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; қолданбасына &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>’s&lt;/b&gt; құрылғысының локациясын пайдалану рұқсаты берілсін бе?"</string>
+    <string name="permgrouprequest_device_aware_location" msgid="6641436550953715107">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; қолданбасына &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g>&lt;/b&gt; құрылғысының локациясын пайдалану рұқсаты берілсін бе?"</string>
     <string name="permgrouprequestdetail_location" msgid="2635935335778429894">"Қолданбаны пайдалану кезінде ғана оған геодеректеріңізді көруге рұқсат етіледі."</string>
     <string name="permgroupbackgroundrequest_location" msgid="1085680897265734809">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; қолданбасына осы құрылғының локациясын пайдалануға рұқсат берілсін бе?"</string>
     <string name="permgroupbackgroundrequest_device_aware_location" msgid="7660465507029650527">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; қолданбасына &lt;b&gt;<xliff:g id="DEVICE_NAME">%2$s</xliff:g> құрылғысының локациясын пайдалану рұқсаты берілсін бе?"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Деректерді бөлісуге қатысты жаңалық"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Кейбір қолданбалар локация деректеріңізді бөлісу жолын өзгертті."</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Параметрлер"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Пайдаланылған уақыты: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Кеше пайдаланылған уақыты: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Пайдаланылған уақыты: <xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Бір реттік құпия сөзіңіз: 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Шектелген параметр"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Қауіпсіздік мақсатында бұл параметрді қазір пайдалану мүмкін емес."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"<xliff:g id="PERMISSION_NAME">%1$s</xliff:g> пайдалану рұқсаты қабылданбады"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Бұл қолданба шектеулі параметр болып саналатын <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> рұқсатын сұрады. Себебі қауіпсіздік пен құпиялыққа қауіп төнуі мүмкін. Бұл рұқсатты шектеу қолданбаның жұмыс істеуіне кедергі келтіруі мүмкін."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Толық ақпарат"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Түсінікті"</string>
 </resources>

@@ -140,6 +140,14 @@ class DrivingDecisionReminderService : Service() {
                 car.disconnect()
             }
         }
+
+        fun cancelNotification(context: Context) {
+            val notificationManager = context.getSystemService(NotificationManager::class.java)!!
+            notificationManager.cancel(
+                DrivingDecisionReminderService::class.java.simpleName,
+                Constants.PERMISSION_DECISION_REMINDER_NOTIFICATION_ID
+            )
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

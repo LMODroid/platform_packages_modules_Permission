@@ -35,7 +35,19 @@
                 profile="all_profiles"
                 title="@com.android.safetycenter.resources:string/biometrics_title"
                 titleForWork="@com.android.safetycenter.resources:string/biometrics_title_for_work"
+                titleForPrivateProfile="@com.android.safetycenter.resources:string/biometrics_title_for_private_profile"
                 searchTerms="@com.android.safetycenter.resources:string/biometrics_search_terms"
+                initialDisplayState="hidden"/>
+        </safety-sources-group>
+        <safety-sources-group
+            id="AndroidCellularNetworkSecuritySources"
+            title="@com.android.safetycenter.resources:string/cellular_network_security_title"
+            summary="@com.android.safetycenter.resources:string/cellular_network_security_summary">
+            <dynamic-safety-source
+                id="AndroidCellularNetworkSecurity"
+                packageName="com.android.phone"
+                profile="primary_profile_only"
+                notificationsAllowed="true"
                 initialDisplayState="hidden"/>
         </safety-sources-group>
         <safety-sources-group

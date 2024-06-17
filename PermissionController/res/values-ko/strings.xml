@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"모든 권한"</string>
     <string name="other_permissions" msgid="2901186127193849594">"다른 앱 기능"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"권한 요청"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Wear에서는 설치/제거 작업이 지원되지 않습니다"</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;에서 액세스하도록 허용할 항목 선택"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;이(가) 업데이트되었습니다. 이 앱에서 액세스하도록 허용할 항목을 선택하세요."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"취소"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"앱이 사용되지 않는 경우 권한 삭제"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"권한을 삭제하고 여유 공간 확보"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"사용하지 않을 때 앱 활동 일시중지"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"사용하지 않는 앱 관리"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"권한 제거, 임시 파일 삭제, 알림 중지"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"권한 제거, 임시 파일 삭제, 알림 중지, 앱 보관처리"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"데이터 보호를 위해 몇 개월 동안 앱을 사용하지 않으면 앱의 권한이 삭제됩니다."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"데이터 보호를 위해 몇 개월 동안 앱을 사용하지 않으면 다음 권한이 삭제됩니다. <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"데이터 보호를 위해 몇 개월 동안 사용하지 않은 앱에서 권한이 삭제되었습니다."</string>
@@ -351,7 +351,7 @@
     <string name="accessibility_service_dialog_bottom_text_multiple" msgid="7009848932395519852">"이 앱이 내 화면, 작업, 입력 내용을 보고 작업을 실행하며 디스플레이를 제어할 수 있습니다."</string>
     <string name="role_assistant_label" msgid="4727586018198208128">"기본 디지털 어시스턴트 앱"</string>
     <string name="role_assistant_short_label" msgid="3369003713187703399">"디지털 어시스턴트 앱"</string>
-    <string name="role_assistant_description" msgid="6622458130459922952">"지원 앱은 화면에 표시된 정보에 맞게 도움을 줄 수 있습니다. 일부 앱은 통합된 지원을 제공하기 위해 런처와 음성 입력 서비스를 모두 지원합니다."</string>
+    <string name="role_assistant_description" msgid="6622458130459922952">"지원 앱은 화면에 표시된 정보를 기반으로 도움을 줄 수 있습니다. 일부 앱은 통합된 지원을 제공하기 위해 런처와 음성 입력 서비스를 모두 지원합니다."</string>
     <string name="role_browser_label" msgid="2877796144554070207">"기본 브라우저 앱"</string>
     <string name="role_browser_short_label" msgid="6745009127123292296">"브라우저 앱"</string>
     <string name="role_browser_description" msgid="3465253637499842671">"인터넷에 액세스하고 탭하는 링크를 표시하는 앱"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"메모 앱"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"이 기기에서 메모할 수 있게 해주는 앱"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"메모"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"기본 월렛 앱"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"월렛 앱"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"다양한 형태의 거래에 사용할 수 있도록 월렛 앱에 신용카드 및 포인트 카드, 자동차 키 등을 저장할 수 있습니다."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"<xliff:g id="APP_NAME">%1$s</xliff:g> 앱을 기본 월렛 앱으로 설정하시겠습니까?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"권한 필요 없음"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"현재 기본 앱"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"다시 묻지 않음"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"기본 앱으로 설정"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"데이터 공유 업데이트"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"일부 앱에서 위치 데이터 공유 방법이 변경되었습니다."</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"설정"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"<xliff:g id="TIME_DATE">%1$s</xliff:g>에 액세스함"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"어제 <xliff:g id="TIME_DATE">%1$s</xliff:g>에 액세스함"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"<xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>에 액세스함"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"일회용 비밀번호는 132435입니다"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"제한된 설정"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"보안을 위해 이 설정은 현재 사용할 수 없습니다."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"<xliff:g id="PERMISSION_NAME">%1$s</xliff:g> 사용 권한이 거부되었습니다"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"앱에서 <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> 권한을 요청했습니다. 이 권한은 보안 및 개인 정보 보호에 위험할 수 있는 제한된 설정입니다. 이 권한을 제한하면 앱이 작동하지 않을 수 있습니다."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"자세히 알아보기"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"확인"</string>
 </resources>

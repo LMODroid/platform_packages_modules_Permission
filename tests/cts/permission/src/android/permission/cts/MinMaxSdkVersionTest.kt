@@ -80,7 +80,7 @@ class MinMaxSdkVersionTest {
             mContext!!
                 .packageManager
                 .getPackageInfo(TEST_APP_PKG_NAME, PackageManager.GET_PERMISSIONS)
-        return packageInfo.requestedPermissions.any { it == permName }
+        return packageInfo.requestedPermissions!!.any { it == permName }
     }
 
     companion object {

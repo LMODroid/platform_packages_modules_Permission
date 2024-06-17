@@ -20,7 +20,8 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+
+import androidx.test.filters.SmallTest;
 
 /**
 * Test that protected AppWidgetManager APIs cannot be called without permissions

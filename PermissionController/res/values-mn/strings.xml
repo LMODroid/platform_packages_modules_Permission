@@ -28,7 +28,7 @@
     <string name="uninstall_or_disable" msgid="4496612999740858933">"Устгах эсвэл идэвхгүй болгох"</string>
     <string name="app_not_found_dlg_title" msgid="6029482906093859756">"Апп олдсонгүй"</string>
     <string name="grant_dialog_button_deny" msgid="88262611492697192">"Бүү зөвшөөр"</string>
-    <string name="grant_dialog_button_deny_and_dont_ask_again" msgid="1748925431574312595">"Бүү зөвшөөрч, дахин битгий асуу"</string>
+    <string name="grant_dialog_button_deny_and_dont_ask_again" msgid="1748925431574312595">"Бүү зөвшөөр, дахин бүү асуу"</string>
     <string name="grant_dialog_button_no_upgrade" msgid="8344732743633736625">"\"Аппыг ашиглаж байх үед\" хэвээр үлдээх"</string>
     <string name="grant_dialog_button_no_upgrade_one_time" msgid="5125892775684968694">"“Зөвхөн энэ удаад зөвшөөрөх”-г хэвээр хадгалах"</string>
     <string name="grant_dialog_button_more_info" msgid="213350268561945193">"Дэлгэрэнгүй мэдээлэл"</string>
@@ -45,7 +45,7 @@
     <string name="permission_add_background_warning_template" msgid="1812914855915092273">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;-д <xliff:g id="ACTION">%2$s</xliff:g>-г тогтмол зөвшөөрөх үү?"</string>
     <string name="allow_permission_foreground_only" msgid="116465816039675404">"Зөвхөн апп ашиглах үед"</string>
     <string name="allow_permission_always" msgid="5194342531206054051">"Тогтмол"</string>
-    <string name="deny_permission_deny_and_dont_ask_again" msgid="6106035221490102341">"Бүү зөвшөөрч, дахин битгий асуу"</string>
+    <string name="deny_permission_deny_and_dont_ask_again" msgid="6106035221490102341">"Бүү зөвшөөр, дахин бүү асуу"</string>
     <string name="permission_revoked_count" msgid="4785082705441547086">"<xliff:g id="COUNT">%1$d</xliff:g>-г цуцалсан"</string>
     <string name="permission_revoked_all" msgid="3397649017727222283">"бүгдийг цуцалсан"</string>
     <string name="permission_revoked_none" msgid="9213345075484381180">"алийг нь ч цуцлаагүй"</string>
@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Бүх зөвшөөрөл"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Аппын бусад чадамж"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Зөвшөөрлийн хүсэлт"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Андройд Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Wear-д суулгах/устгах үйлдлийг дэмждэггүй."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;-н хандаж болох зүйлсийг сонгоно уу"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;-г шинэчилсэн. Энэ аппын хандаж болох зүйлсийг сонгоно уу."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Цуцлах"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Аппыг ашигладаггүй бол зөвшөөрлийг нь хасах"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Зөвшөөрлийг хасаж, сул зай гаргах"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Ашиглаагүй бол аппын үйл ажиллагааг түр зогсоох"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Хэрэв ашиглаагүй бол аппыг удирдах"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Зөвшөөрлийг хасаж, түр зуурын файлыг устгаж мөн мэдэгдлийг зогсооно"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Зөвшөөрлийг хасаж, түр зуурын файлыг устгаж, мэдэгдлийг зогсоож мөн аппыг архивлана"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Таны өгөгдлийг хамгаалах үүднээс энэ аппыг хэдэн сарын турш ашиглахгүй бол зөвшөөрлийг нь хасах болно."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Таны өгөгдлийг хамгаалах үүднээс аппыг хэдэн сарын турш ашиглахгүй бол  дараах зөвшөөрлүүдийг хасах болно: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Таны өгөгдлийг хамгаалах үүднээс таны хэдэн сарын турш ашиглаагүй аппуудын зөвшөөрлийг нь хассан."</string>
@@ -376,7 +376,7 @@
     <string name="role_emergency_request_description" msgid="131645948770262850">"Ямар ч зөвшөөрөл шаардлагагүй"</string>
     <string name="role_emergency_search_keywords" msgid="1920007722599213358">"ice"</string>
     <string name="role_home_label" msgid="3871847846649769412">"Нүүр хуудасны өгөгдмөл апп"</string>
-    <string name="role_home_short_label" msgid="8544733747952272337">"Нүүр хуудасны апп"</string>
+    <string name="role_home_short_label" msgid="8544733747952272337">"Home апп"</string>
     <string name="role_home_description" msgid="7997371519626556675">"Таны Android төхөөрөмжийн үндсэн нүүрийг сольдог бөгөөд таны төхөөрөмжийн контент болон онцлогуудад хандах эрх олгодог, ихэвчлэн эхлүүлэгч гэж нэрлэгддэг аппууд"</string>
     <string name="role_home_request_title" msgid="738136983453341081">"<xliff:g id="APP_NAME">%1$s</xliff:g>-г нүүр хуудасны өгөгдмөл аппаар тохируулах уу?"</string>
     <string name="role_home_request_description" msgid="2658833966716057673">"Ямар ч зөвшөөрөл шаардлагагүй"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Тэмдэглэлийн апп"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Таныг төхөөрөмж дээрээ тэмдэглэл хөтлөх боломж олгодог аппууд"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"тэмдэглэл"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Өгөгдмөл түрийвчийн апп"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Түрийвчийн апп"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Төрөл бүрийн гүйлгээнд туслахын тулд түрийвчийн аппууд таны кредит ба лояалти карт, машины түлхүүр болон бусад зүйлийг хадгалах боломжтой."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"<xliff:g id="APP_NAME">%1$s</xliff:g>-г таны өгөгдмөл түрийвчийн аппаар тохируулах уу?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Ямар ч зөвшөөрөл шаардлагагүй"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Одоогийн өгөгдмөл апп"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Дахиж бүү асуу"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Өгөгдмөлөөр тохируулах"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Өгөгдөл хуваалцах тухай шинэчлэлт"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Зарим апп таны байршлын өгөгдлийг хуваалцдаг аргаа өөрчилсөн"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Тохиргоо"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"<xliff:g id="TIME_DATE">%1$s</xliff:g>-д хандсан"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Өчигдөр <xliff:g id="TIME_DATE">%1$s</xliff:g>-д хандсан"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"<xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>-д хандсан"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Таны нэг удаагийн нууц үг бол 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Хязгаарлагдсан тохиргоо"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Таны аюулгүй байдлын үүднээс энэ тохиргоо одоогоор боломжгүй байна."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>-г ашиглах зөвшөөрлөөс татгалзсан"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Энэ апп <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>-н зөвшөөрлийг хүссэн бөгөөд энэ тохиргоо таны аюулгүй байдал болон нууцлалыг эрсдэлд оруулж болох тул үүнийг хязгаарласан. Энэ зөвшөөрлийн хязгаарлалт нь уг аппыг ажиллахаас сэргийлж болно."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Нэмэлт мэдээлэл авах"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Ойлголоо"</string>
 </resources>

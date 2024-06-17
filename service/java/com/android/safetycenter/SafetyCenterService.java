@@ -74,6 +74,7 @@ import androidx.annotation.RequiresApi;
 import com.android.internal.annotations.GuardedBy;
 import com.android.modules.utils.BackgroundThread;
 import com.android.modules.utils.build.SdkLevel;
+import com.android.permission.flags.Flags;
 import com.android.permission.util.ForegroundThread;
 import com.android.permission.util.UserUtils;
 import com.android.safetycenter.data.SafetyCenterDataManager;
@@ -1076,10 +1077,21 @@ public final class SafetyCenterService extends SystemService {
             IntentFilter filter = new IntentFilter();
             filter.addAction(Intent.ACTION_USER_SWITCHED);
             filter.addAction(Intent.ACTION_USER_REMOVED);
-            filter.addAction(Intent.ACTION_MANAGED_PROFILE_ADDED);
-            filter.addAction(Intent.ACTION_MANAGED_PROFILE_REMOVED);
-            filter.addAction(Intent.ACTION_MANAGED_PROFILE_AVAILABLE);
-            filter.addAction(Intent.ACTION_MANAGED_PROFILE_UNAVAILABLE);
+            if (SdkLevel.isAtLeastV() && Flags.privateProfileSupported()) {
+                // These intents are available on V+ only, and are called for managed and other
+                // profile(s).
+                filter.addAction(Intent.ACTION_PROFILE_ADDED);
+                filter.addAction(Intent.ACTION_PROFILE_REMOVED);
+                filter.addAction(Intent.ACTION_PROFILE_AVAILABLE);
+                filter.addAction(Intent.ACTION_PROFILE_UNAVAILABLE);
+            } else {
+                // Only these intents are available in T and U, but that's okay because only managed
+                // profiles are supported by Safety Center on these SDK versions.
+                filter.addAction(Intent.ACTION_MANAGED_PROFILE_ADDED);
+                filter.addAction(Intent.ACTION_MANAGED_PROFILE_REMOVED);
+                filter.addAction(Intent.ACTION_MANAGED_PROFILE_AVAILABLE);
+                filter.addAction(Intent.ACTION_MANAGED_PROFILE_UNAVAILABLE);
+            }
             context.registerReceiverForAllUsers(
                     /* receiver= */ this,
                     filter,
@@ -1108,50 +1120,86 @@ public final class SafetyCenterService extends SystemService {
 
             int userId = userHandle.getIdentifier();
             Log.d(TAG, "Received action: " + action + ", for user id: " + userId);
-            if (!UserProfileGroup.isSupported(userId, context)) {
-                Log.i(
-                        TAG,
-                        "Received broadcast for user id: "
-                                + userId
-                                + ", which is an unsupported user");
+
+            if (!isUserIdValidForAction(action, userId, context)) {
                 return;
             }
 
-            switch (action) {
-                case Intent.ACTION_USER_REMOVED:
-                case Intent.ACTION_MANAGED_PROFILE_REMOVED:
-                    removeUserAndData(userId);
-                    break;
-                case Intent.ACTION_MANAGED_PROFILE_UNAVAILABLE:
-                    removeUser(userId);
-                    break;
-                case Intent.ACTION_USER_SWITCHED:
-                    if (userId != ActivityManager.getCurrentUser()) {
-                        Log.w(
-                                TAG,
-                                "Received broadcast for user id: "
-                                        + userId
-                                        + ", which is not the current user");
-                        return;
-                    }
-                    // Fall through
-                case Intent.ACTION_MANAGED_PROFILE_ADDED:
-                case Intent.ACTION_MANAGED_PROFILE_AVAILABLE:
-                    if (!UserUtils.isUserExistent(userId, getContext())) {
-                        Log.w(
-                                TAG,
-                                "Received broadcast for user id: "
-                                        + userId
-                                        + ", which does not exist");
-                        return;
-                    }
-                    synchronized (mApiLock) {
-                        startRefreshingSafetySourcesLocked(REFRESH_REASON_OTHER, userId);
-                        mNotificationChannels.createAllChannelsForUser(getContext(), userHandle);
-                    }
-                    break;
+            if (isUserOrProfileRemoved(action)) {
+                removeUserAndData(userId);
+                return;
             }
+
+            if (isProfileUnavailable(action)) {
+                removeUser(userId);
+                return;
+            }
+
+            if (Intent.ACTION_USER_SWITCHED.equals(action) || isProfileAddedOrAvailable(action)) {
+                synchronized (mApiLock) {
+                    startRefreshingSafetySourcesLocked(REFRESH_REASON_OTHER, userId);
+                    mNotificationChannels.createAllChannelsForUser(getContext(), userHandle);
+                }
+                return;
+            }
+            Log.w(TAG, "Received unexpected broadcast with action: " + action);
         }
+    }
+
+    private static boolean isUserIdValidForAction(
+            String action, @UserIdInt int userId, Context context) {
+        if (!UserProfileGroup.isSupported(userId, context)) {
+            Log.i(
+                    TAG,
+                    "Received broadcast for user id: "
+                            + userId
+                            + ", which is an unsupported user");
+            return false;
+        }
+        if (Intent.ACTION_USER_SWITCHED.equals(action)
+                && userId != ActivityManager.getCurrentUser()) {
+            Log.w(
+                    TAG,
+                    "Received broadcast for user id: "
+                            + userId
+                            + ", which is not the current user");
+            return false;
+        }
+        if (isProfileAddedOrAvailable(action) && !UserUtils.isUserExistent(userId, context)) {
+            Log.w(
+                    TAG,
+                    "Received broadcast for user id: "
+                            + userId
+                            + ", which does not exist");
+            return false;
+        }
+        return true;
+    }
+
+    private static boolean isUserOrProfileRemoved(String action) {
+        if (Intent.ACTION_USER_REMOVED.equals(action)) {
+            return true;
+        }
+        if (SdkLevel.isAtLeastV() && Flags.privateProfileSupported()) {
+            return Intent.ACTION_PROFILE_REMOVED.equals(action);
+        }
+        return Intent.ACTION_MANAGED_PROFILE_REMOVED.equals(action);
+    }
+
+    private static boolean isProfileUnavailable(String action) {
+        if (SdkLevel.isAtLeastV() && Flags.privateProfileSupported()) {
+            return Intent.ACTION_PROFILE_UNAVAILABLE.equals(action);
+        }
+        return Intent.ACTION_MANAGED_PROFILE_UNAVAILABLE.equals(action);
+    }
+
+    private static boolean isProfileAddedOrAvailable(String action) {
+        if (SdkLevel.isAtLeastV() && Flags.privateProfileSupported()) {
+            return Intent.ACTION_PROFILE_AVAILABLE.equals(action)
+                    || Intent.ACTION_PROFILE_ADDED.equals(action);
+        }
+        return Intent.ACTION_MANAGED_PROFILE_ADDED.equals(action)
+                || Intent.ACTION_MANAGED_PROFILE_AVAILABLE.equals(action);
     }
 
     private void removeUserAndData(@UserIdInt int userId) {

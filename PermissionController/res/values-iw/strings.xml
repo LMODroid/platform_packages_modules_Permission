@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"כל ההרשאות"</string>
     <string name="other_permissions" msgid="2901186127193849594">"הרשאות אחרות של האפליקציה"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"בקשת הרשאה"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"‏פעולות התקנה/הסרת התקנה אינן נתמכות ב-Wear."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"‏בחירה בהרשאות הגישה שברצונך לתת לאפליקציה &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"‏אפליקציית &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; עודכנה. יש לבחור הרשאות גישה לאפליקציה הזו."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"ביטול"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"הסרת ההרשאות כשלא בשימוש"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"הסרת הרשאות ופינוי מקום אחסון"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"השהיית הפעילות באפליקציה אם אין בה שימוש"</string>
-    <string name="unused_apps_summary" msgid="8839466950318403115">"ההרשאות של האפליקציה יוסרו, הקבצים הזמניים יימחקו ותופסק קבלת ההתראות ממנה"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"ניהול האפליקציה כשהיא לא בשימוש"</string>
+    <string name="unused_apps_summary" msgid="8839466950318403115">"הסרת ההרשאות, מחיקה של הקבצים הזמניים, הפסקה של קבלת ההתראות"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"הסרת ההרשאות, מחיקה של הקבצים הזמניים, הפסקה של קבלת ההתראות והעברת האפליקציה לארכיון"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"כדי להגן על הנתונים שלך, אם האפליקציה הזו לא תהיה בשימוש במשך מספר חודשים, ההרשאות שניתנו לה יוסרו."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"כדי להגן על הנתונים שלך, אם האפליקציה לא תהיה בשימוש במשך מספר חודשים, ההרשאות הבאות יוסרו: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"כדי להגן על הנתונים שלך, הוסרו הרשאות מאפליקציות שלא השתמשת בהן במשך מספר חודשים."</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"אפליקציית פתקים"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"אפליקציות שמאפשרות לך לרשום הערות במכשיר"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"הערות"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"ברירת המחדל של אפליקציית הארנק"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"אפליקציית ארנק"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"אפליקציות ארנק מאחסנות את כרטיסי האשראי ואת כרטיסי מועדון הלקוחות שלך, את מפתחות הרכב ועוד כדי לעזור בסוגים שונים של עסקאות."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"להגדיר את <xliff:g id="APP_NAME">%1$s</xliff:g> כברירת המחדל של אפליקציית הארנק?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"אין צורך בהרשאות"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"ברירת המחדל הנוכחית"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"לא לשאול שוב"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"הגדרה כברירת מחדל"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"עדכונים לגבי שיתוף הנתונים"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"בחלק מהאפליקציות, השתנה האופן שבו הן עשויות לשתף את נתוני המיקום שלך"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"הגדרות"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"תאריך גישה: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"גישה אתמול: <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"תאריך גישה: <xliff:g id="TIME_DATE_0">%1$s</xliff:g> ב-<xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"הסיסמה החד-פעמית שלך היא 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"הגדרה מוגבלת"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"מטעמי אבטחה, ההגדרה הזו לא זמינה כרגע."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"הבקשה להשתמש בהרשאה ל<xliff:g id="PERMISSION_NAME">%1$s</xliff:g> נדחתה"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"האפליקציה הזו ביקשה הרשאה ל<xliff:g id="PERMISSION_NAME">%1$s</xliff:g>, שהיא הגדרה מוגבלת מכיוון שהיא יכולה לסכן את האבטחה והפרטיות שלך. הגבלת ההרשאה הזו עשויה למנוע מהאפליקציה הזו לפעול."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"מידע נוסף"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"הבנתי"</string>
 </resources>

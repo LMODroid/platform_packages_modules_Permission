@@ -49,6 +49,18 @@
             "file_patterns": ["res/xml/roles\\.xml"]
         },
         {
+            "name": "PermissionControllerMockingTests[com.google.android.permission.apex]",
+            "options": [
+                {
+                    "include-filter": "com.android.permissioncontroller.tests.mocking.role.model.RoleParserTest"
+                },
+                {
+                    "exclude-annotation": "androidx.test.filters.FlakyTest"
+                }
+            ],
+            "file_patterns": ["res/xml/roles\\.xml"]
+        },
+        {
             "name": "PermissionUiTestCases[com.google.android.permission.apex]",
             "options": [
                 {
@@ -103,6 +115,15 @@
                 },
                 {
                     "exclude-filter": "android.app.role.cts.RoleManagerTest#removeSmsRoleHolderThenPermissionIsRevoked"
+                }
+            ],
+            "file_patterns": ["res/xml/roles\\.xml"]
+        },
+        {
+            "name": "PermissionControllerMockingTests[com.google.android.permission.apex]",
+            "options": [
+                {
+                    "include-filter": "com.android.permissioncontroller.tests.mocking.role.model.RoleParserTest"
                 }
             ],
             "file_patterns": ["res/xml/roles\\.xml"]

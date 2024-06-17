@@ -19,7 +19,8 @@ package android.permission.cts;
 import android.hardware.Camera;
 import android.os.Environment;
 import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.MediumTest;
+
+import androidx.test.filters.MediumTest;
 
 import java.io.FileOutputStream;
 

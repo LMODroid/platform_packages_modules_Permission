@@ -19,7 +19,8 @@ package android.permission.cts;
 import android.content.Intent;
 import android.os.Bundle;
 import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+
+import androidx.test.filters.SmallTest;
 
 /**
  * Verify Context related methods without specific BROADCAST series permissions.

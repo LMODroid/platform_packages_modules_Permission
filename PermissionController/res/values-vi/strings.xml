@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Tất cả các quyền"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Các khả năng khác của ứng dụng"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Yêu cầu quyền"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Các hành động Cài đặt/Gỡ cài đặt không được hỗ trợ trên Wear."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Chọn nội dung &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; được phép truy cập vào"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"Đã cập nhật &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;. Chọn nội dung ứng dụng này được phép truy cập vào."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Hủy"</string>
@@ -205,8 +203,10 @@
     <string name="unused_apps_category_title" msgid="2988455616845243901">"Chế độ cài đặt cho ứng dụng không dùng đến"</string>
     <string name="auto_revoke_label" msgid="5068393642936571656">"Thu hồi quyền nếu bạn không dùng ứng dụng"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Thu hồi quyền và giải phóng dung lượng"</string>
-    <string name="unused_apps_label_v2" msgid="7058776770056517980">"Tạm dừng hoạt động trong ứng dụng nếu không dùng"</string>
+    <string name="unused_apps_label_v2" msgid="7058776770056517980">"Tạm dừng hoạt động của ứng dụng nếu không dùng"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Quản lý ứng dụng nếu không dùng"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Loại bỏ quyền, xoá tệp tạm thời và dừng thông báo"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Loại bỏ quyền, xoá tệp tạm thời, dừng thông báo và lưu trữ ứng dụng"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Để bảo vệ dữ liệu của bạn, các quyền cấp cho ứng dụng này sẽ bị thu hồi nếu bạn không dùng ứng dụng trong vài tháng."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Để bảo vệ dữ liệu của bạn, nếu bạn không dùng ứng dụng này trong vài tháng thì các quyền sau đây sẽ bị thu hồi: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Để bảo vệ dữ liệu của bạn, quản trị viên CNTT đã thu hồi các quyền đối với những ứng dụng bạn không dùng trong vài tháng."</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Ứng dụng ghi chú"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Các ứng dụng cho phép bạn tạo ghi chú trên thiết bị"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"ghi chú"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Ứng dụng ví mặc định"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Ứng dụng ví"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Ứng dụng ví có thể lưu trữ thông tin thẻ tín dụng và thẻ khách hàng thân thiết của bạn, chìa khoá ô tô của bạn, cùng nhiều thông tin khác giúp bạn thực hiện nhiều hình thức giao dịch đa dạng."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Đặt <xliff:g id="APP_NAME">%1$s</xliff:g> làm ứng dụng ví mặc định?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Không cần quyền"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Ứng dụng mặc định hiện tại"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Không hỏi lại"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Đặt làm mặc định"</string>
@@ -564,7 +569,7 @@
     <string name="safety_privacy_qs_tile_subtitle" msgid="3621544532041936749">"Kiểm tra trạng thái"</string>
     <string name="privacy_controls_qs" msgid="5780144882040591169">"Các chế độ kiểm soát quyền riêng tư"</string>
     <string name="security_settings_button_label_qs" msgid="8280343822465962330">"Tùy chọn cài đặt khác"</string>
-    <string name="camera_toggle_label_qs" msgid="3880261453066157285">"Quyền truy cập máy ảnh"</string>
+    <string name="camera_toggle_label_qs" msgid="3880261453066157285">"Quyền truy cập camera"</string>
     <string name="microphone_toggle_label_qs" msgid="8132912469813396552">"Quyền truy cập micrô"</string>
     <string name="permissions_removed_qs" msgid="8957319130625294572">"Đã thu hồi quyền sử dụng"</string>
     <string name="camera_usage_qs" msgid="4394233566086665994">"Xem mức sử dụng của máy ảnh gần đây"</string>
@@ -606,7 +611,7 @@
     <string name="safety_center_background_location_access_revoked" msgid="6972274943343442213">"Đã thay đổi quyền truy cập"</string>
     <string name="safety_center_view_recent_location_access" msgid="3524391299490678243">"Xem thông tin về hoạt động sử dụng thông tin vị trí gần đây"</string>
     <string name="privacy_controls_title" msgid="7605929972256835199">"Chế độ kiểm soát quyền riêng tư"</string>
-    <string name="camera_toggle_title" msgid="1251201397431837666">"Quyền truy cập máy ảnh"</string>
+    <string name="camera_toggle_title" msgid="1251201397431837666">"Quyền truy cập camera"</string>
     <string name="mic_toggle_title" msgid="2649991093496110162">"Quyền truy cập micrô"</string>
     <string name="perm_toggle_description" msgid="7801326363741451379">"Áp dụng cho các ứng dụng và dịch vụ"</string>
     <string name="mic_toggle_description" msgid="9163104307990677157">"Áp dụng cho các ứng dụng và dịch vụ. Nếu bạn tắt chế độ cài đặt, dữ liệu thu được qua micrô vẫn có thể được chia sẻ khi bạn gọi đến số khẩn cấp."</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Nội dung cập nhật về cách thức chia sẻ dữ liệu"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Một số ứng dụng đã thay đổi cách thức có thể được dùng để chia sẻ dữ liệu vị trí của bạn"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Cài đặt"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Truy cập lúc <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Truy cập hôm qua lúc <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Truy cập lúc <xliff:g id="TIME_DATE_1">%2$s</xliff:g> ngày <xliff:g id="TIME_DATE_0">%1$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Mật khẩu một lần của bạn là 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Chế độ cài đặt bị hạn chế"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Để đảm bảo an toàn cho bạn, chế độ cài đặt này hiện không dùng được."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Quyền sử dụng <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> đã bị từ chối"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Ứng dụng này đã yêu cầu quyền <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> – đây là một chế độ cài đặt bị hạn chế vì có thể gây ra rủi ro đối với tính bảo mật và quyền riêng tư của bạn. Việc hạn chế quyền này có thể khiến ứng dụng này không hoạt động được."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Tìm hiểu thêm"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Tôi hiểu"</string>
 </resources>

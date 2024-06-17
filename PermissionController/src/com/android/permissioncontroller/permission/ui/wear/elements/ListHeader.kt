@@ -67,7 +67,6 @@ fun ListHeader(
         modifier =
             modifier
                 .defaultMinSize(minHeight = ListHeaderDefaults.Height)
-                .height(IntrinsicSize.Min)
                 .wrapContentSize()
                 .background(backgroundColor)
                 .padding(contentPadding)

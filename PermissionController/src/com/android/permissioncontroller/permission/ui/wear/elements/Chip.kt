@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -232,7 +233,8 @@ public fun Chip(
         icon = icon,
         colors = colors,
         enabled = enabled,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
+        shape = RoundedCornerShape(26.dp)
     )
 }
 

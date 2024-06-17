@@ -1,4 +1,17 @@
 // Signature format: 2.0
+package android.app.ecm {
+
+  @FlaggedApi("android.permission.flags.enhanced_confirmation_mode_apis_enabled") public final class EnhancedConfirmationManager {
+    method @RequiresPermission(android.Manifest.permission.MANAGE_ENHANCED_CONFIRMATION_STATES) public void clearRestriction(@NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @NonNull public android.content.Intent createRestrictedSettingDialogIntent(@NonNull String, @NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @RequiresPermission(android.Manifest.permission.MANAGE_ENHANCED_CONFIRMATION_STATES) public boolean isClearRestrictionAllowed(@NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @RequiresPermission(android.Manifest.permission.MANAGE_ENHANCED_CONFIRMATION_STATES) public boolean isRestricted(@NonNull String, @NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
+    method @RequiresPermission(android.Manifest.permission.MANAGE_ENHANCED_CONFIRMATION_STATES) public void setClearRestrictionAllowed(@NonNull String) throws android.content.pm.PackageManager.NameNotFoundException;
+    field public static final String ACTION_SHOW_ECM_RESTRICTED_SETTING_DIALOG = "android.app.ecm.action.SHOW_ECM_RESTRICTED_SETTING_DIALOG";
+  }
+
+}
+
 package android.app.role {
 
   public interface OnRoleHoldersChangedListener {
@@ -558,6 +571,7 @@ package android.safetycenter.config {
     method public int getProfile();
     method @StringRes public int getSearchTermsResId();
     method @StringRes public int getSummaryResId();
+    method @FlaggedApi("com.android.permission.flags.private_profile_title_api") @StringRes public int getTitleForPrivateProfileResId();
     method @StringRes public int getTitleForWorkResId();
     method @StringRes public int getTitleResId();
     method public int getType();
@@ -593,6 +607,7 @@ package android.safetycenter.config {
     method @NonNull public android.safetycenter.config.SafetySource.Builder setRefreshOnPageOpenAllowed(boolean);
     method @NonNull public android.safetycenter.config.SafetySource.Builder setSearchTermsResId(@StringRes int);
     method @NonNull public android.safetycenter.config.SafetySource.Builder setSummaryResId(@StringRes int);
+    method @FlaggedApi("com.android.permission.flags.private_profile_title_api") @NonNull public android.safetycenter.config.SafetySource.Builder setTitleForPrivateProfileResId(@StringRes int);
     method @NonNull public android.safetycenter.config.SafetySource.Builder setTitleForWorkResId(@StringRes int);
     method @NonNull public android.safetycenter.config.SafetySource.Builder setTitleResId(@StringRes int);
   }

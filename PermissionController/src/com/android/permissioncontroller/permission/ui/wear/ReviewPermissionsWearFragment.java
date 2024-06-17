@@ -179,7 +179,10 @@ public class ReviewPermissionsWearFragment extends PreferenceFragmentCompat
             } else {
                 preference.setEnabled(true);
             }
-
+            if (preference.getParent() != null) {
+                // Remove first if already added.
+                preference.getParent().removePreference(preference);
+            }
             if (group.isReviewRequired()) {
                 if (!isPackageUpdated) {
                     // An app just being installed, which means all groups requiring reviews.

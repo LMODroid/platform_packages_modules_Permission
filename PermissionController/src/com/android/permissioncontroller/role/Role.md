@@ -65,6 +65,10 @@ title. This attribute is required if the role is `visible`.
 Android S. This attribute is optional and defaults to `Build.VERSION_CODES.CUR_DEVELOPMENT`.
 - `minSdkVersion`: The minimum SDK version for the role to be available (inclusive), e.g. `31` for
 Android S. This attribute is optional and defaults to `Build.VERSION_CODES.BASE`.
+- `onlyGrantWhenAdded`: Whether the role should only grant privileges when a role holder is actively
+added. This attribute is optional and defaults to `false`.
+- `overrideUserWhenGranting`: Whether the role should override user's choice about privileges when
+granting. This attribute is optional and defaults to `false`.
 - `requestDescription`: The string resource for the description in the request role dialog, e.g.
 `@string/role_sms_request_description`, which says "Gets access to contacts, SMS, phone". This
 description should describe to the user the privileges that are going to be granted, and should not

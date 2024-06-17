@@ -31,12 +31,12 @@ import android.safetycenter.config.SafetySourcesGroup;
 import android.util.SparseArray;
 
 import com.android.modules.utils.build.SdkLevel;
-import com.android.permission.util.UserUtils;
 import com.android.safetycenter.SafetyCenterConfigReader;
 import com.android.safetycenter.SafetySourceIssueInfo;
 import com.android.safetycenter.SafetySourceKey;
 import com.android.safetycenter.SafetySources;
 import com.android.safetycenter.UserProfileGroup;
+import com.android.safetycenter.UserProfileGroup.ProfileType;
 import com.android.safetycenter.internaldata.SafetyCenterIssueKey;
 
 import java.io.PrintWriter;
@@ -88,12 +88,12 @@ final class SafetyCenterIssueRepository {
      * that can affect issues.
      */
     void updateIssues(@UserIdInt int userId) {
-        updateIssues(userId, UserUtils.isManagedProfile(userId, mContext));
+        updateIssues(userId, UserProfileGroup.getProfileTypeOfUser(userId, mContext));
     }
 
-    private void updateIssues(@UserIdInt int userId, boolean isManagedProfile) {
+    private void updateIssues(@UserIdInt int userId, @ProfileType int profileType) {
         List<SafetySourceIssueInfo> issues =
-                getAllStoredIssuesFromRawSourceData(userId, isManagedProfile);
+                getAllStoredIssuesFromRawSourceData(userId, profileType);
 
         issues.sort(SAFETY_SOURCE_ISSUES_INFO_BY_SEVERITY_DESCENDING);
 
@@ -183,14 +183,14 @@ final class SafetyCenterIssueRepository {
     }
 
     private List<SafetySourceIssueInfo> getAllStoredIssuesFromRawSourceData(
-            @UserIdInt int userId, boolean isManagedProfile) {
+            @UserIdInt int userId, @ProfileType int profileType) {
         List<SafetySourceIssueInfo> allIssuesInfo = new ArrayList<>();
 
         List<SafetySourcesGroup> safetySourcesGroups =
                 mSafetyCenterConfigReader.getSafetySourcesGroups();
         for (int j = 0; j < safetySourcesGroups.size(); j++) {
             addSafetySourceIssuesInfo(
-                    allIssuesInfo, safetySourcesGroups.get(j), userId, isManagedProfile);
+                    allIssuesInfo, safetySourcesGroups.get(j), userId, profileType);
         }
 
         return allIssuesInfo;
@@ -200,7 +200,7 @@ final class SafetyCenterIssueRepository {
             List<SafetySourceIssueInfo> issuesInfo,
             SafetySourcesGroup safetySourcesGroup,
             @UserIdInt int userId,
-            boolean isManagedProfile) {
+            @ProfileType int profileType) {
         List<SafetySource> safetySources = safetySourcesGroup.getSafetySources();
         for (int i = 0; i < safetySources.size(); i++) {
             SafetySource safetySource = safetySources.get(i);
@@ -208,7 +208,7 @@ final class SafetyCenterIssueRepository {
             if (!SafetySources.isExternal(safetySource)) {
                 continue;
             }
-            if (isManagedProfile && !SafetySources.supportsManagedProfiles(safetySource)) {
+            if (!SafetySources.supportsProfileType(safetySource, profileType)) {
                 continue;
             }
 
@@ -244,12 +244,11 @@ final class SafetyCenterIssueRepository {
      * UserProfileGroup}.
      */
     private List<SafetySourceIssueInfo> getIssuesFor(UserProfileGroup userProfileGroup) {
-        List<SafetySourceIssueInfo> issues =
-                new ArrayList<>(getIssuesForUser(userProfileGroup.getProfileParentUserId()));
+        List<SafetySourceIssueInfo> issues = new ArrayList<>();
 
-        int[] managedRunningProfileUserIds = userProfileGroup.getManagedRunningProfilesUserIds();
-        for (int i = 0; i < managedRunningProfileUserIds.length; i++) {
-            issues.addAll(getIssuesForUser(managedRunningProfileUserIds[i]));
+        int[] allRunningProfileUserIds = userProfileGroup.getAllRunningProfilesUserIds();
+        for (int i = 0; i < allRunningProfileUserIds.length; i++) {
+            issues.addAll(getIssuesForUser(allRunningProfileUserIds[i]));
         }
 
         return issues;

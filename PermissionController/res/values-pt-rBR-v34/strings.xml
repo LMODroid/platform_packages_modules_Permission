@@ -23,5 +23,4 @@
     <string name="health_connect_summary" msgid="815473513776882296">"Gerenciar o acesso de apps aos dados de saúde"</string>
     <string name="location_settings" msgid="8863940440881290182">"Acesso ao local"</string>
     <string name="mic_toggle_description" msgid="1504101620086616040">"Para apps e serviços. Se esta configuração estiver desativada, os dados do microfone ainda poderão ser compartilhados quando você ligar para um número de emergência"</string>
-    <string name="location_settings_subtitle" msgid="6846532794702613851">"Para apps e serviços"</string>
 </resources>

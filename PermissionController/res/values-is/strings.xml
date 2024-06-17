@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"Allar heimildir"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Aðrir forritseiginleikar"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Beiðni um heimild"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Aðgerðir til að setja upp / fjarlægja eru ekki studdar í Wear."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Veldu hverju &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; fær aðgang að"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; hefur verið uppfært. Veldu hverju forritið fær aðgang að."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Hætta við"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Fjarlægja heimildir ef forrit er ekki notað"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Fjarlægja heimildir og losa um pláss"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Gera hlé á forritavirkni ef ekki notað"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Stjórna forriti ef það er ónotað"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Fjarlægja heimildir, eyða tímabundnum skrám og stöðva tilkynningar"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Fjarlægja heimildir, eyða tímabundnum skrám, stöðva tilkynningar og setja forritið í geymslu"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"Til að vernda gögnin þín verða heimildir þessa forrits fjarlægðar ef það er ekki notað í nokkra mánuði."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"Til að vernda gögnin þín verða eftirfarandi heimildir fjarlægðar ef forritið er ekki notað í nokkra mánuði: <xliff:g id="PERMS">%1$s</xliff:g>."</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"Til að vernda gögnin þín voru heimildir fjarlægðar úr forritum sem þú hefur ekki notað í nokkra mánuði."</string>
@@ -377,7 +377,7 @@
     <string name="role_emergency_search_keywords" msgid="1920007722599213358">"neyð"</string>
     <string name="role_home_label" msgid="3871847846649769412">"Sjálfgefið heimaforrit"</string>
     <string name="role_home_short_label" msgid="8544733747952272337">"Heimaforrit"</string>
-    <string name="role_home_description" msgid="7997371519626556675">"Forrit sem koma í stað heimaskjásins í Android tækinu þínu, stundum nefnd ræsiforrit, sem gefa þér aðgang að efni og eiginleikum í tækinu."</string>
+    <string name="role_home_description" msgid="7997371519626556675">"Forrit sem koma í stað heimaskjásins í Android-tækinu þínu, stundum nefnd ræsiforrit, sem gefa þér aðgang að efni og eiginleikum í tækinu."</string>
     <string name="role_home_request_title" msgid="738136983453341081">"Velja <xliff:g id="APP_NAME">%1$s</xliff:g> sem sjálfgefið heimaforrit?"</string>
     <string name="role_home_request_description" msgid="2658833966716057673">"Engra heimilda krafist"</string>
     <string name="role_home_search_keywords" msgid="3830755001192666285">"ræsiforrit"</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Glósuforrit"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Forrit sem gera þér kleift að taka glósur í tækinu þínu"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"glósur"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Sjálfgefið veskisforrit"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Veskisforrit"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Veskisforrit geta geymt kredit- og tryggðarkortin þín, bíllyklana og aðra hluti til að auðvelda þér að ganga frá ýmiskonar greiðslum."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Stilla <xliff:g id="APP_NAME">%1$s</xliff:g> sem sjálfgefið veskisforrit?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"Engra heimilda krafist"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Núverandi sjálfgefið forrit"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Ekki spyrja aftur"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Velja sem sjálfgefið"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Gagnadeilingaruppfærslur"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Deiling staðsetningargagna hefur breyst í sumum forritum"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Stillingar"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Opnað kl. <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Opnað í gær kl. <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Opnað <xliff:g id="TIME_DATE_0">%1$s</xliff:g> kl. <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Einnota aðgangsorðið þitt er 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Takmörkuð stilling"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"Til að tryggja öryggi þitt er þessi stilling ekki tiltæk eins og er."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Leyfi til að nota <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> hefur verið hafnað"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"Þetta forrit hefur krafist <xliff:g id="PERMISSION_NAME">%1$s</xliff:g>-leyfis sem er takmörkuð stilling vegna þess að hún getur stofnað öryggi þínu og persónuvernd í hættu. Takmarkanir á þessu leyfi geta komið í veg fyrir að þetta forrit virki."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Nánar"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Ég skil"</string>
 </resources>

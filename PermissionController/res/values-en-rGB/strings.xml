@@ -116,8 +116,6 @@
     <string name="all_permissions" msgid="6911125611996872522">"All permissions"</string>
     <string name="other_permissions" msgid="2901186127193849594">"Other app capabilities"</string>
     <string name="permission_request_title" msgid="8790310151025020126">"Permission request"</string>
-    <string name="wear_not_allowed_dlg_title" msgid="1429467891296932713">"Android Wear"</string>
-    <string name="wear_not_allowed_dlg_text" msgid="512340555334769098">"Install/Uninstall actions not supported on Wear."</string>
     <string name="permission_review_title_template_install" msgid="1284337937156289081">"Choose what to allow &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; to access"</string>
     <string name="permission_review_title_template_update" msgid="3232333580548588657">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; has been updated. Choose what access to allow this app."</string>
     <string name="review_button_cancel" msgid="2191147944056548886">"Cancel"</string>
@@ -206,7 +204,9 @@
     <string name="auto_revoke_label" msgid="5068393642936571656">"Remove permissions if app isn’t used"</string>
     <string name="unused_apps_label" msgid="2595428768404901064">"Remove permissions and free up space"</string>
     <string name="unused_apps_label_v2" msgid="7058776770056517980">"Pause app activity if unused"</string>
+    <string name="unused_apps_label_v3" msgid="693340578642156657">"Manage app if unused"</string>
     <string name="unused_apps_summary" msgid="8839466950318403115">"Remove permissions, delete temporary files and stop notifications"</string>
+    <string name="unused_apps_summary_v2" msgid="5011313200815115802">"Remove permissions, delete temporary files, stop notifications and archive the app"</string>
     <string name="auto_revoke_summary" msgid="5867548789805911683">"To protect your data, permissions for this app will be removed if the app is unused for a few months."</string>
     <string name="auto_revoke_summary_with_permissions" msgid="389712086597285013">"To protect your data, if the app is unused for a few months, the following permissions will be removed: <xliff:g id="PERMS">%1$s</xliff:g>"</string>
     <string name="auto_revoked_apps_page_summary" msgid="6594753657893756536">"To protect your data, permissions have been removed from apps that you haven’t used in a few months."</string>
@@ -403,6 +403,11 @@
     <string name="role_notes_short_label" msgid="8796604147546125285">"Notes app"</string>
     <string name="role_notes_description" msgid="8496852798616883551">"Apps that allow you to take notes on your device"</string>
     <string name="role_notes_search_keywords" msgid="7710756695666744631">"notes"</string>
+    <string name="role_wallet_label" msgid="3719419175656204207">"Default wallet app"</string>
+    <string name="role_wallet_short_label" msgid="6521288403762457452">"Wallet app"</string>
+    <string name="role_wallet_description" msgid="3726535836165949838">"Wallet apps can store your credit and loyalty cards, car keys and other things to help with various forms of transactions."</string>
+    <string name="role_wallet_request_title" msgid="4770217108262737093">"Set <xliff:g id="APP_NAME">%1$s</xliff:g> as your default wallet app?"</string>
+    <string name="role_wallet_request_description" msgid="6305487425777483053">"No permissions needed"</string>
     <string name="request_role_current_default" msgid="738722892438247184">"Current default"</string>
     <string name="request_role_dont_ask_again" msgid="3556017886029520306">"Don\'t ask again"</string>
     <string name="request_role_set_as_default" msgid="4253949643984172880">"Set as default"</string>
@@ -560,7 +565,7 @@
     <string name="safety_status_preference_title_and_summary_content_description" msgid="3511373256505058464">"Security and privacy status. <xliff:g id="OVERALL_SAFETY_STATUS">%1$s</xliff:g>. <xliff:g id="SUMMARY_OF_DEVICE_STATUS">%2$s</xliff:g>"</string>
     <string name="security_settings" msgid="3808106921175271317">"Security settings"</string>
     <string name="sensor_permissions_qs" msgid="1022267900031317472">"Permissions"</string>
-    <string name="safety_privacy_qs_tile_title" msgid="727301867710374052">"Security &amp; privacy"</string>
+    <string name="safety_privacy_qs_tile_title" msgid="727301867710374052">"Security and privacy"</string>
     <string name="safety_privacy_qs_tile_subtitle" msgid="3621544532041936749">"Check status"</string>
     <string name="privacy_controls_qs" msgid="5780144882040591169">"Your privacy controls"</string>
     <string name="security_settings_button_label_qs" msgid="8280343822465962330">"More settings"</string>
@@ -648,4 +653,14 @@
     <string name="safety_label_changes_notification_title" msgid="4479955083472203839">"Data sharing updates"</string>
     <string name="safety_label_changes_notification_desc" msgid="7808764283266234675">"Some apps changed the way that they may share your location data"</string>
     <string name="safety_label_changes_gear_description" msgid="2655887555599138509">"Settings"</string>
+    <string name="wear_app_perms_24h_access" msgid="8668121661337328895">"Accessed <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_24h_access_yest" msgid="7069312481704735679">"Accessed yesterday <xliff:g id="TIME_DATE">%1$s</xliff:g>"</string>
+    <string name="wear_app_perms_7d_access" msgid="4608069019194676432">"Accessed <xliff:g id="TIME_DATE_0">%1$s</xliff:g> <xliff:g id="TIME_DATE_1">%2$s</xliff:g>"</string>
+    <string name="test_otp_msg" msgid="7559110574222727550">"Your one-time password is 132435"</string>
+    <string name="enhanced_confirmation_dialog_title" msgid="7562437438040966351">"Restricted setting"</string>
+    <string name="enhanced_confirmation_dialog_desc" msgid="5921240234843839219">"For your security, this setting is currently unavailable."</string>
+    <string name="enhanced_confirmation_dialog_title_permission" msgid="8411239333012890492">"Permission to use <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> has been denied"</string>
+    <string name="enhanced_confirmation_dialog_desc_permission" msgid="9207115054288224451">"This app has requested the <xliff:g id="PERMISSION_NAME">%1$s</xliff:g> permission, which is a restricted setting because it can put your security and privacy at risk. Restriction to this permission may prevent this app from working."</string>
+    <string name="enhanced_confirmation_dialog_learn_more" msgid="5226619861379095709">"Learn more"</string>
+    <string name="enhanced_confirmation_dialog_ok" msgid="1767075979746135617">"Got it"</string>
 </resources>

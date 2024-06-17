@@ -17,7 +17,6 @@
 package android.permission.cts;
 
 import static android.content.Context.DEVICE_POLICY_SERVICE;
-import static android.content.Context.FINGERPRINT_SERVICE;
 import static android.content.Context.SHORTCUT_SERVICE;
 import static android.content.Context.USB_SERVICE;
 import static android.content.Context.WALLPAPER_SERVICE;
@@ -46,12 +45,6 @@ public class ServicesInstantAppsCannotAccessTests {
     public void cannotGetDevicePolicyManager() {
     assertNull(InstrumentationRegistry.getTargetContext().getSystemService(
             DEVICE_POLICY_SERVICE));
-    }
-
-    @Test
-    public void cannotGetFingerprintManager() {
-        assertNull(InstrumentationRegistry.getTargetContext().getSystemService(
-                FINGERPRINT_SERVICE));
     }
 
     @Test

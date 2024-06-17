@@ -41,6 +41,7 @@ import com.android.permissioncontroller.permission.ui.model.UnusedAppsViewModel.
 import com.android.permissioncontroller.permission.ui.model.UnusedAppsViewModelFactory
 import com.android.permissioncontroller.permission.ui.wear.model.WearUnusedAppsViewModel
 import com.android.permissioncontroller.permission.ui.wear.model.WearUnusedAppsViewModel.UnusedAppChip
+import com.android.permissioncontroller.permission.ui.wear.theme.WearPermissionTheme
 import com.android.permissioncontroller.permission.utils.KotlinUtils
 import com.android.settingslib.utils.applications.AppUtils
 import java.text.Collator
@@ -131,7 +132,9 @@ class WearUnusedAppsFragment : Fragment() {
             updateWearViewModel(false)
         }
 
-        return ComposeView(activity).apply { setContent { WearUnusedAppsScreen(wearViewModel) } }
+        return ComposeView(activity).apply {
+            setContent { WearPermissionTheme { WearUnusedAppsScreen(wearViewModel) } }
+        }
     }
 
     private fun initUnusedAppsMap(): MutableMap<UnusedPeriod, MutableMap<String, UnusedAppChip>> {
@@ -145,17 +148,18 @@ class WearUnusedAppsFragment : Fragment() {
     private fun updatePackages(categorizedPackages: Map<UnusedPeriod, List<UnusedPackageInfo>>) {
         // Remove stale unused app chips
         for (period in allPeriods) {
-            val it: MutableIterator<Map.Entry<String, UnusedAppChip>> =
-                unusedAppsMap[period]!!.entries.iterator()
-            while (it.hasNext()) {
-                val contains =
-                    categorizedPackages[period]?.any { (pkgName, user, _) ->
-                        val key = createKey(pkgName, user)
-                        it.next().key == key
-                    }
-                if (contains != true) {
-                    it.remove()
-                }
+            val unUsedAppsInAPeriod = unusedAppsMap[period] ?: continue
+            val categorizedPackagesOfAPeriod = categorizedPackages[period]
+            if (categorizedPackagesOfAPeriod == null) {
+                unUsedAppsInAPeriod.clear()
+                continue
+            }
+            val categorizedPackageKeys =
+                categorizedPackagesOfAPeriod.map { createKey(it.packageName, it.user) }
+            // Do not remove apps that are still in the unused category
+            val keysToRemove = unUsedAppsInAPeriod.keys.filterNot { it in categorizedPackageKeys }
+            for (key in keysToRemove) {
+                unUsedAppsInAPeriod.remove(key)
             }
         }
 
@@ -300,6 +304,13 @@ class WearUnusedAppsFragment : Fragment() {
     private fun updateWearViewModel(isLoading: Boolean) {
         wearViewModel.loadingLiveData.value = isLoading
         wearViewModel.unusedPeriodCategoryVisibilitiesLiveData.setValue(categoryVisibilities)
-        wearViewModel.unusedAppChipsLiveData.setValue(unusedAppsMap)
+
+        // Need to copy to non mutable maps or compose will not update correctly
+        val map = mutableMapOf<UnusedPeriod, Map<String, UnusedAppChip>>()
+        for (period in allPeriods) {
+            map.put(period, unusedAppsMap[period]!!.toMap())
+        }
+
+        wearViewModel.unusedAppChipsLiveData.setValue(map.toMap())
     }
 }
