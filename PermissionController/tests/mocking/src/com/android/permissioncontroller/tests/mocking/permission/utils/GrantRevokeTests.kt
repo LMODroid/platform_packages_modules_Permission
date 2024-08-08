@@ -24,6 +24,7 @@ import android.app.AppOpsManager.MODE_FOREGROUND
 import android.app.AppOpsManager.MODE_IGNORED
 import android.app.AppOpsManager.permissionToOp
 import android.app.Application
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.FLAG_PERMISSION_AUTO_REVOKED
 import android.content.pm.PackageManager.FLAG_PERMISSION_ONE_TIME
@@ -180,7 +181,8 @@ class GrantRevokeTests {
         permInfoProtectionFlags: Int = 0
     ): LightPermission {
         val permInfo = LightPermInfo(permName, TEST_PACKAGE_NAME, PERM_GROUP_NAME, backgroundPerm,
-            PermissionInfo.PROTECTION_DANGEROUS, permInfoProtectionFlags, 0)
+            PermissionInfo.PROTECTION_DANGEROUS, permInfoProtectionFlags, 0,
+            pkgInfo.appFlags and ApplicationInfo.FLAG_SYSTEM != 0)
         return LightPermission(pkgInfo, permInfo,
                 pkgInfo.requestedPermissionsFlags[pkgInfo.requestedPermissions.indexOf(permName)]
                         == PERMISSION_GRANTED, flags, foregroundPerms)
@@ -251,7 +253,7 @@ class GrantRevokeTests {
             val flags = state.second
 
             assertWithMessage("permission $permName grant state incorrect")
-                .that(perms[permName]?.isGrantedIncludingAppOp).isEqualTo(granted)
+                .that(perms[permName]?.isGranted).isEqualTo(granted)
 
             val actualFlags = perms[permName]!!.flags
             assertWithMessage("permission $permName flags incorrect, expected" +

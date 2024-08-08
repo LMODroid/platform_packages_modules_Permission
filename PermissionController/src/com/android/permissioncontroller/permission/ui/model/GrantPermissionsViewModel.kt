@@ -301,7 +301,7 @@ class GrantPermissionsViewModel(
                 if (states.isNotEmpty()) {
                     for ((key, state) in states) {
                         val allAffectedGranted = state.affectedPermissions.all { perm ->
-                            appPermGroup.permissions[perm]?.isGrantedIncludingAppOp == true &&
+                            appPermGroup.permissions[perm]?.isGranted == true &&
                                 appPermGroup.permissions[perm]?.isRevokeWhenRequested == false
                         }
                         if (allAffectedGranted) {
@@ -340,7 +340,7 @@ class GrantPermissionsViewModel(
                     for (perm in fgState.affectedPermissions) {
                         minSdkForOrderedSplitPermissions = maxOf(minSdkForOrderedSplitPermissions,
                                 splitPermissionTargetSdkMap.getOrDefault(perm, 0))
-                        if (fgGroup.permissions[perm]?.isGrantedIncludingAppOp == false) {
+                        if (fgGroup.permissions[perm]?.isGranted == false) {
                             // If any of the requested permissions is not granted,
                             // needFgPermissions = true
                             needFgPermissions = true
@@ -373,7 +373,7 @@ class GrantPermissionsViewModel(
                     // If the USER_SELECTED permission is user fixed and granted, or the app is only
                     // requesting USER_SELECTED, direct straight to photo picker
                     val userPerm = groupState.group.permissions[READ_MEDIA_VISUAL_USER_SELECTED]
-                    if ((userPerm?.isUserFixed == true && userPerm.isGrantedIncludingAppOp) ||
+                    if ((userPerm?.isUserFixed == true && userPerm.isGranted) ||
                         groupState.affectedPermissions == listOf(READ_MEDIA_VISUAL_USER_SELECTED)) {
                         requestInfos.add(RequestInfo(groupInfo, openPhotoPicker = true))
                         continue
@@ -524,7 +524,7 @@ class GrantPermissionsViewModel(
                                 fgState.affectedPermissions.contains(ACCESS_FINE_LOCATION)) {
                             val coarseLocationPerm =
                                 groupState.group.allPermissions[ACCESS_COARSE_LOCATION]
-                            if (coarseLocationPerm?.isGrantedIncludingAppOp == true) {
+                            if (coarseLocationPerm?.isGranted == true) {
                                 // Upgrade flow
                                 locationVisibilities[DIALOG_WITH_FINE_LOCATION_ONLY] = true
                                 message = RequestMessage.FG_FINE_LOCATION_MESSAGE
@@ -773,7 +773,7 @@ class GrantPermissionsViewModel(
                     return true
                 }
             } else if (perm in getPartialStorageGrantPermissionsForGroup(group) &&
-                lightPermission.isGrantedIncludingAppOp) {
+                lightPermission.isGranted) {
                 // If a partial storage permission is granted as fixed, we should immediately show
                 // the photo picker
                 return true
@@ -825,7 +825,7 @@ class GrantPermissionsViewModel(
 
         // Do not attempt to grant background access if foreground access is not either already
         // granted or requested
-        if (isBackground && !group.foreground.isGrantedExcludingRWROrAllRWR &&
+        if (isBackground && !group.foreground.allowFullGroupGrant &&
             !hasForegroundRequest) {
             Log.w(LOG_TAG, "Cannot grant $perm as the matching foreground permission is not " +
                 "already granted.")
@@ -837,10 +837,10 @@ class GrantPermissionsViewModel(
             return STATE_SKIPPED
         }
 
-        if ((isBackground && group.background.isGrantedExcludingRWROrAllRWR ||
-            !isBackground && group.foreground.isGrantedExcludingRWROrAllRWR) &&
+        if ((isBackground && group.background.allowFullGroupGrant ||
+            !isBackground && group.foreground.allowFullGroupGrant) &&
             canAutoGrantWholeGroup(group)) {
-            if (group.permissions[perm]?.isGrantedIncludingAppOp == false) {
+            if (group.permissions[perm]?.isGranted == false) {
                 if (isBackground) {
                     grantBackgroundRuntimePermissions(app, group, listOf(perm))
                 } else {
@@ -869,7 +869,7 @@ class GrantPermissionsViewModel(
         // If FINE location is not granted, do not grant it automatically when COARSE
         // location is already granted.
         if (group.permGroupName == LOCATION &&
-            group.allPermissions[ACCESS_FINE_LOCATION]?.isGrantedIncludingAppOp == false) {
+            group.allPermissions[ACCESS_FINE_LOCATION]?.isGranted == false) {
             return false
         }
         // If READ_MEDIA_VISUAL_USER_SELECTED is the only permission in the group that is granted,
@@ -893,7 +893,7 @@ class GrantPermissionsViewModel(
 
         val partialPerms = getPartialStorageGrantPermissionsForGroup(group)
         return group.isGranted && group.permissions.values.all {
-            it.name in partialPerms || (it.name !in partialPerms && !it.isGrantedIncludingAppOp)
+            it.name in partialPerms || (it.name !in partialPerms && !it.isGranted)
         }
     }
 
@@ -1114,28 +1114,39 @@ class GrantPermissionsViewModel(
             } else {
                 PERMISSION_GRANT_REQUEST_RESULT_REPORTED__RESULT__USER_GRANTED
             }
+            var affectedPermissions: List<String> = groupState.affectedPermissions
             if (groupState.isBackground) {
-                grantBackgroundRuntimePermissions(app, groupState.group,
-                    groupState.affectedPermissions)
+                grantBackgroundRuntimePermissions(app, groupState.group, affectedPermissions)
             } else {
                 if (affectedForegroundPermissions == null) {
                     grantForegroundRuntimePermissions(app, groupState.group,
-                        groupState.affectedPermissions, isOneTime)
+                        affectedPermissions, isOneTime)
                     // This prevents weird flag state when app targetSDK switches from S+ to R-
                     if (groupState.affectedPermissions.contains(ACCESS_FINE_LOCATION)) {
                         KotlinUtils.setFlagsWhenLocationAccuracyChanged(
                                 app, groupState.group, true)
                     }
                 } else {
+                    affectedPermissions = affectedForegroundPermissions
                     val newGroup = grantForegroundRuntimePermissions(app,
-                            groupState.group, affectedForegroundPermissions, isOneTime)
+                            groupState.group, affectedPermissions, isOneTime)
                     if (!isOneTime || newGroup.isOneTime) {
                         KotlinUtils.setFlagsWhenLocationAccuracyChanged(app, newGroup,
                                 affectedForegroundPermissions.contains(ACCESS_FINE_LOCATION))
                     }
                 }
             }
-            groupState.state = STATE_ALLOWED
+            val shouldDenyFullGroupGrant =
+                groupState.group.isPlatformPermissionGroup &&
+                        affectedPermissions.none {
+                            groupState.group.permissions[it]?.isPlatformOrSystem == true
+                        }
+            groupState.state =
+                if (shouldDenyFullGroupGrant) {
+                    STATE_UNKNOWN
+                } else {
+                    STATE_ALLOWED
+                }
         } else {
             if (groupState.isBackground) {
                 revokeBackgroundRuntimePermissions(app, groupState.group,

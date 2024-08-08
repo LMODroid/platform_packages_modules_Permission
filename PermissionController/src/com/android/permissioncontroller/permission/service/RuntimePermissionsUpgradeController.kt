@@ -412,7 +412,7 @@ internal object RuntimePermissionsUpgradeController {
 
                 val allPermissionsWithxemption = bgApp.allPermissions.toMutableMap()
                 allPermissionsWithxemption[permission.ACCESS_BACKGROUND_LOCATION] =
-                        LightPermission(perm.pkgInfo, perm.permInfo, perm.isGrantedIncludingAppOp,
+                        LightPermission(perm.pkgInfo, perm.permInfo, perm.isGranted,
                         perm.flags or FLAG_PERMISSION_RESTRICTION_UPGRADE_EXEMPT,
                         perm.foregroundPerms)
 
@@ -474,7 +474,7 @@ internal object RuntimePermissionsUpgradeController {
                             ?: continue
 
                     if (!perm.isUserSet && !perm.isSystemFixed && !perm.isPolicyFixed &&
-                            !perm.isGrantedIncludingAppOp) {
+                            !perm.isGranted) {
                         grants.add(Grant(false, appPermGroup,
                                 listOf(permission.ACCESS_MEDIA_LOCATION)))
                     }
