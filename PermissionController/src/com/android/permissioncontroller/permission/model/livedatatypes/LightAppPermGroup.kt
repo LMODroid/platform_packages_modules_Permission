@@ -33,21 +33,26 @@ import com.android.permissioncontroller.permission.utils.Utils
  * @param hasInstallToRuntimeSplit If this group contains a permission that was previously an
  * install permission, but is currently a runtime permission
  * @param specialLocationGrant If this package is the location provider, or the extra location
- * package, then the grant state of the group is not determined by the grant state of individual
- * permissions, but by other system properties
+ *   package, then the grant state of the group is not determined by the grant state of individual
+ *   permissions, but by other system properties
+ * @param specialFixedStorageGrant If this package holds the SYSTEM_GALLERY role, and has the
+ *   WRITE_MEDIA_IMAGES app op granted, then we should show the grant state of the storage
+ *   permissions as system fixed and granted.
+ *
  */
 data class LightAppPermGroup(
     val packageInfo: LightPackageInfo,
     val permGroupInfo: LightPermGroupInfo,
     val allPermissions: Map<String, LightPermission>,
     val hasInstallToRuntimeSplit: Boolean,
-    val specialLocationGrant: Boolean?
+    val specialLocationGrant: Boolean?,
+    val specialFixedStorageGrant: Boolean,
 ) {
     constructor(
         pI: LightPackageInfo,
         pGI: LightPermGroupInfo,
         perms: Map<String, LightPermission>
-    ) : this(pI, pGI, perms, false, null)
+    ) : this(pI, pGI, perms, false, null, false)
 
     /**
      * All unrestricted permissions. Usually restricted permissions are ignored
@@ -85,11 +90,23 @@ data class LightAppPermGroup(
 
     val isPlatformPermissionGroup = permGroupInfo.packageName == Utils.OS_PKG
 
-    val foreground = AppPermSubGroup(permissions.filter { it.key in foregroundPermNames },
-        packageInfo, isPlatformPermissionGroup, specialLocationGrant)
+    val foreground =
+        AppPermSubGroup(
+            permissions.filter { it.key in foregroundPermNames },
+            packageInfo,
+            isPlatformPermissionGroup,
+            specialLocationGrant,
+            specialFixedStorageGrant
+        )
 
-    val background = AppPermSubGroup(permissions.filter { it.key in backgroundPermNames },
-        packageInfo, isPlatformPermissionGroup, specialLocationGrant)
+    val background =
+        AppPermSubGroup(
+            permissions.filter { it.key in backgroundPermNames },
+            packageInfo,
+            isPlatformPermissionGroup,
+            specialLocationGrant,
+            specialFixedStorageGrant
+        )
 
     /**
      * Whether or not this App Permission Group has a permission which has a background mode
@@ -187,17 +204,19 @@ data class LightAppPermGroup(
      * in the full group
      * @param isPlatformPermissionGroup Whether this is a platform permission group
      * @param specialLocationGrant Whether this is a special location package
+     * @param specialFixedStorageGrant Whether this is a special storage grant
      */
     data class AppPermSubGroup internal constructor(
         private val permissions: Map<String, LightPermission>,
         private val packageInfo: LightPackageInfo,
         private val isPlatformPermissionGroup: Boolean,
-        private val specialLocationGrant: Boolean?
+        private val specialLocationGrant: Boolean?,
+        private val specialFixedStorageGrant: Boolean
     ) {
         /** Whether any of this App Permission SubGroup's permissions are granted */
         val isGranted =
             specialLocationGrant
-                ?: permissions.any {
+                ?: specialFixedStorageGrant || permissions.any {
                     val mayGrantByPlatformOrSystem =
                         !isPlatformPermissionGroup || it.value.isPlatformOrSystem
                     it.value.isGranted && mayGrantByPlatformOrSystem
@@ -237,10 +256,8 @@ data class LightAppPermGroup(
          */
         val isPolicyFixed = permissions.any { it.value.isPolicyFixed }
 
-        /**
-         * Whether any of this App Permission Subgroup's permissions are fixed by the system
-         */
-        val isSystemFixed = permissions.any { it.value.isSystemFixed }
+        /** Whether any of this App Permission Subgroup's permissions are fixed by the system */
+        val isSystemFixed = permissions.any { it.value.isSystemFixed } || specialFixedStorageGrant
 
         /**
          * Whether any of this App Permission Subgroup's permissions are fixed by the user

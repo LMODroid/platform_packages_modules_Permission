@@ -18,6 +18,7 @@ package com.android.permissioncontroller.permission.data
 
 import android.Manifest
 import android.Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED
+import android.Manifest.permission_group.READ_MEDIA_VISUAL
 import android.Manifest.permission_group.STORAGE
 import android.app.AppOpsManager
 import android.app.Application
@@ -64,9 +65,8 @@ class AppPermGroupUiInfoLiveData private constructor(
     private val isStorage = permGroupName == STORAGE
 
     init {
-        isSpecialLocation = LocationUtils.isLocationGroupAndProvider(app,
-            permGroupName, packageName) ||
-            LocationUtils.isLocationGroupAndControllerExtraPackage(app, permGroupName, packageName)
+        isSpecialLocation = LightAppPermGroupLiveData
+            .isSpecialLocationGranted(app, packageName, permGroupName, user) != null
 
         addSource(packageInfoLiveData) {
             update()
@@ -248,8 +248,13 @@ class AppPermGroupUiInfoLiveData private constructor(
         allPermInfos: Map<String, LightPermInfo>,
         pkg: LightPackageInfo
     ): PermGrantState {
-        val specialLocationState = getIsSpecialLocationState()
+        val specialLocationState = LightAppPermGroupLiveData
+            .isSpecialLocationGranted(app, packageName, permGroupName, user)
+        val specialFixedStorage = LightAppPermGroupLiveData
+            .isSpecialFixedStorageGranted(app, packageName, permGroupName, pkg.uid)
         if (isStorage && isFullFilesAccessGranted(pkg)) {
+            return PermGrantState.PERMS_ALLOWED
+        } else if (permGroupName == READ_MEDIA_VISUAL && specialFixedStorage) {
             return PermGrantState.PERMS_ALLOWED
         }
 
@@ -310,24 +315,6 @@ class AppPermGroupUiInfoLiveData private constructor(
             return PermGrantState.PERMS_ASK
         }
         return PermGrantState.PERMS_DENIED
-    }
-
-    private fun getIsSpecialLocationState(): Boolean? {
-        if (!isSpecialLocation) {
-            return null
-        }
-
-        val userContext = Utils.getUserContext(app, user)
-        if (LocationUtils.isLocationGroupAndProvider(userContext, permGroupName, packageName)) {
-            return LocationUtils.isLocationEnabled(userContext)
-        }
-        // The permission of the extra location controller package is determined by the
-        // status of the controller package itself.
-        if (LocationUtils.isLocationGroupAndControllerExtraPackage(userContext,
-                permGroupName, packageName)) {
-            return LocationUtils.isExtraLocationControllerPackageEnabled(userContext)
-        }
-        return null
     }
 
     private fun isFullFilesAccessGranted(pkg: LightPackageInfo): Boolean {

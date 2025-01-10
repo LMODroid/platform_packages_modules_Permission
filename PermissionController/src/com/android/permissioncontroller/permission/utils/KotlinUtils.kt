@@ -696,8 +696,14 @@ object KotlinUtils {
             newPerms[permName] = LightPermission(group.packageInfo, perm.permInfo,
                 perm.isGranted, perm.flags or flagsToSet, perm.foregroundPerms)
         }
-        return LightAppPermGroup(group.packageInfo, group.permGroupInfo, newPerms,
-            group.hasInstallToRuntimeSplit, group.specialLocationGrant)
+        return LightAppPermGroup(
+            group.packageInfo,
+            group.permGroupInfo,
+            newPerms,
+            group.hasInstallToRuntimeSplit,
+            group.specialLocationGrant,
+            group.specialFixedStorageGrant,
+        )
     }
 
     /**
@@ -787,8 +793,15 @@ object KotlinUtils {
             (app.getSystemService(ActivityManager::class.java) as ActivityManager).killUid(
                 group.packageInfo.uid, KILL_REASON_APP_OP_CHANGE)
         }
-        val newGroup = LightAppPermGroup(group.packageInfo, group.permGroupInfo, newPerms,
-            group.hasInstallToRuntimeSplit, group.specialLocationGrant)
+        val newGroup =
+            LightAppPermGroup(
+                group.packageInfo,
+                group.permGroupInfo,
+                newPerms,
+                group.hasInstallToRuntimeSplit,
+                group.specialLocationGrant,
+                group.specialFixedStorageGrant,
+            )
         // If any permission in the group is one time granted, start one time permission session.
         if (newGroup.permissions.any { it.value.isOneTime && it.value.isGranted }) {
             if (SdkLevel.isAtLeastT()) {
@@ -1015,8 +1028,15 @@ object KotlinUtils {
                 group.packageInfo.uid, KILL_REASON_APP_OP_CHANGE)
         }
 
-        val newGroup = LightAppPermGroup(group.packageInfo, group.permGroupInfo, newPerms,
-            group.hasInstallToRuntimeSplit, group.specialLocationGrant)
+        val newGroup =
+            LightAppPermGroup(
+                group.packageInfo,
+                group.permGroupInfo,
+                newPerms,
+                group.hasInstallToRuntimeSplit,
+                group.specialLocationGrant,
+                group.specialFixedStorageGrant,
+            )
 
         if (wasOneTime && !anyPermsOfPackageOneTimeGranted(app, newGroup.packageInfo, newGroup)) {
             app.getSystemService(PermissionManager::class.java)!!.stopOneTimePermissionSession(
