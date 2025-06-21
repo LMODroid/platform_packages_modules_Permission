@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Advanced Protection -->
+    <string name="google_advanced_protection_title">Advanced Protection</string>
+    <string name="google_advanced_protection_summary">Protection for your device and Google Account</string>
+</resources>
