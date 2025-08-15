@@ -524,6 +524,7 @@
 
     <role
         name="android.app.role.SYSTEM_GALLERY"
+        behavior="SystemGalleryRoleBehavior"
         defaultHolders="config_systemGallery"
         exclusive="true"
         exclusivity="user"
@@ -531,8 +532,10 @@
         systemOnly="true"
         visible="false">
         <permissions>
-            <permission-set name="storage" />
-            <permission name="android.permission.ACCESS_MEDIA_LOCATION" />
+            <!-- The photo/video permissions and ACCESS_MEDIA_LOCATION are granted by the
+                 SystemGalleryRoleBehavior, to override the user choice (as the write_media app ops
+                 override the user's choice anyway). -->
+            <permission name="android.permission.READ_MEDIA_AUDIO" minSdkVersion="33" />
             <permission name="android.permission.START_FOREGROUND_SERVICES_FROM_BACKGROUND" minSdkVersion="31" />
         </permissions>
         <app-ops>
