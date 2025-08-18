@@ -782,8 +782,7 @@ object KotlinUtils {
             group.permGroupInfo,
             newPerms,
             group.hasInstallToRuntimeSplit,
-            group.specialLocationGrant,
-            group.specialFixedStorageGrant,
+            group.specialLocationGrant
         )
     }
 
@@ -903,8 +902,7 @@ object KotlinUtils {
                 group.permGroupInfo,
                 newPerms,
                 group.hasInstallToRuntimeSplit,
-                group.specialLocationGrant,
-                group.specialFixedStorageGrant,
+                group.specialLocationGrant
             )
         // If any permission in the group is one time granted, start one time permission session.
         if (newGroup.permissions.any { it.value.isOneTime && it.value.isGranted }) {
@@ -1186,8 +1184,7 @@ object KotlinUtils {
                 group.permGroupInfo,
                 newPerms,
                 group.hasInstallToRuntimeSplit,
-                group.specialLocationGrant,
-                group.specialFixedStorageGrant,
+                group.specialLocationGrant
             )
 
         if (wasOneTime && !anyPermsOfPackageOneTimeGranted(app, newGroup.packageInfo)) {
