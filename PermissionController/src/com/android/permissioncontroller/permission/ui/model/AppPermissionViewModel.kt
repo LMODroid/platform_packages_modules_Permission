@@ -1532,11 +1532,7 @@ class AppPermissionViewModel(
      * READ_MEDIA_VISUAL_USER_SELECTED and/or ACCESS_MEDIA_LOCATION granted
      */
     private fun isPartialStorageGrant(group: LightAppPermGroup): Boolean {
-        if (
-            !isPhotoPickerPromptEnabled() ||
-            group.permGroupName != READ_MEDIA_VISUAL ||
-            group.specialFixedStorageGrant
-        ) {
+        if (!isPhotoPickerPromptEnabled() || group.permGroupName != READ_MEDIA_VISUAL) {
             return false
         }
 
