@@ -52,18 +52,45 @@ public class AssistantRoleUiBehavior implements RoleUiBehavior {
         return new Intent(Settings.ACTION_VOICE_INPUT_SETTINGS);
     }
 
+    @Nullable
+    @Override
+    public String getRecommendedApplicationsTitle(@NonNull Role role, @NonNull Context context) {
+        if (Flags.defaultAppsRecommendationEnabled()) {
+            String by = context.getString(R.string.config_recommendedAssistantsBy);
+            if (!by.isEmpty()) {
+                return context.getString(R.string.role_assistant_recommended_title, by);
+            }
+        }
+        return RoleUiBehavior.super.getRecommendedApplicationsTitle(role, context);
+    }
+
+    @Nullable
+    @Override
+    public String getRecommendedApplicationsDescription(@NonNull Role role,
+            @NonNull Context context) {
+        if (Flags.defaultAppsRecommendationEnabled()) {
+            String description =
+                    context.getString(R.string.config_recommendedAssistantsDescription);
+            if (!description.isEmpty()) {
+                return description;
+            }
+        }
+        return RoleUiBehavior.super.getRecommendedApplicationsDescription(role, context);
+    }
+
     @NonNull
     @Override
     public Predicate<RoleApplicationItem> getRecommendedApplicationFilter(
             @NonNull Role role, @NonNull Context context) {
-        if (Flags.defaultAppsRecommendationEnabled()) {
+        if (Flags.defaultAppsRecommendationEnabled()
+                && getRecommendedApplicationsTitle(role, context) != null
+                && getRecommendedApplicationsDescription(role, context) != null) {
             List<SignedPackage> signedPackages = SignedPackage.parseList(
                     context.getResources().getString(R.string.config_recommendedAssistants));
             return applicationItem -> SignedPackageUtils.matchesAny(
                     applicationItem.getApplicationInfo(), signedPackages, context);
-        } else {
-            return RoleUiBehavior.super.getRecommendedApplicationFilter(role, context);
         }
+        return RoleUiBehavior.super.getRecommendedApplicationFilter(role, context);
     }
 
     @Nullable

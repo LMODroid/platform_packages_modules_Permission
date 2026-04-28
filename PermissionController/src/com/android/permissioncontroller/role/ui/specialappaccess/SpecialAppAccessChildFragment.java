@@ -173,7 +173,7 @@ public class SpecialAppAccessChildFragment<PF extends PreferenceFragmentCompat
 
         Preference descriptionPreference = oldDescriptionPreference;
         if (descriptionPreference == null) {
-            descriptionPreference = preferenceFragment.createFooterPreference();
+            descriptionPreference = preferenceFragment.createDescriptionPreference();
             descriptionPreference.setKey(PREFERENCE_KEY_DESCRIPTION);
             descriptionPreference.setSummary(mRole.getDescriptionResource());
         }
@@ -239,12 +239,12 @@ public class SpecialAppAccessChildFragment<PF extends PreferenceFragmentCompat
         RoleApplicationPreference createApplicationPreference();
 
         /**
-         * Create a new preference for the footer.
+         * Create a new preference for a description.
          *
-         * @return a new preference for the footer
+         * @return a new preference for the description
          */
         @NonNull
-        Preference createFooterPreference();
+        Preference createDescriptionPreference();
 
         /**
          * Callback when changes have been made to the {@link PreferenceScreen} of the parent

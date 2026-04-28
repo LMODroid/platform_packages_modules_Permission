@@ -209,4 +209,8 @@ android_app {
         "//apex_available:platform",
         "com.android.permission",
     ],
+    licenses: [
+        "packages_modules_Permission_PermissionController_license",
+        "opensourcerequest",
+    ],
 }

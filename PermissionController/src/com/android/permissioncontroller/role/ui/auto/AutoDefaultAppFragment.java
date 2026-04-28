@@ -96,9 +96,11 @@ public class AutoDefaultAppFragment extends AutoSettingsFrameFragment implements
 
     @NonNull
     @Override
-    public Preference createFooterPreference() {
+    public Preference createDescriptionPreference(boolean isFooter) {
         Preference preference = new Preference(requireContext());
-        preference.setIcon(R.drawable.ic_info_outline);
+        if (isFooter) {
+            preference.setIcon(R.drawable.ic_info_outline);
+        }
         preference.setSelectable(false);
         return preference;
     }

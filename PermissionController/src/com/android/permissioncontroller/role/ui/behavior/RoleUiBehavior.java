@@ -94,6 +94,35 @@ public interface RoleUiBehavior {
             @NonNull UserHandle user, @NonNull Context context) {}
 
     /**
+     * Get the title for recommended applications of this role.
+     *
+     * @param role the role to get the recommended applications title for
+     * @param context the {@code Context} to retrieve system services
+     *
+     * @return the title for recommended applications, or {@code null} when recommendation isn't
+     *         enabled
+     */
+    @Nullable
+    default String getRecommendedApplicationsTitle(@NonNull Role role, @NonNull Context context) {
+        return null;
+    }
+
+    /**
+     * Get the description for recommended applications of this role.
+     *
+     * @param role the role to get the recommended applications description for
+     * @param context the {@code Context} to retrieve system services
+     *
+     * @return the description for recommended applications, or {@code null} when recommendation
+     *         isn't enabled
+     */
+    @Nullable
+    default String getRecommendedApplicationsDescription(@NonNull Role role,
+            @NonNull Context context) {
+        return null;
+    }
+
+    /**
      * Get the filter for recommended applications of this role.
      *
      * @param role the role to get the recommended application filter for
@@ -102,8 +131,8 @@ public interface RoleUiBehavior {
      * @return the filter for recommended applications
      */
     @NonNull
-    default Predicate<RoleApplicationItem> getRecommendedApplicationFilter(
-            @NonNull Role role, @NonNull Context context) {
+    default Predicate<RoleApplicationItem> getRecommendedApplicationFilter(@NonNull Role role,
+            @NonNull Context context) {
         return applicationItem -> false;
     }
 

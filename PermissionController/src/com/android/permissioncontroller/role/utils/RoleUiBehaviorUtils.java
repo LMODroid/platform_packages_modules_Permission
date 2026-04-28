@@ -119,6 +119,32 @@ public final class RoleUiBehaviorUtils {
     }
 
     /**
+     * @see RoleUiBehavior#getRecommendedApplicationsTitle
+     */
+    @Nullable
+    public static String getRecommendedApplicationsTitle(@NonNull Role role,
+            @NonNull Context context) {
+        RoleUiBehavior uiBehavior = getUiBehavior(role);
+        if (uiBehavior == null) {
+            return null;
+        }
+        return uiBehavior.getRecommendedApplicationsTitle(role, context);
+    }
+
+    /**
+     * @see RoleUiBehavior#getRecommendedApplicationsDescription
+     */
+    @Nullable
+    public static String getRecommendedApplicationsDescription(@NonNull Role role,
+            @NonNull Context context) {
+        RoleUiBehavior uiBehavior = getUiBehavior(role);
+        if (uiBehavior == null) {
+            return null;
+        }
+        return uiBehavior.getRecommendedApplicationsDescription(role, context);
+    }
+
+    /**
      * @see RoleUiBehavior#getRecommendedApplicationFilter
      */
     @NonNull

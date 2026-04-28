@@ -72,6 +72,8 @@ public class DefaultAppChildFragment<PF extends PreferenceFragmentCompat
 
     private static final String PREFERENCE_KEY_RECOMMENDED_CATEGORY =
             DefaultAppChildFragment.class.getName() + ".preference.RECOMMENDED_CATEGORY";
+    private static final String PREFERENCE_KEY_RECOMMENDED_DESCRIPTION =
+            DefaultAppChildFragment.class.getName() + ".preference.RECOMMENDED_DESCRIPTION";
     private static final String PREFERENCE_KEY_OTHERS_CATEGORY =
             DefaultAppChildFragment.class.getName() + ".preference.OTHERS_CATEGORY";
     private static final String PREFERENCE_KEY_NONE = DefaultAppChildFragment.class.getName()
@@ -178,16 +180,13 @@ public class DefaultAppChildFragment<PF extends PreferenceFragmentCompat
         }
 
         if (Flags.defaultAppsRecommendationEnabled() && !recommendedApplicationItems.isEmpty()) {
-            addApplicationPreferenceCategory(oldRecommendedPreferenceCategory,
-                    PREFERENCE_KEY_RECOMMENDED_CATEGORY,
-                    getString(R.string.default_app_recommended), preferenceScreen, false, false,
-                    recommendedApplicationItems, oldPreferences, context);
+            addApplicationPreferenceCategory(oldRecommendedPreferenceCategory, true,
+                    preferenceScreen, false, recommendedApplicationItems, oldPreferences, context);
             if (mRole.shouldShowNone() || !otherApplicationItems.isEmpty()) {
                 boolean noneChecked = !(hasHolderApplication(recommendedApplicationItems)
                         || hasHolderApplication(otherApplicationItems));
-                addApplicationPreferenceCategory(oldOthersPreferenceCategory,
-                        PREFERENCE_KEY_OTHERS_CATEGORY, getString(R.string.default_app_others),
-                        preferenceScreen, true, noneChecked, otherApplicationItems, oldPreferences,
+                addApplicationPreferenceCategory(oldOthersPreferenceCategory, false,
+                        preferenceScreen, noneChecked, otherApplicationItems, oldPreferences,
                         context);
             }
         } else {
@@ -225,22 +224,39 @@ public class DefaultAppChildFragment<PF extends PreferenceFragmentCompat
     }
 
     private void addApplicationPreferenceCategory(
-            @Nullable PreferenceCategory oldPreferenceCategory, @NonNull String key,
-            @Nullable String title, @NonNull PreferenceScreen preferenceScreen,
-            boolean addNonePreferenceIfNeeded, boolean noneChecked,
+            @Nullable PreferenceCategory oldPreferenceCategory, boolean isRecommended,
+            @NonNull PreferenceScreen preferenceScreen, boolean noneChecked,
             @NonNull List<RoleApplicationItem> applicationItems,
             @NonNull ArrayMap<String, Preference> oldPreferences, @NonNull Context context) {
         PreferenceCategory preferenceCategory = oldPreferenceCategory;
         if (preferenceCategory == null) {
             preferenceCategory = new PreferenceCategory(context);
-            preferenceCategory.setKey(key);
-            preferenceCategory.setTitle(title);
+            preferenceCategory.setKey(isRecommended ? PREFERENCE_KEY_RECOMMENDED_CATEGORY
+                    : PREFERENCE_KEY_OTHERS_CATEGORY);
+            preferenceCategory.setTitle(isRecommended
+                    ? RoleUiBehaviorUtils.getRecommendedApplicationsTitle(mRole, context)
+                    : getString(R.string.default_app_others));
         }
         preferenceScreen.addPreference(preferenceCategory);
-        if (addNonePreferenceIfNeeded) {
+        if (isRecommended) {
+            addRecommendedDescriptionPreference(preferenceCategory, oldPreferences, context);
+        } else {
             addNonePreferenceIfNeeded(preferenceCategory, noneChecked, oldPreferences, context);
         }
         addApplicationPreferences(preferenceCategory, applicationItems, oldPreferences, context);
+    }
+
+    private void addRecommendedDescriptionPreference(@NonNull PreferenceGroup preferenceGroup,
+            @NonNull ArrayMap<String, Preference> oldPreferences, @NonNull Context context) {
+        Preference preference = oldPreferences.get(PREFERENCE_KEY_RECOMMENDED_DESCRIPTION);
+        if (preference == null) {
+            preference = requirePreferenceFragment().createDescriptionPreference(false);
+            preference.setKey(PREFERENCE_KEY_RECOMMENDED_DESCRIPTION);
+            preference.setSummary(
+                    RoleUiBehaviorUtils.getRecommendedApplicationsDescription(mRole, context));
+        }
+
+        preferenceGroup.addPreference(preference);
     }
 
     private static boolean hasHolderApplication(
@@ -411,7 +427,7 @@ public class DefaultAppChildFragment<PF extends PreferenceFragmentCompat
             @NonNull ArrayMap<String, Preference> oldPreferences) {
         Preference preference = oldPreferences.get(PREFERENCE_KEY_DESCRIPTION);
         if (preference == null) {
-            preference = requirePreferenceFragment().createFooterPreference();
+            preference = requirePreferenceFragment().createDescriptionPreference(true);
             preference.setKey(PREFERENCE_KEY_DESCRIPTION);
             preference.setSummary(mRole.getDescriptionResource());
         }
@@ -446,12 +462,13 @@ public class DefaultAppChildFragment<PF extends PreferenceFragmentCompat
         RoleApplicationPreference createApplicationPreference();
 
         /**
-         * Create a new preference for the footer.
+         * Create a new preference for a description.
          *
-         * @return a new preference for the footer
+         * @param isFooter whether the description is a footer
+         * @return a new preference for the description
          */
         @NonNull
-        Preference createFooterPreference();
+        Preference createDescriptionPreference(boolean isFooter);
 
         /**
          * Callback when changes have been made to the {@link PreferenceScreen} of the parent

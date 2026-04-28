@@ -25,8 +25,8 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.android.permissioncontroller.role.ui.RoleApplicationPreference;
+import com.android.permissioncontroller.role.ui.handheld.HandheldDescriptionPreference;
 import com.android.permissioncontroller.role.ui.specialappaccess.SpecialAppAccessChildFragment;
-import com.android.settingslib.widget.FooterPreference;
 
 /**
  * Handheld fragment for a special app access.
@@ -95,8 +95,8 @@ public class HandheldSpecialAppAccessPreferenceFragment extends PreferenceFragme
 
     @NonNull
     @Override
-    public Preference createFooterPreference() {
-        return new FooterPreference(requireContext());
+    public Preference createDescriptionPreference() {
+        return new HandheldDescriptionPreference(requireContext(), true);
     }
 
     @Override

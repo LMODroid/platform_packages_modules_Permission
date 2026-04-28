@@ -1125,6 +1125,8 @@
     <string name="role_assistant_short_label">Digital assistant app</string>
     <!-- Description for the assistant role. [CHAR LIMIT=NONE] -->
     <string name="role_assistant_description">Assist apps can help you based on information from the screen you\u2019re viewing. Some apps support both launcher and voice input services to give you integrated assistance.</string>
+    <!-- Title for category of recommended assistant apps. [CHAR LIMIT=50] [SCREENSHOT=screen/89mSADZQmkrZeNq] -->
+    <string name="role_assistant_recommended_title">Recommended by <xliff:g id="OEM_NAME" example="FictionalOEM">%s</xliff:g></string>
 
     <!-- Label for the browser role. [CHAR LIMIT=30] -->
     <string name="role_browser_label">Default browser app</string>
@@ -1336,9 +1338,6 @@
 
     <!-- Title for category of default apps for private profile [CHAR LIMIT=50] -->
     <string name="default_apps_for_private_profile">Default for private space</string>
-
-    <!-- Title for category of apps that are optimized for the device [CHAR LIMIT=50] -->
-    <string name="default_app_recommended">Optimized for device</string>
 
     <!-- Title for category of other apps [CHAR LIMIT=50] -->
     <string name="default_app_others">Others</string>

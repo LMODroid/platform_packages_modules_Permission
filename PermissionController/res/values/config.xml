@@ -20,13 +20,34 @@
     <bool name="config_showDialerRole">true</bool>
     <bool name="config_showSmsRole">true</bool>
     <!--
-      ~ Semicolon separated list of packages that are recommended for the assistant role.
+      ~ The "OEM_NAME" part of the "Recommended by OEM_NAME" title for the recommended section in
+      ~ the default assistant setting.
+      ~ <p>
+      ~ Recommendation is only enabled if {@code config_recommendedAssistantsBy},
+      ~ {@code config_recommendedAssistantsDescription} and {@code config_recommendedAssistants}
+      ~ are all set.
+      -->
+    <string name="config_recommendedAssistantsBy"></string>
+    <!--
+      ~ Description for the recommended section in the default assistant setting.
+      ~ <p>
+      ~ Recommendation is only enabled if {@code config_recommendedAssistantsBy},
+      ~ {@code config_recommendedAssistantsDescription} and {@code config_recommendedAssistants}
+      ~ are all set.
+      -->
+    <string name="config_recommendedAssistantsDescription"></string>
+    <!--
+      ~ Semicolon separated list of packages that are recommended in the default assistant setting.
       ~ <p>
       ~ This follows the same format as config_defaultAssistant and also requires a signing
       ~ certificate digest (separated by a colon from the package name) if the app is not a system
       ~ app.
+      ~ <p>
+      ~ Recommendation is only enabled if {@code config_recommendedAssistantsBy},
+      ~ {@code config_recommendedAssistantsDescription} and {@code config_recommendedAssistants}
+      ~ are all set.
       -->
-    <string name="config_recommendedAssistants"></string>
+    <string name="config_recommendedAssistants" translatable="false"></string>
 
     <bool name="config_useAlternativePermGroupSummary">false</bool>
     <bool name="config_useWindowBlur">false</bool>

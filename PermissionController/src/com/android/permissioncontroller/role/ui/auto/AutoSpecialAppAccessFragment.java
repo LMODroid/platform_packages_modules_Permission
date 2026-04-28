@@ -86,7 +86,7 @@ public class AutoSpecialAppAccessFragment extends AutoSettingsFrameFragment impl
 
     @NonNull
     @Override
-    public Preference createFooterPreference() {
+    public Preference createDescriptionPreference() {
         Preference preference = new Preference(requireContext());
         preference.setIcon(R.drawable.ic_info_outline);
         preference.setSelectable(false);

@@ -378,6 +378,8 @@
             <item type="bool" name="config_showBrowserRole" />
             <item type="bool" name="config_showDialerRole" />
             <item type="bool" name="config_showSmsRole" />
+            <item type="string" name="config_recommendedAssistantsBy" />
+            <item type="string" name="config_recommendedAssistantsDescription" />
             <item type="string" name="config_recommendedAssistants" />
             <!-- END ROLE CONFIGS -->
 
